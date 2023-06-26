@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+directory="$(find ~/projects ~/.config ~/.local/bin -mindepth 1 -maxdepth 1 -type d | fzf-tmux -p)"
+
+if [[ -z "$directory" ]]; then
+	echo "No directory selected"
+	exit 1
+fi
+
+echo "Directory: $directory"
+
+session_name="$(basename $directory | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr '.' '_')"
+
+echo "Session name: $session_name"
+
+if [[ ! "$session_name" =~ ^[a-z0-9_-]+$ ]]; then
+	echo "Could not create valid session name from selected directory '$directory'"
+	exit 1
+fi
+
+if ! tmux has-session -t $session_name 2> /dev/null; then
+	tmux new-session -s $session_name -c $directory -d
+fi
+
+[[ -z "$TMUX" ]] && tmux attach -t $session_name || tmux switch-client -t $session_name
+

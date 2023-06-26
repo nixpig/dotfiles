@@ -1,0 +1,37 @@
+[user]
+	name = "nixpig"
+	email = "143995476+nixpig@users.noreply.github.com"
+
+[alias]
+	change-commits = "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [[ \\\"$`echo $VAR`\\\" = '$OLD' ]]; then export $VAR='$NEW'; fi\" $@; }; f"
+
+[pull]
+	rebase = false
+
+[url "https://aur.archlinux.org/"]
+    insteadOf = aur:
+[url "aur@aur.archlinux.org:"]
+    pushInsteadOf = "aur:"
+
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "git@github.com:"]
+    pushInsteadOf = "gh:"
+
+[url "git@ssh.dev.azure.com:"]
+    insteadOf = "az:"
+
+[color]
+	ui = true
+
+[color "diff"]
+	meta = yellow
+	old = red
+	new = green
+
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = cyan
+[core]
+	pager = diff-so-fancy | bat --tabs=4
