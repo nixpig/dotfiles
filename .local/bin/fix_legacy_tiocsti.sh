@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 if [[ $(sysctl -n dev.tty.legacy_tiocsti) == 0 ]]; then
-	sudo sysctl -w dev.tty.legacy_tiocsti=1
+	sudo sysctl -w dev.tty.legacy_tiocsti=1 &1>/dev/null
 	exit 0
 fi
