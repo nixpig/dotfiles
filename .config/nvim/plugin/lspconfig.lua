@@ -72,7 +72,6 @@ nvim_lsp.ansiblels.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.cssmodules_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.custom_elements_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.docker_compose_language_service.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.stylelint_lsp.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.flow.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.sourcekit.setup { on_attach = on_attach, capabilities = capabilities }
@@ -87,6 +86,8 @@ nvim_lsp.gradle_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.helm_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
+
+-- nvim_lsp.rust_analyzer.setup { on_attach = on_attach, filetypes = { 'rust' }, capabilities = capabilities }
 
 nvim_lsp.jdtls.setup {
     on_attach = on_attach,

@@ -26,17 +26,33 @@ packer.startup(function(use)
 	use {
 		"zbirenbaum/copilot-cmp",
 	}
-	use 'nvim-lua/plenary.nvim'                     -- Common utilities needed by plugins, e.g. Telescope
-	use 'wbthomason/packer.nvim'                    -- A use-package inspired plugin manager for Neovim
-	use 'onsails/lspkind-nvim'                      -- vscode-like pictograms for neovim lsp completion items
-	use 'nvim-lualine/lualine.nvim'                 -- A blazing fast and easy to configure neovim statusline plugin written in pure lua
-	use 'hrsh7th/cmp-buffer'                        -- nvim-cmp source for buffer words
-	use 'hrsh7th/cmp-nvim-lsp'                      -- nvim-cmp source for neovim builtin LSP client
-	use 'hrsh7th/nvim-cmp'                          -- A completion plugin for neovim coded in Lua
+	use 'nvim-lua/plenary.nvim'    -- Common utilities needed by plugins, e.g. Telescope
+	use 'wbthomason/packer.nvim'   -- A use-package inspired plugin manager for Neovim
+	use 'onsails/lspkind-nvim'     -- vscode-like pictograms for neovim lsp completion items
+	use 'nvim-lualine/lualine.nvim' -- A blazing fast and easy to configure neovim statusline plugin written in pure lua
+	use 'hrsh7th/nvim-cmp'         -- A completion plugin for neovim coded in Lua
+
+	use({
+		-- nvim-cmp source for neovim builtin LSP client
+		'hrsh7th/cmp-nvim-lsp',
+		-- nvim-cmp source for vsnip
+		'hrsh7th/cmp-vsnip',
+		-- nvim-cmp source for filepath
+		'hrsh7th/cmp-path',
+		-- nvim-cmp source for buffer words
+		'hrsh7th/cmp-buffer',
+		after = { 'hrsh7th/nvim-cmp' },
+		requires = { 'hrsh7th/nvim-cmp' }
+	})
+
+	use 'hrsh7th/vim-vsnip' -- Snippet plugin for vim/nvim that supports LSP/VSCode's snippet format.
+
+	use 'simrat39/rust-tools.nvim'
 	use 'neovim/nvim-lspconfig'                     -- Quickstart configs for Nvim LSP
 	use 'jose-elias-alvarez/null-ls.nvim'           -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
 	use 'williamboman/mason.nvim'                   -- Portable package manager for Neovim that runs everywhere Neovim runs
 	use 'williamboman/mason-lspconfig.nvim'         -- Extension to mason.nvim that makes it easier to use lspconfig with mason.nvim
+	use 'WhoIsSethDaniel/mason-tool-installer.nvim' -- A tool installer for mason.nvim
 	use 'glepnir/lspsaga.nvim'                      -- improve neovim lsp experience
 	use 'kyazdani42/nvim-web-devicons'              -- Adds file type icons to Vim plugins
 	use 'nvim-telescope/telescope.nvim'             -- telescope.nvim is a highly extendable fuzzy finder over lists
@@ -77,7 +93,7 @@ packer.startup(function(use)
 	use 'nvim-treesitter/nvim-treesitter-context'                                                -- Lightweight alternative to context.vim implemented with nvim-treesitter
 	use 'nvim-telescope/telescope-ui-select.nvim'                                                -- It sets vim.ui.select to telescope. That means for example that neovim core stuff can fill the telescope picker.
 	use 'debugloop/telescope-undo.nvim'                                                          -- Telescope extension to browse and edit undo history
-	use { 'j-hui/fidget.nvim', tag = 'legacy' }                                                  -- Standalone UI for nvim-lsp progress
+	use { 'j-hui/fidget.nvim' }                                                                  -- Standalone UI for nvim-lsp progress
 	use 'MunifTanjim/prettier.nvim'                                                              -- Format your code using Prettier
 	use { 'L3MON4D3/LuaSnip', run = 'make install_jsregexp' }                                    -- Snippet Engine for Neovim written in Lua
 	use 'rafamadriz/friendly-snippets'                                                           -- Snippets collection

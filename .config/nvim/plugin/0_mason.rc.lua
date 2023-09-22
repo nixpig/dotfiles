@@ -10,6 +10,12 @@ if not status_mason_lspconfig then
     return
 end
 
+local status_mason_installer, installer = pcall(require, 'mason-tool-installer')
+if not status_mason_installer then
+    print 'Failed to load mason-tool-installer'
+    return
+end
+
 mason.setup({})
 
 lspconfig.setup({
@@ -42,4 +48,8 @@ lspconfig.setup({
         -- 'nginx-language-server',
         'terraformls',
     }
+})
+
+installer.setup({
+    'codelldb'
 })
