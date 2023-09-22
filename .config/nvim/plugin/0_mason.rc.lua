@@ -21,7 +21,6 @@ mason.setup({})
 lspconfig.setup({
     ensure_installed = {
         'astro',
-        -- 'azure_pipelines_ls',
         'bashls',
         'cssls',
         'lua_ls',
@@ -33,7 +32,6 @@ lspconfig.setup({
         'cucumber_language_server',
         'custom_elements_ls',
         'docker_compose_language_service',
-        'rust_analyzer',
         'stylelint_lsp',
         'bashls',
         'jsonls',
@@ -45,7 +43,6 @@ lspconfig.setup({
         'gradle_ls',
         'helm_ls',
         'kotlin_language_server',
-        -- 'nginx-language-server',
         'terraformls',
     }
 })

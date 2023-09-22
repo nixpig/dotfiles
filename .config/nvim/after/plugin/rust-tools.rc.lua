@@ -3,6 +3,10 @@ if not status then
 	return "Did not load rust-tools"
 end
 
+local function on_attach(client, buffer)
+	-- do stuff once LSP is attached/enabled
+end
+
 rt.setup({
 	tools = {
 		runnables = {
@@ -16,7 +20,8 @@ rt.setup({
 		}
 	},
 	server = {
-		on_attach = function(client, buffer) end,
+		on_attach = on_attach,
+		standalone = true,
 		settings = {
 			['rust-analyzer'] = {
 				checkOnSave = {

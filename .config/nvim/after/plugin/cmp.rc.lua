@@ -39,9 +39,13 @@ cmp.setup({
         { name = 'buffer' },
         { name = 'path' },
         { name = 'luasnip' },
+        { name = 'vsnip' }
     }),
     snippet = {
-        expand = function(args) require('luasnip').lsp_expand(args.body) end
+        expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+            vim.fn['vsnip#anonymous'](args.body)
+        end
     },
     completion = { completeopt = 'menu,menuone,noinsert' },
     mapping = cmp.mapping.preset.insert({
