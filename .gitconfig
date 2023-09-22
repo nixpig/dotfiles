@@ -9,17 +9,13 @@
 	rebase = false
 
 [url "https://aur.archlinux.org/"]
-    insteadOf = aur:
-[url "aur@aur.archlinux.org:"]
-    pushInsteadOf = "aur:"
+	insteadOf = aur:
 
-[url "https://github.com/"]
-    insteadOf = gh:
 [url "git@github.com:"]
-    pushInsteadOf = "gh:"
+	insteadOf = gh:
 
 [url "git@ssh.dev.azure.com:"]
-    insteadOf = "az:"
+	insteadOf = "az:"
 
 [color]
 	ui = true

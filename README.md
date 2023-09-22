@@ -8,3 +8,7 @@
   - https://github.com/android-password-store/Android-Password-Store
   - https://github.com/carnager/rofi-pass
   - https://github.com/roddhjav/pass-import
+
+## Thanks
+
+- Excellent guide on setting up Neovim + Rust from sharksforarms - [https://sharksforarms.dev/posts/neovim-rust/](https://sharksforarms.dev/posts/neovim-rust/)
