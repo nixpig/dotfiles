@@ -58,7 +58,7 @@ for _, language in ipairs(js_based_languages) do
 			type = "pwa-chrome",
 			request = "launch",
 			name = "Start Chrome with \"localhost\"",
-			url = "http://localhost:6006",
+			url = "http://localhost:3000",
 			webRoot = "${workspaceFolder}",
 			userDataDir = "${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir"
 		},

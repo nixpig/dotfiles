@@ -93,7 +93,7 @@ packer.startup(function(use)
 	use 'nvim-treesitter/nvim-treesitter-context'                                                -- Lightweight alternative to context.vim implemented with nvim-treesitter
 	use 'nvim-telescope/telescope-ui-select.nvim'                                                -- It sets vim.ui.select to telescope. That means for example that neovim core stuff can fill the telescope picker.
 	use 'debugloop/telescope-undo.nvim'                                                          -- Telescope extension to browse and edit undo history
-	use { 'j-hui/fidget.nvim' }                                                                  -- Standalone UI for nvim-lsp progress
+	use { 'j-hui/fidget.nvim', tag = 'legacy' }                                                  -- Standalone UI for nvim-lsp progress
 	use 'MunifTanjim/prettier.nvim'                                                              -- Format your code using Prettier
 	use { 'L3MON4D3/LuaSnip', run = 'make install_jsregexp' }                                    -- Snippet Engine for Neovim written in Lua
 	use 'rafamadriz/friendly-snippets'                                                           -- Snippets collection

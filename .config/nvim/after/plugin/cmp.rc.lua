@@ -38,12 +38,13 @@ cmp.setup({
         { name = 'nvim_lsp' },
         { name = 'buffer' },
         { name = 'path' },
-        { name = 'luasnip' },
-        { name = 'vsnip' }
+        -- { name = 'luasnip' },
+        { name = 'vsnip' },
+        { name = 'lab.quick_data', keyword_length = 4 },
     }),
     snippet = {
         expand = function(args)
-            require('luasnip').lsp_expand(args.body)
+            -- require('luasnip').lsp_expand(args.body)
             vim.fn['vsnip#anonymous'](args.body)
         end
     },

@@ -6,8 +6,11 @@ end
 
 lab.setup({
     code_runner = {
-        enabled = true
-    }
+        enabled = true,
+    },
+    quick_data = {
+        enabled = true,
+    },
 })
 
 vim.keymap.set('n', '<leader>cr', ':Lab code run<CR>', { desc = 'Run code in lab' })

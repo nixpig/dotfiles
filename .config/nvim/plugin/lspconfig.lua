@@ -34,8 +34,17 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
         command = 'silent! EslintFixAll',
-        group = vim.api.nvim_create_augroup('MyAutocmdsJavaScripFormatting', {}),
+        group = vim.api.nvim_create_augroup('MyAutocmdsJavaScriptFormatting', {}),
     })
+
+    -- vim.api.nvim_create_autocmd('BufWritePre', {
+    --     pattern = { '*.rs' },
+    --     command = 'silent! lua vim.lsp.buf.format({ timeout_ms = 100 })',
+    --     -- callback = function()
+    --     --     vim.lsp.buf.format({ timeout_ms = 100 })
+    --     -- end,
+    --     group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
+    -- })
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -186,3 +195,26 @@ vim.diagnostic.config({
         source = 'always' -- Or 'if_many'
     }
 })
+
+-- Check if floating window already exists and if not then open lsp hover
+-- function OpenLspHoverIfNoFloat()
+--     for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+--         if vim.api.nvim_win_get_config(winid).zindex then
+--             return
+--         end
+--     end
+--
+--     vim.lsp.buf.hover({
+--         scope = "cursor",
+--         focusable = false,
+--         close_events = { "CursorMoved", "CursorMovedI", "BufHidden", "InsertCharPre", "WinLeave" }
+--
+--     })
+-- end
+--
+-- vim.api.nvim_create_augroup("lsp_hover_hold", { clear = true })
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--     pattern = "*",
+--     command = "lua OpenLspHoverIfNoFloat()",
+--     group = "lsp_hover_hold"
+-- })

@@ -3,8 +3,17 @@ if not status then
 	return "Did not load rust-tools"
 end
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+
 local function on_attach(client, buffer)
-	-- do stuff once LSP is attached/enabled
+	vim.api.nvim_create_autocmd('BufWritePre', {
+		pattern = { '*.rs' },
+		callback = function()
+			vim.lsp.buf.format({ timeout_ms = 100 })
+		end,
+		group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
+	})
 end
 
 rt.setup({
@@ -21,7 +30,7 @@ rt.setup({
 	},
 	server = {
 		on_attach = on_attach,
-		standalone = true,
+		capacities = capabilities,
 		settings = {
 			['rust-analyzer'] = {
 				checkOnSave = {
