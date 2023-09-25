@@ -48,7 +48,7 @@ cmp.setup({
             vim.fn['vsnip#anonymous'](args.body)
         end
     },
-    completion = { completeopt = 'menu,menuone,noinsert' },
+    completion = { completeopt = 'menu,menuone,noinsert,preview' },
     mapping = cmp.mapping.preset.insert({
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -79,11 +79,15 @@ cmp.setup({
             end
         })
     },
-    preselect = cmp.PreselectMode.None
+    preselect = cmp.PreselectMode.None,
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
 })
 
 vim.cmd([[
-  set completeopt=menuone,noinsert
+  set completeopt=menu,menuone,noinsert,preview
   highlight! default link CmpItemKind CmpItemMenuDefault
 ]])
 

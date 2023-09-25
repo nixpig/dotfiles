@@ -31,6 +31,7 @@ packer.startup(function(use)
 	use 'onsails/lspkind-nvim'     -- vscode-like pictograms for neovim lsp completion items
 	use 'nvim-lualine/lualine.nvim' -- A blazing fast and easy to configure neovim statusline plugin written in pure lua
 	use 'hrsh7th/nvim-cmp'         -- A completion plugin for neovim coded in Lua
+	use 'ray-x/lsp_signature.nvim' -- lsp_signature.nvim is a Neovim plugin that shows the function signature when you type
 
 	use({
 		-- nvim-cmp source for neovim builtin LSP client
