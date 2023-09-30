@@ -41,7 +41,7 @@ telescope.setup {
             },
             width = 0.87,
             height = 0.85,
-            preview_cutoff = 120,
+            -- preview_cutoff = 120,
         },
         set_env = { ['COLORTERM'] = 'truecolor' },
     },

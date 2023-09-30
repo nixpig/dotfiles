@@ -107,6 +107,7 @@ packer.startup(function(use)
 	use { 'anuvyklack/fold-preview.nvim', requires = { 'anuvyklack/keymap-amend.nvim' } }        -- Preview folds in float window
 	use 'carlsmedstad/vim-bicep'                                                                 -- Vim syntax highlighting for Bicep files
 	use 'hashivim/vim-terraform'                                                                 -- Terraform plugin for Vim - tf files syntax highlighting and more
+	use 'prisma/vim-prisma'
 
 	-- Plugin for calling lazygit from within neovim.
 	use {

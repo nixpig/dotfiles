@@ -31,10 +31,17 @@ local on_attach = function(client, bufnr)
         enable_format_on_save(client, bufnr)
     end
 
+
     vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
         command = 'silent! EslintFixAll',
         group = vim.api.nvim_create_augroup('MyAutocmdsJavaScriptFormatting', {}),
+    })
+
+    vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = { '*.prisma' },
+        command = 'silent! yes | prisma format',
+        group = vim.api.nvim_create_augroup('MyAutocmdsPrismaFormatting', {}),
     })
 end
 
@@ -86,6 +93,7 @@ nvim_lsp.gradle_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.helm_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
+nvim_lsp.prismals.setup { on_attach = on_attach, capabilities = capabilities }
 
 -- nvim_lsp.rust_analyzer.setup { on_attach = on_attach, filetypes = { 'rust' }, capabilities = capabilities }
 
