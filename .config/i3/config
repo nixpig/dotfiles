@@ -138,7 +138,7 @@ set $ws4 "4:misc"
 set $ws5 "5:misc"
 
 # Misc
-set $ws6 "6:misc"
+set $ws6 "6:virtualbox"
 
 # Web
 set $ws7 "7:web"
@@ -183,6 +183,9 @@ assign [class="firefoxdeveloperedition"] $ws2
 # 3:db
 assign [class="DBeaver"] $ws3
 assign [class="MongoDB Compass"] $ws3
+
+# 6:virtualbox
+assign [class="VirtualBox Machine"] $ws6
 
 # 7:web
 assign [class="Google-chrome"] $ws7

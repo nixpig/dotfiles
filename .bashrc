@@ -123,7 +123,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="${HOME}/.cargo/bin:${HOME}/.local/bin:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/build-tools/debian:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${HOME}/.config/lsp/lua-language-server/bin:${PATH}"
+export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$PATH:$HOME/go/bin"
 
 export BAT_THEME="Catppuccin-mocha"
 
@@ -137,6 +137,8 @@ else
 fi
 
 export GIT_EDITOR="nvim"
+
+export VAGRANT_HOME=/mnt/efe8b538-025d-4e8c-befc-fe22dcec7f15/Vagrant
 
 # Set up mcfly options
 export MCFLY_KEY_SCHEME=vim
@@ -174,3 +176,7 @@ source ${HOME}/.config/broot/launcher/bash/br
 # Initialise the keychain
 eval $(keychain --eval --quiet id_rsa)
 
+
+# >>>> Vagrant command completion (start)
+. /opt/vagrant/embedded/gems/gems/vagrant-2.3.7/contrib/bash/completion.sh
+# <<<<  Vagrant command completion (end)

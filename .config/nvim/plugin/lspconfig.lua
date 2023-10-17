@@ -95,8 +95,6 @@ nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = ca
 nvim_lsp.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.prismals.setup { on_attach = on_attach, capabilities = capabilities }
 
--- nvim_lsp.rust_analyzer.setup { on_attach = on_attach, filetypes = { 'rust' }, capabilities = capabilities }
-
 nvim_lsp.jdtls.setup {
     on_attach = on_attach,
     capabilities = capabilities,

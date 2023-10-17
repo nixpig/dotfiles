@@ -16,7 +16,7 @@
     background_darkness = 0.98
     background_type = transparent
     cursor_shape = ibeam
-    font = Operator Mono for Powerline 12
+    font = Operator Mono for Powerline 16
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
@@ -31,7 +31,7 @@
     background_darkness = 0.98
     background_type = transparent
     cursor_shape = ibeam
-    font = Operator Mono for Powerline 22
+    font = Operator Mono for Powerline 21
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden

@@ -9,7 +9,7 @@ ts.setup {
 	indent = { enable = true, disable = {} },
 	ensure_installed = {
 		'markdown', 'markdown_inline', 'tsx', 'typescript', 'javascript',
-		'java', 'kotlin', 'yaml', 'bash', 'json', 'yaml', 'swift', 'css',
+		'java', 'kotlin', 'yaml', 'bash', 'json', 'go', 'yaml', 'swift', 'css',
 		'html', 'lua', 'rust', 'python', 'diff', 'dockerfile', 'gitcommit', 'gitattributes', 'gitignore', 'git_rebase',
 		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query'
 	},

@@ -40,7 +40,8 @@ cmp.setup({
         { name = 'path' },
         -- { name = 'luasnip' },
         { name = 'vsnip' },
-        { name = 'lab.quick_data', keyword_length = 4 },
+        { name = 'lab.quick_data',       keyword_length = 4 },
+        { name = 'vim-dadbod-completion' },
     }),
     snippet = {
         expand = function(args)
@@ -92,6 +93,7 @@ vim.cmd([[
 ]])
 
 -- vim.api.nvim_create_autocmd("CursorHoldI", {
+
 --     group = vim.api.nvim_create_augroup("cmp_complete_on_space", {}),
 --     callback = function()
 --         local line = vim.api.nvim_get_current_line()

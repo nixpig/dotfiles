@@ -108,6 +108,12 @@ packer.startup(function(use)
 	use 'carlsmedstad/vim-bicep'                                                                 -- Vim syntax highlighting for Bicep files
 	use 'hashivim/vim-terraform'                                                                 -- Terraform plugin for Vim - tf files syntax highlighting and more
 	use 'prisma/vim-prisma'
+	use 'tpope/vim-dadbod'
+	use 'kristijanhusak/vim-dadbod-completion'
+	use { 'kristijanhusak/vim-dadbod-ui', requires = {
+		'tpope/vim-dadbod',
+		'kristijanhusak/vim-dadbod-completion',
+	} }
 
 	-- Plugin for calling lazygit from within neovim.
 	use {

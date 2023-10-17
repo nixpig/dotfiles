@@ -2,7 +2,7 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/nixpig/.gtkrc-2.0.mine"
-gtk-theme-name="Catppuccin-Mocha-Standard-Flamingo-dark"
+gtk-theme-name="Catppuccin-Mocha-Standard-Blue-Dark"
 gtk-icon-theme-name="Catppuccin-SE"
 gtk-font-name="Sans 10"
 gtk-cursor-theme-name="elementary"
