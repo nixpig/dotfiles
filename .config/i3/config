@@ -85,6 +85,7 @@ bindsym $mod+Shift+q kill
 
 # Start Rofi app launcher
 bindcode $mod+40 exec "rofi -modi drun,run -show drun"
+bindcode $mod+65 exec "rofi -modi drun,run -show drun"
 
 # Start splatmoji emoji picker
 bindsym $mod+e exec --no-startup-id splatmoji type

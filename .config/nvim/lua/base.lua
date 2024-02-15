@@ -25,13 +25,13 @@ opt.cmdheight = 1                                      -- Command line display h
 opt.cursorline = true                                  -- Highlight the cursorline
 opt.cursorcolumn = true                                -- Highlight the cursorcolumn
 opt.laststatus = 2                                     -- Always displat status bar
-opt.expandtab = false                                  -- Don't convert tabs to spaces
+opt.expandtab = true                                   -- Don't convert tabs to spaces
 opt.scrolloff = 15                                     -- Screen lines to keep visible above and below cursor
 opt.shell = 'bash'                                     -- Shell to use when executing commands
 opt.backupskip = { '/tmp/*', '/private/tmp/*' }        -- Skip backups for temp directories
 opt.inccommand = 'split'                               -- Show replacements in split window before applying changes
 opt.ignorecase = true                                  -- Ignore case when searching
-opt.smarttab = false                                   -- Don't insert spaces when tab key pressed
+opt.smarttab = true                                    -- Don't insert spaces when tab key pressed
 opt.breakindent = true                                 -- Add extra indentation to wrapped lines
 opt.shiftwidth = 2                                     -- Indent using 4 spaces
 opt.tabstop = 2                                        -- Indent using 4 spaces
@@ -57,7 +57,9 @@ vim.o.updatetime = 250                                 -- Time to wait before tr
 -- Add filetypes
 vim.filetype.add({
 	extension = {
-		pcss = "css"
+		pcss = "css",
+		templ = "templ",
+		tf = "terraform"
 	}
 })
 

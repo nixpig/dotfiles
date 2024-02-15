@@ -44,6 +44,8 @@ lspconfig.setup({
         'helm_ls',
         'kotlin_language_server',
         'terraformls',
+        'tflint',
+        'templ',
     }
 })
 

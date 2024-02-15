@@ -31,7 +31,6 @@ local on_attach = function(client, bufnr)
         enable_format_on_save(client, bufnr)
     end
 
-
     vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
         command = 'silent! EslintFixAll',
@@ -92,13 +91,18 @@ nvim_lsp.gopls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.gradle_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.helm_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.prismals.setup { on_attach = on_attach, capabilities = capabilities }
 
 nvim_lsp.jdtls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     cmd = { 'jdtls' }
+}
+
+nvim_lsp.terraformls.setup {
+    on_attach = on_attach,
+    filetypes = { 'hcl', 'terraform' },
+    capabilities = capabilities,
 }
 
 nvim_lsp.cucumber_language_server.setup {
@@ -126,6 +130,12 @@ nvim_lsp.eslint.setup {
     capabilities = capabilities,
     filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx' },
     root_dir = function() return vim.loop.cwd() end
+}
+
+nvim_lsp.tflint.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'hcl', 'terraform' },
 }
 
 nvim_lsp.lua_ls.setup {

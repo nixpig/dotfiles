@@ -9,12 +9,12 @@ ts.setup {
 	indent = { enable = true, disable = {} },
 	ensure_installed = {
 		'markdown', 'markdown_inline', 'tsx', 'typescript', 'javascript',
-		'java', 'kotlin', 'yaml', 'bash', 'json', 'go', 'yaml', 'swift', 'css',
+		'java', 'kotlin', 'yaml', 'bash', 'json', 'go', 'yaml', 'hcl', 'terraform', 'swift', 'css',
 		'html', 'lua', 'rust', 'python', 'diff', 'dockerfile', 'gitcommit', 'gitattributes', 'gitignore', 'git_rebase',
-		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query'
+		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query', 'templ'
 	},
 	autotag = { enable = true },
-	context_commentstring = { enable = true, enable_autocmd = false },
+	-- context_commentstring = { enable = true, enable_autocmd = false },
 	refactor = {
 		enable = true,
 		clear_on_cursor_move = true,

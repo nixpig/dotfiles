@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/nixpig/.cache/nvim/packer_hererocks/2.1.1692616192/share/lua/5.1/?.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1692616192/share/lua/5.1/?/init.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1692616192/lib/luarocks/rocks-5.1/?.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1692616192/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/nixpig/.cache/nvim/packer_hererocks/2.1.1692616192/lib/lua/5.1/?.so"
+local package_path_str = "/home/nixpig/.cache/nvim/packer_hererocks/2.1.1697887905/share/lua/5.1/?.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1697887905/share/lua/5.1/?/init.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1697887905/lib/luarocks/rocks-5.1/?.lua;/home/nixpig/.cache/nvim/packer_hererocks/2.1.1697887905/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/nixpig/.cache/nvim/packer_hererocks/2.1.1697887905/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -78,11 +78,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/Comment.nvim",
     url = "https://github.com/numToStr/Comment.nvim"
-  },
-  ["FixCursorHold.nvim"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim",
-    url = "https://github.com/antoinemadec/FixCursorHold.nvim"
   },
   LuaSnip = {
     loaded = true,
@@ -164,15 +159,15 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/keymap-amend.nvim",
     url = "https://github.com/anuvyklack/keymap-amend.nvim"
   },
-  ["lab.nvim"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/lab.nvim",
-    url = "https://github.com/0x100101/lab.nvim"
-  },
   ["lazygit.nvim"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/lazygit.nvim",
     url = "https://github.com/kdheepak/lazygit.nvim"
+  },
+  ["lsp_signature.nvim"] = {
+    loaded = true,
+    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim",
+    url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["lspkind-nvim"] = {
     loaded = true,
@@ -189,11 +184,6 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
   },
-  ["markdown-preview.nvim"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim",
-    url = "https://github.com/iamcco/markdown-preview.nvim"
-  },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim",
@@ -208,16 +198,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
-  },
-  neotest = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/neotest",
-    url = "https://github.com/nvim-neotest/neotest"
-  },
-  ["neotest-jest"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/neotest-jest",
-    url = "https://github.com/haydenmeade/neotest-jest"
   },
   ["null-ls.nvim"] = {
     loaded = true,
@@ -329,16 +309,6 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/rainbow-delimiters.nvim",
     url = "https://github.com/hiphish/rainbow-delimiters.nvim"
   },
-  ["rest.nvim"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/rest.nvim",
-    url = "https://github.com/rest-nvim/rest.nvim"
-  },
-  rnvimr = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/rnvimr",
-    url = "https://github.com/kevinhwang91/rnvimr"
-  },
   ["rust-tools.nvim"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
@@ -379,11 +349,6 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/typescript.nvim",
     url = "https://github.com/jose-elias-alvarez/typescript.nvim"
   },
-  ["vim-bicep"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-bicep",
-    url = "https://github.com/carlsmedstad/vim-bicep"
-  },
   ["vim-repeat"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-repeat",
@@ -398,11 +363,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-surround",
     url = "https://github.com/tpope/vim-surround"
-  },
-  ["vim-terraform"] = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-terraform",
-    url = "https://github.com/hashivim/vim-terraform"
   },
   ["vim-tmux-navigator"] = {
     loaded = true,

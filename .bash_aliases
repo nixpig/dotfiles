@@ -1,5 +1,5 @@
 # Alias sudo for shell expansion
-alias sudo='${HOME}/.local/bin/sudo.sh '
+# alias sudo='${HOME}/.local/bin/sudo.sh '
 
 alias y='yes| '
 

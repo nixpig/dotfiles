@@ -16,14 +16,14 @@
     background_darkness = 0.98
     background_type = transparent
     cursor_shape = ibeam
-    font = Operator Mono for Powerline 16
+    font = Operator Mono for Powerline 22
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
     palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#a6adc8"
     use_system_font = False
     bold_is_bright = True
-  [[stream]]
+  [[small]]
     audible_bell = True
     visible_bell = True
     urgent_bell = True
@@ -31,13 +31,15 @@
     background_darkness = 0.98
     background_type = transparent
     cursor_shape = ibeam
-    font = Operator Mono for Powerline 21
+    font = Operator Mono for Powerline 16
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
     palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#a6adc8"
     use_system_font = False
     bold_is_bright = True
+    title_use_system_font = False
+    title_font = Operator Mono for Powerline 10
 [layouts]
   [[default]]
     [[[window0]]]

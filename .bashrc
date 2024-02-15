@@ -138,6 +138,8 @@ fi
 
 export GIT_EDITOR="nvim"
 
+export LC_CTYPE=C.UTF-8
+
 export VAGRANT_HOME=/mnt/efe8b538-025d-4e8c-befc-fe22dcec7f15/Vagrant
 
 # Set up mcfly options
@@ -178,5 +180,5 @@ eval $(keychain --eval --quiet id_rsa)
 
 
 # >>>> Vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.3.7/contrib/bash/completion.sh
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.0/contrib/bash/completion.sh
 # <<<<  Vagrant command completion (end)

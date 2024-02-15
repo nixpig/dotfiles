@@ -3,6 +3,11 @@ local keymap = vim.keymap
 local status, dap = pcall(require, 'dap')
 if not status then print 'Failed to load dap' end
 
+local dg_status, dap_go = pcall(require, 'dap-go')
+if not dg_status then print 'Failed to load dap-go' end
+
+dap_go.setup {}
+
 -- Set keymaps to control the debugger
 keymap.set('n', '<F5>', require 'dap'.continue, { desc = 'DAP: Start/Continue debugging' })
 keymap.set('n', '<F10>', require 'dap'.step_over, { desc = 'DAP: Step over' })
@@ -13,6 +18,36 @@ keymap.set('n', '<C-Delete>', require 'dap'.clear_breakpoints, { desc = 'DAP: Cl
 keymap.set('n', '<C-c>', function()
 	require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))
 end, { desc = 'DAP: Set conditional breakpoint' })
+
+dap.adapters.lldb = {
+	type = 'executable',
+	command = 'codelldb',
+	name = 'lldb'
+}
+
+dap.configurations.rust = {
+	{
+		type = 'lldb',
+		request = 'launch',
+		name = 'Debug executable',
+		stopOnEntry = false,
+		runInTerminal = true,
+		program = function()
+			return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+		end,
+		cargo = {
+			args = { 'build' },
+			filter = {
+				kind = 'bin'
+			}
+		},
+		args = {},
+		cwd = '${workspaceFolder}'
+	},
+}
+
+
+
 
 local js_based_languages = { "typescript", "javascript", "javascriptreact", "typescriptreact" }
 

@@ -19,7 +19,8 @@ end
 null_ls.setup {
     sources = {
         null_ls.builtins.formatting.prettierd,
-        null_ls.builtins.formatting.tidy
+        null_ls.builtins.formatting.tidy,
+        null_ls.builtins.formatting.terraform_fmt,
     },
     on_attach = function(client, bufnr)
         if client.supports_method('textDocument/formatting') then

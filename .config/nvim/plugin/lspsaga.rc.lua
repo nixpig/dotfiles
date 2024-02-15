@@ -26,8 +26,8 @@ keymap.set('n', ']w', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts)     -- Jump
 keymap.set('n', '[w', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts)     -- Jump to previous diagnostic
 keymap.set('n', 'gl', '<Cmd>Lspsaga show_line_diagnostics<CR>', opts)    -- Show diagnostics for line
 keymap.set('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts) -- Show signature help
--- keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', opts)                -- Show docs
-keymap.set('n', 'gk', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)          -- Show docs
+keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', opts)                -- Show docs
+-- keymap.set('n', 'gk', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)          -- Show docs
 keymap.set('n', 'gh', '<Cmd>Lspsaga finder<CR>', opts)                   -- Show definition and usage
 keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', opts)          -- Peek at definition
 keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts)                   -- Rename all occurrences of hovered word in current file
