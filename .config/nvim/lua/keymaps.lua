@@ -64,7 +64,7 @@ keymap.set({ "n", "x" }, "]p", '<Cmd>exe "put "  . v:register<CR>',
 
 -- Move line under cursor
 keymap.set('n', '<S-Up>', ':m-2<CR>', { desc = 'Move current line up' })
-keymap.set('n', ':nnoremap <S-k>', ':m-2<CR>', { desc = 'Move current line up' })
+keymap.set('n', '<S-k>', ':m-2<CR>', { desc = 'Move current line up' })
 keymap.set('n', '<S-Down>', ':m+<CR>', { desc = 'Move current line down' })
 keymap.set('n', '<S-j>', ':m+<CR>', { desc = 'Move current line down' })
 
