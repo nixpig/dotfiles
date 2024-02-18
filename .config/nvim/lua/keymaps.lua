@@ -46,11 +46,11 @@ keymap.set('n', '<leader><S-k>', '<C-w>+', { desc = 'Resize window Up' })
 keymap.set('n', '<leader><S-l>', '<C-w>>', { desc = 'Resize window Right' })
 
 -- Close floating windows
--- keymap.set("n", "<esc>", function()
--- 	close_floating()
--- 	cmd(":noh")
--- end, { silent = true, desc = "Remove Search Highlighting, Dismiss Popups" })
---
+keymap.set("n", "<esc>", function()
+	close_floating()
+	cmd(":noh")
+end, { silent = true, desc = "Remove Search Highlighting, Dismiss Popups" })
+
 
 -- Remove all console.log statements
 keymap.set("n", "<Leader>xc", ":g/console.lo/d<cr>",

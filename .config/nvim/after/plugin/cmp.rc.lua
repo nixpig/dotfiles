@@ -34,8 +34,8 @@ if not status_lspkind then print 'Failed to load lspkind' end
 -- end
 cmp.setup({
     sources = cmp.config.sources({
-        { name = 'copilot' },
         { name = 'nvim_lsp' },
+        { name = 'copilot' },
         { name = 'buffer' },
         { name = 'path' },
         -- { name = 'luasnip' },
