@@ -149,6 +149,11 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  ["gomod.vim"] = {
+    loaded = true,
+    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/gomod.vim",
+    url = "https://github.com/maralla/gomod.vim"
+  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
@@ -233,6 +238,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/nvim-dap",
     url = "https://github.com/mfussenegger/nvim-dap"
+  },
+  ["nvim-dap-go"] = {
+    loaded = true,
+    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/nvim-dap-go",
+    url = "https://github.com/leoluz/nvim-dap-go"
   },
   ["nvim-dap-ui"] = {
     loaded = true,
@@ -349,6 +359,11 @@ _G.packer_plugins = {
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/typescript.nvim",
     url = "https://github.com/jose-elias-alvarez/typescript.nvim"
   },
+  ["vim-go"] = {
+    loaded = true,
+    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-go",
+    url = "https://github.com/fatih/vim-go"
+  },
   ["vim-repeat"] = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-repeat",
@@ -378,11 +393,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vim-vsnip",
     url = "https://github.com/hrsh7th/vim-vsnip"
-  },
-  vimade = {
-    loaded = true,
-    path = "/home/nixpig/.local/share/nvim/site/pack/packer/start/vimade",
-    url = "https://github.com/TaDaa/vimade"
   },
   ["vscode-js-debug"] = {
     loaded = true,

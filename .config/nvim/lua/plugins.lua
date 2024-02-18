@@ -89,7 +89,6 @@ packer.startup(function(use)
 	use 'MunifTanjim/prettier.nvim'                                                              -- Format your code using Prettier
 	use { 'L3MON4D3/LuaSnip', run = 'make install_jsregexp' }                                    -- Snippet Engine for Neovim written in Lua
 	use 'rafamadriz/friendly-snippets'                                                           -- Snippets collection
-	use 'TaDaa/vimade'                                                                           -- Fade inactive buffers
 	use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }                       -- A nice UI for debugging
 	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }                             -- Nvim Treesitter configurations and abstraction layer
 	use { 'nvim-treesitter/nvim-treesitter' }                                                    -- Nvim Treesitter configurations and abstraction layer

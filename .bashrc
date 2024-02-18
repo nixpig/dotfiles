@@ -123,7 +123,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$PATH:$HOME/go/bin"
+export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$PATH:$HOME/go/bin"
 
 export BAT_THEME="Catppuccin-mocha"
 
