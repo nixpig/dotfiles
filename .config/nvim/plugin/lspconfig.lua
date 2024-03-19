@@ -94,9 +94,13 @@ nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = ca
 nvim_lsp.prismals.setup { on_attach = on_attach, capabilities = capabilities }
 
 nvim_lsp.jdtls.setup {
-    on_attach = on_attach,
+    on_attach = function()
+        require('jdtls').start_or_attach({
+            cmd = "~/.local/share/nvim/mason/bin/jdtls",
+            root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
+        })
+    end,
     capabilities = capabilities,
-    cmd = { 'jdtls' }
 }
 
 nvim_lsp.terraformls.setup {

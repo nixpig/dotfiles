@@ -39,6 +39,9 @@ symbol = " "
 [golang]
 symbol = " "
 
+[gradle]
+symbol = " "
+
 [guix_shell]
 symbol = " "
 
@@ -59,6 +62,9 @@ symbol = " "
 
 [julia]
 symbol = " "
+
+[kotlin]
+symbol = " "
 
 [lua]
 symbol = " "
@@ -125,6 +131,9 @@ symbol = "󰏗 "
 [pijul_channel]
 symbol = " "
 
+[php]
+symbol = " "
+
 [python]
 symbol = " "
 
@@ -140,3 +149,11 @@ symbol = " "
 [scala]
 symbol = " "
 
+[swift]
+symbol = " "
+
+[terraform]
+symbol = "󱁢 "
+
+[zig]
+symbol = " "

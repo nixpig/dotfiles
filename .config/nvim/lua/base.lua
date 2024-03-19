@@ -59,7 +59,8 @@ vim.filetype.add({
 	extension = {
 		pcss = "css",
 		templ = "templ",
-		tf = "terraform"
+		tf = "terraform",
+		tfvars = "terraform",
 	}
 })
 

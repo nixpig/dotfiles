@@ -119,6 +119,8 @@ alias gss='git stash'
 alias gsp='git stash pop'
 alias gsa='git stash apply'
 
+alias tf='terraform'
+
 alias n='sudo n'
 alias r='ranger'
 
