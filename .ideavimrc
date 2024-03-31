@@ -1,0 +1,55 @@
+let mapleader=" "
+Plug 'tpope/vim-surround'
+Plug 'machakann/vim-highlightedyank'
+
+" note to self - install from here - https://plugins.jetbrains.com/plugin/19417-ideavim-quickscope
+set quickscope
+" note to self - install from here - https://plugins.jetbrains.com/plugin/15976-which-key
+set which-key
+
+set ignorecase
+set clipboard+=unnamedplus
+
+
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+nmap [[ _i
+nmap ]] $a
+nmap + <C-a>
+nmap - <C-x>
+nmap <C-a> gg<S-v>G
+nmap <leader>d :bd<CR>
+nmap <leader>D :bd!<CR>
+nmap te :tabedit<Return>
+nmap tc :tabclose<Return>
+nmap sh :split<Return><C-w>w
+nmap sv :vsplit<Return><C-w>w
+nmap sc :only<Return>
+nmap <S-l> xp
+nmap <S-h> xhhp
+nmap <S-Up> :m-2<CR>
+nmap <S-k> :m-2<CR>
+nmap <S-Down> :m+<CR>
+nmap <S-j> :m+<CR>
+nmap U <C-r>
+nmap <M-j> :cnext<CR>
+nmap <M-k> :cprev<CR>
+nmap [<Space> O<Esc>
+nmap ]<Space> o<Esc>
+nmap <Space>f <Action>(GotoFile)
+nmap <Space>r <Action>(FindInPath)
+nmap ]w <Action>(GotoNextError)
+nmap [w <Action>(GotoPreviousError)
+
+vmap <S-Down> :m '>+1<CR>gv=gv
+vmap <S-j> :m '>+1<CR>gv=gv
+vmap <S-Up> :m '<-2<CR>gv=gv
+vmap <S-k> :m '<-2<CR>gv=gv
+vmap <S-l> dpgvlol
+vmap <S-h> dhhpgvhoh
+vmap y ygv<Esc>
+
+inoremap <C-J> <Down>
+inoremap <C-k> <Up>

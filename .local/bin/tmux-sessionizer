@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 
-directory="$(find ~/projects ~/.config ~/.local/bin ~/work -mindepth 1 -maxdepth 1 -type d | fzf-tmux -p)"
+directory="$(find ~ ~/projects ~/.config ~/.local ~/work -mindepth 0 -maxdepth 1 -type d | fzf-tmux -p)"
 
 if [[ -z "$directory" ]]; then
-	echo "No directory selected"
+	# echo "No directory selected"
 	exit 1
 fi
 
-echo "Directory: $directory"
-
 session_name="$(basename $directory | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr '.' '_')"
-
-echo "Session name: $session_name"
 
 if [[ ! "$session_name" =~ ^[a-z0-9_-]+$ ]]; then
 	echo "Could not create valid session name from selected directory '$directory'"

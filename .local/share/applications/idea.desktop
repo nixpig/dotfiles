@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=IntelliJ IDEA
+Icon=/opt/idea/bin/idea.svg
+Exec=/opt/idea/bin/idea.sh
+

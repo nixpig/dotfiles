@@ -111,4 +111,6 @@ packer.startup(function(use)
 		-- Note: I had to git clone into ~/.local/share/nvim/site/pack/packer/opt and run the below manually - https://github.com/microsoft/vscode-js-debug
 		run = 'npm i && npm run compile vsDebugServerBundle && mv dist out'
 	}
+
+	use "unblevable/quick-scope" -- Lightning fast left-right movement in Vim
 end)

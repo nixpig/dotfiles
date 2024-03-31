@@ -2,6 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Initialise keychain with main SSH key
+eval $(keychain --eval --quiet id_rsa)
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -62,8 +65,6 @@ if [ -f "/etc/arch-release" ]; then
     source /usr/share/git/completion/git-prompt.sh
 elif [ -f "/etc/debian_version" ]; then
     source /usr/lib/git-core/git-sh-prompt
-else
-    export ANDROID_HOME="/usr/lib/android-sdk"
 fi
 
 PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
@@ -123,7 +124,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$PATH:$HOME/go/bin"
+export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$HOME/go/bin:/opt/idea/bin:$PATH"
 
 export BAT_THEME="Catppuccin-mocha"
 
@@ -175,10 +176,6 @@ eval "$(starship init bash)"
 
 source ${HOME}/.config/broot/launcher/bash/br
 
-# Initialise the keychain
-eval $(keychain --eval --quiet id_rsa)
-
-
 # >>>> Vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.0/contrib/bash/completion.sh
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 # <<<<  Vagrant command completion (end)
