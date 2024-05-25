@@ -105,3 +105,5 @@ keymap.set('n', '<C-f>', '<Cmd>silent !tmux neww tmux-sessionizer<CR>', { desc =
 -- Trigger tldr.sh
 keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr.sh<CR>',
 	{ desc = 'Trigger tldr.sh' })
+
+keymap.set('i', '<C-e>', 'if err != nil {\n\treturn nil, err\n}')

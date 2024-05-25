@@ -2,6 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# set -o vi
+set show-mode-in-prompt on
+
 # Initialise keychain with main SSH key
 eval $(keychain --eval --quiet id_rsa)
 
@@ -179,3 +182,7 @@ source ${HOME}/.config/broot/launcher/bash/br
 # >>>> Vagrant command completion (start)
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 # <<<<  Vagrant command completion (end)
+
+complete -C /home/nixpig/.local/bin/terraform terraform
+
+source <(kubectl completion bash)

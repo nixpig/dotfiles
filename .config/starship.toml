@@ -6,6 +6,15 @@ vimcmd_symbol = "[❮](green)"
 [aws]
 symbol = "  "
 
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "󰠅 "
+style = "blue"
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
+
 [buf]
 symbol = " "
 
@@ -35,6 +44,10 @@ symbol = " "
 
 [git_branch]
 symbol = " "
+
+[git_metrics]
+added_style = 'blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 [golang]
 symbol = " "

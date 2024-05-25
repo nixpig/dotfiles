@@ -4,51 +4,39 @@ if not status_cmp then
     return
 end
 
-local icons = {
-    ui = require("icons").get("ui"),
-}
-
 local status_lspkind, lspkind = pcall(require, 'lspkind')
 if not status_lspkind then print 'Failed to load lspkind' end
 
--- local function formatForTailwindCSS(entry, vim_item)
---     if vim_item.kind == 'Color' and entry.completion_item.documentation then
---         local _, _, r, g, b = string.find(entry.completion_item.documentation,
---             '^rgb%((%d+), (%d+), (%d+)')
---         if r then
---             local color =
---                 string.format('%02x', r) .. string.format('%02x', g) ..
---                 string.format('%02x', b)
---             local group = 'Tw_' .. color
---             if vim.fn.hlID(group) < 1 then
---                 vim.api.nvim_set_hl(0, group, { fg = '#' .. color })
---             end
---             vim_item.kind = icons.ui.BigCircle
---             vim_item.kind_hl_group = group
---             return vim_item
---         end
---     end
---     vim_item.kind = lspkind.symbolic(vim_item.kind) and
---         lspkind.symbolic(vim_item.kind) or vim_item.kind
---     return vim_item
--- end
 cmp.setup({
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'copilot' },
         { name = 'buffer' },
         { name = 'path' },
-        -- { name = 'luasnip' },
-        { name = 'vsnip' },
+        { name = 'luasnip',              option = { use_show_condition = false } },
         { name = 'lab.quick_data',       keyword_length = 4 },
         { name = 'vim-dadbod-completion' },
     }),
     snippet = {
         expand = function(args)
-            -- require('luasnip').lsp_expand(args.body)
-            vim.fn['vsnip#anonymous'](args.body)
+            require('luasnip').lsp_expand(args.body)
         end
     },
+    -- sorting = {
+    --     priority_weight = 2,
+    --     comparators = {
+    --         cmp.config.compare.offset,
+    --         cmp.config.compare.scopes,
+    --         cmp.config.compare.score,
+    --         cmp.config.compare.recently_used,
+    --         cmp.config.compare.locality,
+    --         cmp.config.compare.kind,
+    --         cmp.config.compare.sort_text,
+    --         cmp.config.compare.length,
+    --         cmp.config.compare.order,
+    --         cmp.config.compare.exact,
+    --     },
+    -- },
     completion = { completeopt = 'menu,menuone,noinsert,preview' },
     mapping = cmp.mapping.preset.insert({
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
