@@ -3,5 +3,6 @@
 -- 	golines = "-m 80"
 -- }
 --
+
 -- -- disable the Shift-K to open go doc
--- vim.g.go_doc_keywordprg_enabled = false
+vim.g.go_doc_keywordprg_enabled = false

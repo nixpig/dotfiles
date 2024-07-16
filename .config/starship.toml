@@ -1,5 +1,6 @@
 [character]
-success_symbol = "[[..󰊠](white) ❯](green)"
+# success_symbol = "[[..󰊠](white) ❯](green)"
+success_symbol = "[[󰐁](13) ❯](green)"
 error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
 

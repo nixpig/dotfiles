@@ -186,3 +186,6 @@ source ${HOME}/.config/broot/launcher/bash/br
 complete -C /home/nixpig/.local/bin/terraform terraform
 
 source <(kubectl completion bash)
+
+# Turso
+export PATH="/home/nixpig/.turso:$PATH"
