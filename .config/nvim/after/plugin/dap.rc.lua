@@ -10,6 +10,7 @@ dap_go.setup {}
 
 -- Set keymaps to control the debugger
 keymap.set('n', '<F5>', require 'dap'.continue, { desc = 'DAP: Start/Continue debugging' })
+keymap.set('n', '<F9>', require 'dap'.close, { desc = 'DAP: Stop debugging' })
 keymap.set('n', '<F10>', require 'dap'.step_over, { desc = 'DAP: Step over' })
 keymap.set('n', '<F11>', require 'dap'.step_into, { desc = 'DAP: Step into' })
 keymap.set('n', '<F12>', require 'dap'.step_out, { desc = 'DAP: Step out' })

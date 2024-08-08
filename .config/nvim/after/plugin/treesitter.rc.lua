@@ -11,7 +11,7 @@ ts.setup {
 		'markdown', 'markdown_inline', 'tsx', 'typescript', 'javascript',
 		'java', 'kotlin', 'yaml', 'bash', 'json', 'go', 'yaml', 'hcl', 'terraform', 'swift', 'css',
 		'html', 'lua', 'rust', 'python', 'diff', 'dockerfile', 'gitcommit', 'gitattributes', 'gitignore', 'git_rebase',
-		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query', 'templ'
+		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query', 'templ', 'vhs'
 	},
 	autotag = { enable = true },
 	-- context_commentstring = { enable = true, enable_autocmd = false },
@@ -30,7 +30,19 @@ ts.setup {
 }
 
 local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+
 parser_config.tsx.filetype_to_parsername = { 'javascript', 'typescript.tsx' }
+
+parser_config.vhs = {
+	install_info = {
+		url = "/home/nixpig/projects/tree-sitter-vhs",
+		files = { "src/parser.c" },
+		-- branch = "set-window-title-command",
+		generate_requires_npm = false,
+		requires_generate_from_grammar = true,
+	},
+}
+
 
 -- Workaround to get code fix broken code folding on initial opening
 vim.api.nvim_create_autocmd({ "BufEnter" },

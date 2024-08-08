@@ -119,6 +119,7 @@ fi
 
 export ANDROID_SDK_ROOT=$ANDROID_HOME
 
+export FLYCTL_INSTALL="/home/nixpig/.fly"
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 # export N_PREFIX="$HOME/.local/n"
@@ -127,7 +128,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$HOME/go/bin:/opt/idea/bin:$PATH"
+export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$HOME/go/bin:/opt/idea/bin:$FLYCTL_INSTALL/bin:$PATH"
 
 export BAT_THEME="Catppuccin-mocha"
 

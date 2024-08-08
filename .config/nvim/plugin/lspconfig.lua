@@ -1,4 +1,5 @@
--- vim.lsp.set_log_level('debug')
+vim.lsp.set_log_level('DEBUG')
+
 local status, nvim_lsp = pcall(require, 'lspconfig')
 if not status then
     print 'Failed to load lspconfig'

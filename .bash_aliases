@@ -60,7 +60,6 @@ alias grc='cd ~ && vim .gitconfig'
 # Remap utilities
 ## cat aliases
 alias cat='bat'
-alias diff='diff-so-fancy'
 alias make='colormake'
 
 ## exa and ls aliases
