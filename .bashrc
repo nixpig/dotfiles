@@ -180,11 +180,9 @@ eval "$(starship init bash)"
 
 source ${HOME}/.config/broot/launcher/bash/br
 
-# >>>> Vagrant command completion (start)
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
-# <<<<  Vagrant command completion (end)
-
 complete -C /home/nixpig/.local/bin/terraform terraform
+complete -W "" az
 
 source <(kubectl completion bash)
 
