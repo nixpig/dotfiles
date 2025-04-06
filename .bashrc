@@ -178,9 +178,7 @@ eval "$(starship init bash)"
 # Attach blesh
 [[ ${BLE_VERSION-} ]] && ble-attach
 
-source ${HOME}/.config/broot/launcher/bash/br
 
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 complete -C /home/nixpig/.local/bin/terraform terraform
 complete -W "" az
 

@@ -27,7 +27,7 @@ exec --no-startup-id dunst
 exec_always --no-startup-id picom -fb --config $HOME/.config/picom.conf
 
 # Set wallpaper
-exec --no-startup-id feh --bg-fill $HOME/.config/wallpaper/spooky_spill.jpg
+exec --no-startup-id feh --bg-fill $HOME/.config/wallpaper/catppuccin-rainbow.webp
 
 # Remap keys
 exec --no-startup-id $HOME/.local/bin/remap-keys.sh
@@ -224,8 +224,9 @@ for_window [window_role="task_dialog"] floating enable
 # hide_edge_borders both
 
 # Set window gaps
-# gaps right 5px
-# gaps inner 5px
+gaps right 355px
+gaps inner 8px
+
 
 # Theming (colours from Catppuccin)
 set $rosewater #f5e0dc
@@ -255,9 +256,9 @@ set $mantle #181825
 set $crust #11111b
 set $transparent #00000000
 
-# Enable smart borders
-for_window [class="^.*"] border pixel 1
-smart_borders on
+# Remove header bar from windows
+for_window [class="^.*"] border pixel 0
+# smart_borders on
 
 # Window colours
 client.focused $transparent $crust $base $transparent

@@ -20,11 +20,6 @@ cmd([[packadd packer.nvim]])
 
 
 packer.startup(function(use)
-	-- use 'github/copilot.vim'
-	-- use { 'zbirenbaum/copilot.lua' } -- Fully featured & enhanced replacement for copilot.vim complete with API for interacting with Github Copilot
-	-- use {
-	-- 	"zbirenbaum/copilot-cmp",
-	-- }
 	use 'nvim-lua/plenary.nvim'    -- Common utilities needed by plugins, e.g. Telescope
 	use 'wbthomason/packer.nvim'   -- A use-package inspired plugin manager for Neovim
 	use 'onsails/lspkind-nvim'     -- vscode-like pictograms for neovim lsp completion items
@@ -65,7 +60,6 @@ packer.startup(function(use)
 	use 'mxsdev/nvim-dap-vscode-js'                                                                -- DAP adaptor for Node.js - JavaScript, TypeScript
 	use 'leoluz/nvim-dap-go'                                                                       -- DAP adaptor for Go
 	use 'jose-elias-alvarez/typescript.nvim'                                                       -- A Lua plugin, written in TypeScript, to write TypeScript (Lua optional)
-	use 'anuvyklack/pretty-fold.nvim'                                                              -- Foldtext customization in Neovim
 	use { 'akinsho/git-conflict.nvim', tag = "*" }                                                 -- A plugin to visualise and resolve merge conflicts in neovim
 	use 'nvim-treesitter/nvim-treesitter-refactor'                                                 -- Refactor module for nvim-treesitter
 	use 'hiphish/rainbow-delimiters.nvim'
@@ -81,7 +75,7 @@ packer.startup(function(use)
 	use 'nvim-treesitter/nvim-treesitter-context'                                                  -- Lightweight alternative to context.vim implemented with nvim-treesitter
 	use 'nvim-telescope/telescope-ui-select.nvim'                                                  -- It sets vim.ui.select to telescope. That means for example that neovim core stuff can fill the telescope picker.
 	use 'debugloop/telescope-undo.nvim'                                                            -- Telescope extension to browse and edit undo history
-	use { 'j-hui/fidget.nvim', tag = 'legacy' }                                                    -- Standalone UI for nvim-lsp progress
+	-- use { 'j-hui/fidget.nvim', tag = 'legacy' }                                                    -- Standalone UI for nvim-lsp progress
 	use 'MunifTanjim/prettier.nvim'                                                                -- Format your code using Prettier
 	use { 'L3MON4D3/LuaSnip', run = 'make install_jsregexp' }                                      -- Snippet Engine for Neovim written in Lua
 	use { 'saadparwaiz1/cmp_luasnip' }                                                             --
@@ -91,7 +85,6 @@ packer.startup(function(use)
 	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }                               -- Nvim Treesitter configurations and abstraction layer
 	use { 'nvim-treesitter/nvim-treesitter' }                                                      -- Nvim Treesitter configurations and abstraction layer
 	use { 'numToStr/Comment.nvim', requires = { 'JoosepAlviste/nvim-ts-context-commentstring' } }  --  Smart and powerful comment plugin for neovim
-	use { 'anuvyklack/fold-preview.nvim', requires = { 'anuvyklack/keymap-amend.nvim' } }          -- Preview folds in float window
 	-- Plugin for calling lazygit from within neovim.
 	use {
 		"kdheepak/lazygit.nvim",

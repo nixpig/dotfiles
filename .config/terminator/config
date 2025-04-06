@@ -1,7 +1,6 @@
 [global_config]
   borderless = True
   scroll_tabbar = True
-  suppress_multiple_term_dialog = True
   title_at_bottom = True
 [keybindings]
   layout_launcher = <Primary><Shift><Alt>l
@@ -13,10 +12,10 @@
     visible_bell = True
     urgent_bell = True
     background_color = "#1e1e2e"
-    background_darkness = 0.98
+    background_darkness = 0.97
     background_type = transparent
     cursor_shape = ibeam
-    font = Operator Mono for Powerline 22
+    font = Operator Mono for Powerline 23
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
@@ -28,7 +27,7 @@
     visible_bell = True
     urgent_bell = True
     background_color = "#1e1e2e"
-    background_darkness = 0.98
+    background_darkness = 0.97
     background_type = transparent
     cursor_shape = ibeam
     font = Operator Mono for Powerline 16

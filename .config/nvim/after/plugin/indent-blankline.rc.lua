@@ -36,7 +36,7 @@ opt.listchars:append "extends:›"
 opt.listchars:append "precedes:‹"
 opt.listchars:append "nbsp:␣"
 opt.listchars:append "trail:·"
-opt.listchars:append "eol:↲"
+opt.listchars:append "eol:󰌑"
 
 cmd([[highlight IndentBlanklineIndent0 guifg=#b4befe gui=nocombine]])
 cmd([[highlight IndentBlanklineIndent1 guifg=#f38ba8 gui=nocombine]])

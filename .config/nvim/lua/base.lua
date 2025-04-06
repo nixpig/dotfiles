@@ -64,11 +64,10 @@ vim.filetype.add({
 	}
 })
 
--- Improve treesitter code-folding
-opt.foldmethod = 'expr'
-opt.foldcolumn = '0'
-opt.foldexpr = 'nvim_treesitter#foldexpr()'
+-- Disable code folding
 vim.o.foldenable = false
+api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' },
+	{ pattern = '*', command = 'set nofoldenable foldmethod=manual foldlevelstart=99' })
 
 -- Undercurl
 cmd([[let &t_Cs = '\e[4:3m']])

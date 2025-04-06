@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/nixpig/.config/wallpaper/spooky_spill.jpg' 
+feh --no-fehbg --bg-fill '/home/nixpig/.config/wallpaper/catppuccin-rainbow.webp' 

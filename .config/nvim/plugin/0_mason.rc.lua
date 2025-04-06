@@ -20,20 +20,16 @@ mason.setup({})
 
 lspconfig.setup({
     ensure_installed = {
-        'astro',
         'bashls',
         'cssls',
         'lua_ls',
         'tailwindcss',
-        'tsserver',
+        'ts_ls',
         'eslint',
         'ansiblels',
         'cssmodules_ls',
-        'cucumber_language_server',
-        'custom_elements_ls',
         'docker_compose_language_service',
         'stylelint_lsp',
-        'bashls',
         'jsonls',
         'html',
         'dockerls',
@@ -42,10 +38,10 @@ lspconfig.setup({
         'jdtls',
         'gradle_ls',
         'helm_ls',
-        'kotlin_language_server',
         'terraformls',
         'tflint',
         'templ',
+        'asm_lsp',
     }
 })
 

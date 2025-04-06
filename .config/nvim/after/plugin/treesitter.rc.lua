@@ -11,9 +11,8 @@ ts.setup {
 		'markdown', 'markdown_inline', 'tsx', 'typescript', 'javascript',
 		'java', 'kotlin', 'yaml', 'bash', 'json', 'go', 'yaml', 'hcl', 'terraform', 'swift', 'css',
 		'html', 'lua', 'rust', 'python', 'diff', 'dockerfile', 'gitcommit', 'gitattributes', 'gitignore', 'git_rebase',
-		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query', 'templ', 'vhs'
+		'http', 'regex', 'scss', 'sql', 'toml', 'vim', 'c', 'cpp', 'cmake', 'vimdoc', 'query', 'templ', 'vhs', 'asm'
 	},
-	autotag = { enable = true },
 	-- context_commentstring = { enable = true, enable_autocmd = false },
 	refactor = {
 		enable = true,
@@ -42,11 +41,6 @@ parser_config.vhs = {
 		requires_generate_from_grammar = true,
 	},
 }
-
-
--- Workaround to get code fix broken code folding on initial opening
-vim.api.nvim_create_autocmd({ "BufEnter" },
-	{ pattern = { "*" }, command = "normal zx zR" })
 
 local contextStatus, context = pcall(require, 'treesitter-context')
 if not contextStatus then

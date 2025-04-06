@@ -1,5 +1,3 @@
-vim.lsp.set_log_level('DEBUG')
-
 local status, nvim_lsp = pcall(require, 'lspconfig')
 if not status then
     print 'Failed to load lspconfig'
@@ -37,12 +35,6 @@ local on_attach = function(client, bufnr)
         command = 'silent! EslintFixAll',
         group = vim.api.nvim_create_augroup('MyAutocmdsJavaScriptFormatting', {}),
     })
-
-    vim.api.nvim_create_autocmd('BufWritePre', {
-        pattern = { '*.prisma' },
-        command = 'silent! yes | prisma format',
-        group = vim.api.nvim_create_augroup('MyAutocmdsPrismaFormatting', {}),
-    })
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -77,22 +69,16 @@ protocol.CompletionItemKind = {
 
 nvim_lsp.ansiblels.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.cssmodules_ls.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.custom_elements_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.docker_compose_language_service.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.stylelint_lsp.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.flow.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.sourcekit.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.tailwindcss.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.cssls.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.astro.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.jsonls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.html.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.dockerls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.gopls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.gradle_ls.setup { on_attach = on_attach, capabilities = capabilities }
 nvim_lsp.helm_ls.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.kotlin_language_server.setup { on_attach = on_attach, capabilities = capabilities }
-nvim_lsp.prismals.setup { on_attach = on_attach, capabilities = capabilities }
 
 nvim_lsp.jdtls.setup {
     on_attach = function()
@@ -110,19 +96,20 @@ nvim_lsp.terraformls.setup {
     capabilities = capabilities,
 }
 
-nvim_lsp.cucumber_language_server.setup {
-    on_attach = on_attach,
-    filetypes = { 'cucumber' },
-    capabilities = capabilities
-}
-
 nvim_lsp.bashls.setup {
     on_attach = on_attach,
     filetypes = { 'sh', 'shell', 'bash', 'zsh', 'fish', 'fsh' },
     capabilities = capabilities
 }
 
-nvim_lsp.tsserver.setup {
+-- to slow to be even usable :(
+-- nvim_lsp.asm_lsp.setup {
+--     on_attach = on_attach,
+--     filetypes = { 'asm' },
+--     capabilities = capabilities,
+-- }
+
+nvim_lsp.ts_ls.setup {
     on_attach = on_attach,
     filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx' },
     cmd = { 'typescript-language-server', '--stdio' },
