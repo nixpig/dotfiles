@@ -19,7 +19,7 @@
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
-    palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#a6adc8"
+    palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89b4fa:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89b4fa:#a6adc8"
     use_system_font = False
     bold_is_bright = True
   [[small]]
@@ -34,7 +34,7 @@
     foreground_color = "#cdd6f4"
     show_titlebar = False
     scrollbar_position = hidden
-    palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89dceb:#a6adc8"
+    palette = "#181825:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89b4fa:#bac2de:#585b70:#f38ba8:#a6e3a1:#f9e2af:#89b4fa:#cba6f7:#89b4fa:#a6adc8"
     use_system_font = False
     bold_is_bright = True
     title_use_system_font = False

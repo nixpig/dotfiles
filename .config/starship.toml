@@ -1,8 +1,8 @@
 [character]
 # success_symbol = "[[..󰊠](white) ❯](green)"
-success_symbol = "[[󰐁](13) ❯](green)"
-error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](green)"
+success_symbol = "[>](green)"
+error_symbol = "[>](red)"
+vimcmd_symbol = "[<](green)"
 
 [aws]
 symbol = "  "
@@ -45,6 +45,7 @@ symbol = " "
 
 [git_branch]
 symbol = " "
+style = "yellow"
 
 [git_metrics]
 added_style = 'blue'

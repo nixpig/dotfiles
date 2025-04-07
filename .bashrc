@@ -143,7 +143,7 @@ fi
 
 export GIT_EDITOR="nvim"
 
-export LC_CTYPE=C.UTF-8
+export LC_CTYPE=en_GB.UTF-8
 
 export VAGRANT_HOME=/mnt/efe8b538-025d-4e8c-befc-fe22dcec7f15/Vagrant
 
