@@ -1,0 +1,19 @@
+<application>
+  <component name="Trusted.Paths">
+    <option name="TRUSTED_PROJECT_PATHS">
+      <map>
+        <entry key="$USER_HOME$/IdeaProjects/patient-management" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/patient-management/analtics-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/patient-management/analytics-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/patient-management/billing-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/patient-management/patient-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management/api-gateway" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management/auth-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management/user-analytics-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management/user-billing-service" value="true" />
+        <entry key="$USER_HOME$/IdeaProjects/user-management/user-service" value="true" />
+      </map>
+    </option>
+  </component>
+</application>

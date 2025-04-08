@@ -1,0 +1,10 @@
+<application>
+  <component name="LocalDatabaseDriverManager" version="201">
+    <driver id="h2.unified">
+      <artifact id="H2" name="H2" use="true" version="2.2.220" />
+    </driver>
+    <driver id="postgresql">
+      <artifact id="PostgreSQL" name="PostgreSQL" use="true" version="42.7.3" />
+    </driver>
+  </component>
+</application>
