@@ -108,7 +108,6 @@ require('lazy').setup({
   'tpope/vim-unimpaired',
   'tpope/vim-surround',
   'tpope/vim-sleuth',
-  'rmagatti/alternate-toggler',
   'duane9/nvim-rg',
   'nvim-telescope/telescope-symbols.nvim',
   'nvim-treesitter/nvim-treesitter-context',
@@ -121,6 +120,13 @@ require('lazy').setup({
 
   { 'windwp/nvim-ts-autotag', opts = {} },
   { 'norcalli/nvim-colorizer.lua', opts = { '*' } },
+
+  {
+    'rmagatti/alternate-toggler',
+    config = function()
+      vim.keymap.set('n', '<leader><space>', '<cmd>lua require("alternate-toggler").toggleAlternate()<CR>', { desc = 'Toggle boolean-like value' })
+    end,
+  },
 
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -448,9 +454,6 @@ require('lazy').setup({
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
-        -- Toggles
-        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-        map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
       end,
     },
   },
@@ -1146,23 +1149,144 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
-  --
-  -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
-  -- Or use telescope!
-  -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
-  -- you can continue same window with `<space>sr` which resumes last telescope search
+  {
+    'mfussenegger/nvim-dap',
+    dependencies = {
+      'rcarriga/nvim-dap-ui',
+      'nvim-neotest/nvim-nio',
+      'mason-org/mason.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+      'leoluz/nvim-dap-go',
+    },
+    keys = {
+      {
+        '<F5>',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Debug: Start/Continue',
+      },
+      {
+        '<F1>',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Debug: Step into',
+      },
+      {
+        '<F2>',
+        function()
+          require('dap').step_over()
+        end,
+        desc = 'Debug: Step over',
+      },
+      {
+        '<F3>',
+        function()
+          require('dap').step_out()
+        end,
+        desc = 'Debug: Step out',
+      },
+      {
+        '<C-b>',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Debug: Toggle breakpoint',
+      },
+      {
+        '<C-c>',
+        function()
+          require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+        end,
+        desc = 'Debug: Set conditional breakpoint',
+      },
+      -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
+      {
+        '<F7>',
+        function()
+          require('dapui').toggle()
+        end,
+        desc = 'Debug: See last session result',
+      },
+      {
+        '<F9>',
+        function()
+          require('dap').close()
+        end,
+        desc = 'Debug: Stop debugging',
+      },
+      {
+        '<C-Delete>',
+        function()
+          require('dap').clear_breakpoints()
+        end,
+        desc = 'Debug: Clear breakpoints',
+      },
+    },
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+
+      require('mason-nvim-dap').setup {
+        -- Makes a best effort to setup the various debuggers with
+        -- reasonable debug configurations
+        automatic_installation = true,
+
+        ensure_installed = {
+          'delve',
+        },
+      }
+
+      dapui.setup {
+        icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+        controls = {
+          icons = {
+            pause = '⏸',
+            play = '▶',
+            step_into = '⏎',
+            step_over = '⏭',
+            step_out = '⏮',
+            step_back = 'b',
+            run_last = '▶▶',
+            terminate = '⏹',
+            disconnect = '⏏',
+          },
+        },
+      }
+
+      vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#f38ba8' })
+      vim.api.nvim_set_hl(0, 'DapStop', { fg = '#fab387' })
+      local breakpoint_icons = vim.g.have_nerd_font
+          and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+        or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+      for type, icon in pairs(breakpoint_icons) do
+        local tp = 'Dap' .. type
+        local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+        vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+      end
+
+      dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+      dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+      dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+      -- Install golang specific config
+      require('dap-go').setup {
+        delve = {
+          -- On Windows delve must be run attached or it crashes.
+          -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+          detached = vim.fn.has 'win32' == 0,
+        },
+      }
+    end,
+  },
 }, {
   ui = {
     icons = {},
   },
 })
 
--- Here is a utility function that closes any floating windows when you press escape
+-- Utility function to close any floating windows when you press escape
 -- Source: https://gist.github.com/benfrain/97f2b91087121b2d4ba0dcc4202d252f#file-mappings-lua
 local function close_floating()
   for _, win in pairs(vim.api.nvim_list_wins()) do
@@ -1216,8 +1340,6 @@ vim.keymap.set('n', '<C-f>', '<Cmd>silent !tmux neww tmux-sessionizer<CR>', { de
 vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr.sh<CR>', { desc = 'Trigger tldr.sh' })
 vim.keymap.set('i', '<C-e>', 'if err != nil {\n\treturn nil, err\n}')
 
-vim.keymap.set('n', '<leader><space>', '<cmd>lua require("alternate-toggler").toggleAlternate()<CR>', { desc = 'Toggle boolean-like value' })
-
 vim.cmd [[
   set completeopt=menu,menuone,noinsert,preview
   highlight! default link CmpItemKind CmpItemMenuDefault
@@ -1232,7 +1354,6 @@ vim.keymap.set('n', '[w', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts) -- Jump
 vim.keymap.set('n', 'gl', '<Cmd>Lspsaga show_line_diagnostics<CR>', opts) -- Show diagnostics for line
 vim.keymap.set('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts) -- Show signature help
 vim.keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', opts) -- Show docs
--- vim.keymap.set('n', 'gk', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)          -- Show docs
 vim.keymap.set('n', 'gh', '<Cmd>Lspsaga finder<CR>', opts) -- Show definition and usage
 vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', opts) -- Peek at definition
 vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts) -- Rename all occurrences of hovered word in current file
@@ -1241,14 +1362,7 @@ vim.keymap.set('n', 'go', '<Cmd>Lspsaga outline<CR>', opts) -- Show outline
 vim.keymap.set({ 'n', 'v' }, 'ga', '<Cmd>Lspsaga code_action<CR>', opts) -- Code action
 vim.keymap.set('n', 'gt', '<Cmd>Lspsaga term_toggle<CR>', opts) -- Toggle floating terminal
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
-
+-- Unfold and turn of folding
 vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, { pattern = '*', command = 'set nofoldenable foldmethod=manual foldlevelstart=99' })
 
 -- Turn off paste mode when leaving insert
