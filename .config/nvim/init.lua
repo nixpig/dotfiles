@@ -19,7 +19,7 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.o.signcolumn = 'yes'
+-- vim.o.signcolumn = 'yes'
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.list = true
@@ -117,9 +117,8 @@ require('lazy').setup({
   'christoomey/vim-tmux-navigator',
   'jose-elias-alvarez/typescript.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
-
-  { 'windwp/nvim-ts-autotag', opts = {} },
-  { 'norcalli/nvim-colorizer.lua', opts = { '*' } },
+  'windwp/nvim-ts-autotag',
+  'norcalli/nvim-colorizer.lua',
 
   {
     'rmagatti/alternate-toggler',
@@ -172,9 +171,7 @@ require('lazy').setup({
         options = {
           icons_enabled = true,
           theme = 'catppuccin',
-          --section_separators = {left = '', right = ''},
           section_separators = { left = '', right = '' },
-          -- component_separators = { left = '', right = '' },
           component_separators = { left = icons.misc.Vbar, right = icons.misc.Vbar },
           disabled_filetypes = { 'packer', 'NvimTree' },
         },
@@ -283,9 +280,22 @@ require('lazy').setup({
   {
     'nvimdev/lspsaga.nvim',
     after = 'nvim-lspconfig',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
     opts = {
-      ui = { winblend = 10, border = 'rounded', colors = { normal_bg = '#181825' }, code_action = '' },
-      symbol_in_winbar = { enable = true, separator = ' ' .. icons.ui.ArrowClosed .. ' ', respect_root = true },
+      devicon = 'true',
+      ui = {
+        winblend = 10,
+        border = 'rounded',
+        colors = { normal_bg = '#181825' },
+        code_action = '',
+      },
+      symbol_in_winbar = {
+        enable = true,
+        separator = ' ' .. icons.ui.ArrowClosed .. ' ',
+        respect_root = true,
+      },
     },
   },
 
@@ -690,14 +700,22 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+              border = 'rounded',
+            },
+          },
+        },
+      },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
     },
     config = function()
-      local nvim_lsp = require 'lspconfig'
-
       vim.lsp.protocol.CompletionItemKind = {
         icons.kind.Text,
         icons.kind.Method,
@@ -726,7 +744,6 @@ require('lazy').setup({
         icons.kind.TypeParameter,
       }
 
-      local on_attach = function(client, bufnr) end
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -736,23 +753,12 @@ require('lazy').setup({
         severity_sort = true,
       })
 
-      local signs = {
-        Error = icons.diagnostics.Error .. ' ',
-        Warn = icons.diagnostics.Warning .. ' ',
-        Info = icons.diagnostics.Information .. ' ',
-        Hint = icons.diagnostics.Hint .. ' ',
-      }
-
-      for type, icon in pairs(signs) do
-        local hl = 'DiagnosticSign' .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
-      end
-
       vim.diagnostic.config {
         virtual_text = { prefix = icons.ui.BigCircle },
         update_in_insert = true,
         float = {
-          source = true, -- Or 'if_many'
+          -- source = true, -- Or 'if_many'
+          source = 'if_many',
         },
       }
 
@@ -984,10 +990,9 @@ require('lazy').setup({
           auto_show = true,
           auto_show_delay_ms = 250,
           window = {
-            -- winhighlight = 'Normal:CmpNormal',
-            winblend = 20,
+            winblend = 0,
             border = 'rounded',
-            winhighlight = 'Normal:CmpNormal,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpDocCursorLine,Search:None',
+            winhighlight = 'Normal:Normal',
             scrollbar = false,
           },
         },
@@ -1394,3 +1399,24 @@ vim.filetype.add {
     tfvars = 'terraform',
   },
 }
+
+-- vim.diagnostic.config {
+--   virtual_text = true,
+--   signs = true,
+--   -- Update prompts even in insert mode, setting to true may affect performance
+--   update_in_insert = true,
+-- }
+-- local signs = {
+--   Error = icons.diagnostics.Error,
+--   Warn = icons.diagnostics.Warning,
+--   Hint = icons.diagnostics.Hint,
+--   Info = icons.diagnostics.Information,
+-- }
+-- -- for type, icon in pairs(signs) do
+-- --   local hl = 'LspDiagnosticsSign' .. type
+-- --   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
+-- -- end
+-- for type, icon in pairs(signs) do
+--   local hl = 'DiagnosticSign' .. type
+--   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+-- end
