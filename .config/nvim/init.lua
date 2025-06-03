@@ -4,6 +4,8 @@ local icons = {
   diagnostics = require('icons').get 'diagnostics',
   git = require('icons').get 'git',
   misc = require('icons').get 'misc',
+  dap = require('icons').get 'dap',
+  listchars = require('icons').get 'listchars',
 }
 
 vim.g.mapleader = ' '
@@ -39,7 +41,11 @@ vim.scriptencoding = 'utf-8'
 
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = {
+  tab = icons.listchars.Tab,
+  trail = icons.listchars.Trail,
+  nbsp = icons.listchars.Nbsp,
+}
 vim.opt.title = true -- Show the title of the file
 vim.opt.autoindent = true -- New lines inherit the indentation of previous lines
 vim.opt.smartindent = true -- Use smart indent
@@ -412,11 +418,12 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
+        add = { text = icons.git.Add },
+        change = { text = icons.git.Mod_alt },
+        delete = { text = icons.git.Remove },
+        changedelete = { text = icons.git.ChangeDelete },
+        untracked = { text = icons.git.Untracked },
+        topdelete = { text = icons.git.TopDelete },
       },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
@@ -746,19 +753,28 @@ require('lazy').setup({
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-      vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-        underline = true,
-        update_in_insert = false,
-        virtual_text = { spacing = 4, prefix = icons.ui.BigCircle },
-        severity_sort = true,
-      })
-
       vim.diagnostic.config {
-        virtual_text = { prefix = icons.ui.BigCircle },
+        virtual_text = { spacing = 2, prefix = icons.ui.BigCircle },
         update_in_insert = true,
+        underline = true,
+        severity_sort = true,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+            [vim.diagnostic.severity.WARN] = icons.diagnostics.Warning,
+            [vim.diagnostic.severity.INFO] = icons.diagnostics.Information,
+            [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+          },
+        },
         float = {
-          -- source = true, -- Or 'if_many'
           source = 'if_many',
+          border = 'rounded',
+          format = function(d)
+            return ('%s (%s) [%s]'):format(d.message, d.source, d.code or d.user_data.lsp.code)
+          end,
+        },
+        jump = {
+          float = true,
         },
       }
 
@@ -1132,6 +1148,7 @@ require('lazy').setup({
         'templ',
         'vhs',
         'asm',
+        'tmux',
       },
       auto_install = true,
       highlight = {
@@ -1247,15 +1264,15 @@ require('lazy').setup({
         icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
         controls = {
           icons = {
-            pause = '⏸',
-            play = '▶',
-            step_into = '⏎',
-            step_over = '⏭',
-            step_out = '⏮',
-            step_back = 'b',
-            run_last = '▶▶',
-            terminate = '⏹',
-            disconnect = '⏏',
+            pause = icons.dap.Pause,
+            play = icons.dap.Play,
+            step_into = icons.dap.StepInto,
+            step_over = icons.dap.StepOver,
+            step_out = icons.dap.StepOut,
+            step_back = icons.dap.StepBack,
+            run_last = icons.dap.RunLast,
+            terminate = icons.dap.Terminate,
+            disconnect = icons.dap.Disconnect,
           },
         },
       }
@@ -1263,8 +1280,20 @@ require('lazy').setup({
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#f38ba8' })
       vim.api.nvim_set_hl(0, 'DapStop', { fg = '#fab387' })
       local breakpoint_icons = vim.g.have_nerd_font
-          and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-        or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+          and {
+            Breakpoint = icons.dap.Breakpoint,
+            BreakpointCondition = icons.dap.BreakpointCondition,
+            BreakpointRejected = icons.dap.BreakpointRejected,
+            LogPoint = icons.dap.LogPoint,
+            Stopped = icons.dap.Stopped,
+          }
+        or {
+          Breakpoint = icons.dap.Breakpoint,
+          BreakpointCondition = icons.dap.BreakpointCondition,
+          BreakpointRejected = icons.dap.BreakpointRejected,
+          LogPoint = icons.dap.LogPoint,
+          Stopped = icons.dap.Stopped,
+        }
       for type, icon in pairs(breakpoint_icons) do
         local tp = 'Dap' .. type
         local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
@@ -1342,7 +1371,7 @@ vim.keymap.set('', '<leader>x', ':!chmod +x %<CR>', { desc = 'Make file in curre
 vim.keymap.set('n', '<M-j>', ':cnext<CR>', { desc = 'Next item in quickfix list' })
 vim.keymap.set('n', '<M-k>', ':cprev<CR>', { desc = 'Previous item in quickfix list' })
 vim.keymap.set('n', '<C-f>', '<Cmd>silent !tmux neww tmux-sessionizer<CR>', { desc = 'Trigger tmux-sessionizer' })
-vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr.sh<CR>', { desc = 'Trigger tldr.sh' })
+vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr<CR>', { desc = 'Trigger tldr.sh' })
 vim.keymap.set('i', '<C-e>', 'if err != nil {\n\treturn nil, err\n}')
 
 vim.cmd [[
@@ -1377,7 +1406,7 @@ vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', command = 'set nopas
 vim.cmd [[
   augroup highlight_yank
   autocmd!
-  au TextYankPost * silent! lua vim.highlight.on_yank({higroup='Visual', timeout=250})
+  au TextYankPost * silent! lua vim.highlight.on_yank({ higroup='Visual', timeout=250 })
   augroup END
 ]]
 
@@ -1399,24 +1428,3 @@ vim.filetype.add {
     tfvars = 'terraform',
   },
 }
-
--- vim.diagnostic.config {
---   virtual_text = true,
---   signs = true,
---   -- Update prompts even in insert mode, setting to true may affect performance
---   update_in_insert = true,
--- }
--- local signs = {
---   Error = icons.diagnostics.Error,
---   Warn = icons.diagnostics.Warning,
---   Hint = icons.diagnostics.Hint,
---   Info = icons.diagnostics.Information,
--- }
--- -- for type, icon in pairs(signs) do
--- --   local hl = 'LspDiagnosticsSign' .. type
--- --   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = '' })
--- -- end
--- for type, icon in pairs(signs) do
---   local hl = 'DiagnosticSign' .. type
---   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
--- end

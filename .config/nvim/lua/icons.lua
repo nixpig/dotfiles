@@ -70,6 +70,8 @@ local data = {
     Unstaged = '',
     Staged = '',
     Conflict = '',
+    ChangeDelete = '~',
+    TopDelete = '‾',
   },
   ui = {
     ArrowClosed = '',
@@ -133,16 +135,16 @@ local data = {
   },
   diagnostics = {
     Error = '',
-    Warning = '',
+    Warning = '',
     Information = '',
     Question = '',
-    Hint = '󰌵',
+    Hint = '󰠠',
     -- Holo version
     Error_alt = '󰅚',
     Warning_alt = '󰀪',
     Information_alt = '',
     Question_alt = '',
-    Hint_alt = '󰌶',
+    Hint_alt = '󰠠',
   },
   misc = {
     Campass = '󰀹',
@@ -188,24 +190,30 @@ local data = {
     undefined = '',
   },
   dap = {
-    Breakpoint = '󰝥',
+    Breakpoint = '',
     BreakpointCondition = '󰟃',
-    BreakpointRejected = '',
-    LogPoint = '',
-    Pause = '',
-    Play = '',
-    RunLast = '↻',
-    StepBack = '',
+    BreakpointRejected = '󱑙',
+    LogPoint = '',
+    Pause = '󰏤',
+    Play = '󰐊',
+    RunLast = '',
+    StepBack = '',
     StepInto = '󰆹',
     StepOut = '󰆸',
-    StepOver = '󰆷',
-    Stopped = '',
-    Terminate = '󰝤',
+    StepOver = '',
+    Stopped = '',
+    Terminate = '󰓛',
+    Disconnect = '󱐤',
+  },
+  listchars = {
+    Tab = '» ',
+    Trail = '·',
+    Nbsp = '␣',
   },
 }
 
 ---Get a specific icon set.
----@param category "kind"|"type"|"documents"|"git"|"ui"|"diagnostics"|"misc"|"cmp"|"dap"
+---@param category "kind"|"type"|"documents"|"git"|"ui"|"diagnostics"|"misc"|"cmp"|"dap"|"listchars"
 ---@param add_space? boolean @Add trailing space after the icon.
 function icons.get(category, add_space)
   if add_space then
