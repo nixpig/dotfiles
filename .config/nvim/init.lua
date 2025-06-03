@@ -754,7 +754,10 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       vim.diagnostic.config {
-        virtual_text = { spacing = 2, prefix = icons.ui.BigCircle },
+        virtual_text = {
+          spacing = 2,
+          prefix = icons.ui.BigCircle,
+        },
         update_in_insert = true,
         underline = true,
         severity_sort = true,
