@@ -123,8 +123,15 @@ require('lazy').setup({
   'christoomey/vim-tmux-navigator',
   'jose-elias-alvarez/typescript.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
-  'windwp/nvim-ts-autotag',
   'norcalli/nvim-colorizer.lua',
+
+  {
+    'windwp/nvim-ts-autotag',
+    aliases = {
+      ['vue'] = 'html',
+    },
+    opts = {},
+  },
 
   {
     'rmagatti/alternate-toggler',
@@ -382,6 +389,7 @@ require('lazy').setup({
           'typescript',
           'typescriptreact',
           'scss',
+          'vue',
         },
       }
     end,
@@ -701,7 +709,9 @@ require('lazy').setup({
       {
         'mason-org/mason-lspconfig.nvim',
         opts = {
-          ensure_installed = {},
+          ensure_installed = {
+            'vue-language-server@1.8.27',
+          },
         },
       },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -781,14 +791,40 @@ require('lazy').setup({
         },
       }
 
+      local vue_typescript_plugin_path = vim.fn.stdpath 'data'
+        .. '/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
+
+      require('lspconfig').volar.setup {
+        init_options = {
+          vue = {
+            hybridMode = false,
+          },
+        },
+      }
+
       local servers = {
         ts_ls = {
-          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx' },
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+          },
           cmd = { 'typescript-language-server', '--stdio' },
           root_dir = function()
             return vim.loop.cwd()
           end,
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vue_typescript_plugin_path,
+              languages = { 'vue' },
+            },
+          },
         },
+        vue_ls = {},
         bashls = {
           filetypes = { 'sh', 'shell', 'bash', 'zsh', 'fish', 'fsh' },
         },
@@ -810,7 +846,14 @@ require('lazy').setup({
           },
         },
         eslint = {
-          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx' },
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+          },
           root_dir = function()
             return vim.loop.cwd()
           end,
@@ -819,7 +862,6 @@ require('lazy').setup({
         cssmodules_ls = {},
         jsonls = {},
         docker_compose_language_service = {},
-        stylelint_lsp = {},
         html = {},
         dockerls = {},
         gopls = {},
@@ -830,6 +872,8 @@ require('lazy').setup({
                 ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = {
                   'docker-compose*.yml',
                   'docker-compose*.yaml',
+                  '*compose.yml',
+                  '*compose.yaml',
                 },
                 ['https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json'] = '/*.k8s.yaml',
               },
@@ -1122,7 +1166,9 @@ require('lazy').setup({
         'kotlin',
         'bash',
         'json',
+        'json5',
         'go',
+        'gomod',
         'yaml',
         'hcl',
         'terraform',
@@ -1152,6 +1198,7 @@ require('lazy').setup({
         'vhs',
         'asm',
         'tmux',
+        'vue',
       },
       auto_install = true,
       highlight = {
