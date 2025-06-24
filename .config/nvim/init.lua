@@ -124,7 +124,20 @@ require('lazy').setup({
   'jose-elias-alvarez/typescript.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
   'norcalli/nvim-colorizer.lua',
-
+  
+  {
+    'qvalentin/helm-ls.nvim',
+    ft = 'helm',
+    opts = {
+      conceal_templates = {
+        enabled = false, -- disable the replacement of templates with virtual text of their current values
+      },
+      indent_hints = {
+        enabled = true, -- enable hints for indent and nindent functions
+      },
+    },
+  },
+    
   {
     'windwp/nvim-ts-autotag',
     aliases = {
@@ -186,7 +199,7 @@ require('lazy').setup({
           theme = 'catppuccin',
           section_separators = { left = '', right = '' },
           component_separators = { left = icons.misc.Vbar, right = icons.misc.Vbar },
-          disabled_filetypes = { 'packer', 'NvimTree' },
+          disabled_filetypes = { 'packer', 'NvimTree', 'dbui' },
         },
         sections = {
           lualine_a = { 'mode' },
@@ -865,21 +878,7 @@ require('lazy').setup({
         html = {},
         dockerls = {},
         gopls = {},
-        yamlls = {
-          settings = {
-            yaml = {
-              schemas = {
-                ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = {
-                  'docker-compose*.yml',
-                  'docker-compose*.yaml',
-                  '*compose.yml',
-                  '*compose.yaml',
-                },
-                ['https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json'] = '/*.k8s.yaml',
-              },
-            },
-          },
-        },
+        yamlls = {},
         jdtls = {
           on_attach = function()
             require('jdtls').start_or_attach {
@@ -889,7 +888,15 @@ require('lazy').setup({
           end,
         },
         gradle_ls = {},
-        helm_ls = {},
+        helm_ls = {
+             settings = {
+            ['helm-ls'] = {
+              yamlls = {
+                path = 'yaml-language-server',
+              },
+            },
+          },
+        },
         terraformls = {
           filetypes = { 'hcl', 'terraform' },
         },
@@ -897,12 +904,14 @@ require('lazy').setup({
           filetypes = { 'hcl', 'terraform' },
         },
         templ = {},
-        postgres_lsp = {},
+        -- postgres_lsp = {},
+        sleek = {},
+        stylua = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',
+        -- 'stylua',
       })
 
       require('mason-tool-installer').setup {
@@ -959,11 +968,15 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        sql = { 'sleek' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        sleek = {},
       },
     },
   },
@@ -1086,6 +1099,10 @@ require('lazy').setup({
         default = { 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+        },
+        per_filetype = {
+          sql = { 'dadbod', 'snippets', 'buffer' }
         },
       },
 
@@ -1095,6 +1112,27 @@ require('lazy').setup({
         implementation = 'prefer_rust',
       },
     },
+  },
+  
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+      vim.cmd [[ hi NotificationInfo guibg=NONE guifg=#a6e3a1]]
+      vim.cmd [[ hi NotificationWarning guibg=#fab387 guifg=#cdd6f4 ]]
+      vim.cmd [[ hi NotificationError guibg=#f38ba8 guifg=#cdd6f4 ]]
+    end,
   },
 
   {
