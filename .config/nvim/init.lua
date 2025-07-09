@@ -126,6 +126,19 @@ require('lazy').setup({
   'norcalli/nvim-colorizer.lua',
 
   {
+    'qvalentin/helm-ls.nvim',
+    ft = 'helm',
+    opts = {
+      conceal_templates = {
+        enabled = false, -- disable the replacement of templates with virtual text of their current values
+      },
+      indent_hints = {
+        enabled = true, -- enable hints for indent and nindent functions
+      },
+    },
+  },
+
+  {
     'windwp/nvim-ts-autotag',
     aliases = {
       ['vue'] = 'html',
@@ -186,7 +199,7 @@ require('lazy').setup({
           theme = 'catppuccin',
           section_separators = { left = '', right = '' },
           component_separators = { left = icons.misc.Vbar, right = icons.misc.Vbar },
-          disabled_filetypes = { 'packer', 'NvimTree' },
+          disabled_filetypes = { 'packer', 'NvimTree', 'dbui' },
         },
         sections = {
           lualine_a = { 'mode' },
@@ -890,7 +903,15 @@ require('lazy').setup({
           end,
         },
         gradle_ls = {},
-        helm_ls = {},
+        helm_ls = {
+          settings = {
+            ['helm-ls'] = {
+              yamlls = {
+                path = 'yaml-language-server',
+              },
+            },
+          },
+        },
         terraformls = {
           filetypes = { 'hcl', 'terraform' },
         },
@@ -1087,6 +1108,10 @@ require('lazy').setup({
         default = { 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          dadbod = { name = 'Dadbod', module = 'vim_dadbod_completion.blink' },
+        },
+        per_filetype = {
+          sql = { 'dadbod', 'snippets', 'buffer' },
         },
       },
 
@@ -1096,6 +1121,26 @@ require('lazy').setup({
         implementation = 'prefer_rust',
       },
     },
+  },
+
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      vim.g.db_ui_use_nerd_fonts = 1
+      vim.cmd [[ hi NotificationInfo guibg=NONE guifg=#a6e3a1]]
+      vim.cmd [[ hi NotificationWarning guibg=#fab387 guifg=#cdd6f4 ]]
+      vim.cmd [[ hi NotificationError guibg=#f38ba8 guifg=#cdd6f4 ]]
+    end,
   },
 
   {
