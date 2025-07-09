@@ -865,6 +865,7 @@ require('lazy').setup({
         html = {},
         dockerls = {},
         gopls = {},
+        buf_ls = {},
         yamlls = {
           settings = {
             yaml = {
