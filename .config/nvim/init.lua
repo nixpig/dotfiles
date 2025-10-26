@@ -105,7 +105,6 @@ rtp:prepend(lazypath)
 
 require('lazy').setup({
   'maralla/gomod.vim',
-  'fatih/vim-go',
   'unblevable/quick-scope',
   'NMAC427/guess-indent.nvim',
   'rafamadriz/friendly-snippets',
@@ -126,6 +125,16 @@ require('lazy').setup({
   'norcalli/nvim-colorizer.lua',
 
   {
+    'fatih/vim-go',
+    config = function()
+      vim.g.go_fmt_command = 'golines'
+      vim.g.go_fmt_options = {
+        golines = '-m 80',
+      }
+    end,
+  },
+
+  {
     'qvalentin/helm-ls.nvim',
     ft = 'helm',
     opts = {
@@ -140,9 +149,6 @@ require('lazy').setup({
 
   {
     'windwp/nvim-ts-autotag',
-    aliases = {
-      ['vue'] = 'html',
-    },
     opts = {},
   },
 
@@ -266,18 +272,15 @@ require('lazy').setup({
   },
 
   {
-    'simrat39/rust-tools.nvim',
+    'mrcjkb/rustaceanvim',
+    version = '^5',
+    lazy = false,
+    ft = { 'rust' },
     config = function()
-      require('rust-tools').setup {
+      vim.g.rustaceanvim = {
         tools = {
-          runnables = {
-            use_telescope = true,
-          },
-          inlay_hints = {
-            auto = true,
-            show_parameter_hints = false,
-            parameters_hints_prefix = '',
-            other_hints_prefix = '',
+          hover_actions = {
+            auto_focus = false,
           },
         },
         server = {
@@ -290,10 +293,9 @@ require('lazy').setup({
               group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
             })
           end,
-          -- capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-          settings = {
+          default_settings = {
             ['rust-analyzer'] = {
-              checkOnSave = {
+              check = {
                 command = 'clippy',
               },
             },
@@ -402,7 +404,6 @@ require('lazy').setup({
           'typescript',
           'typescriptreact',
           'scss',
-          'vue',
         },
       }
     end,
@@ -721,11 +722,7 @@ require('lazy').setup({
       { 'mason-org/mason.nvim', opts = {} },
       {
         'mason-org/mason-lspconfig.nvim',
-        opts = {
-          ensure_installed = {
-            'vue-language-server@1.8.27',
-          },
-        },
+        opts = {},
       },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -804,17 +801,6 @@ require('lazy').setup({
         },
       }
 
-      local vue_typescript_plugin_path = vim.fn.stdpath 'data'
-        .. '/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin'
-
-      require('lspconfig').volar.setup {
-        init_options = {
-          vue = {
-            hybridMode = false,
-          },
-        },
-      }
-
       local servers = {
         ts_ls = {
           filetypes = {
@@ -823,21 +809,12 @@ require('lazy').setup({
             'typescript',
             'typescriptreact',
             'typescript.tsx',
-            'vue',
           },
           cmd = { 'typescript-language-server', '--stdio' },
           root_dir = function()
             return vim.loop.cwd()
           end,
-          plugins = {
-            {
-              name = '@vue/typescript-plugin',
-              location = vue_typescript_plugin_path,
-              languages = { 'vue' },
-            },
-          },
         },
-        vue_ls = {},
         bashls = {
           filetypes = { 'sh', 'shell', 'bash', 'zsh', 'fish', 'fsh' },
         },
@@ -865,7 +842,6 @@ require('lazy').setup({
             'typescript',
             'typescriptreact',
             'typescript.tsx',
-            'vue',
           },
           root_dir = function()
             return vim.loop.cwd()
@@ -942,7 +918,8 @@ require('lazy').setup({
             -- -- by the server configuration above. Useful when disabling
             -- -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            vim.lsp.config(server_name, server)
+            vim.lsp.enable(server_name)
           end,
         },
       }
@@ -998,8 +975,11 @@ require('lazy').setup({
       {
         'L3MON4D3/LuaSnip',
         version = '2.*',
-        dependencies = {},
-        opts = {},
+        dependencies = { 'rafamadriz/friendly-snippets' },
+        config = function()
+          require('luasnip.loaders.from_vscode').lazy_load()
+          require('luasnip.loaders.from_vscode').lazy_load { paths = { vim.fn.stdpath 'config' .. '/snippets' } }
+        end,
         build = (function()
           if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
             return
@@ -1020,6 +1000,8 @@ require('lazy').setup({
         ['<Down>'] = { 'scroll_documentation_down', 'fallback' },
         ['<Up>'] = { 'scroll_documentation_up', 'fallback' },
         ['<Tab>'] = { 'accept', 'fallback' },
+        ['<C-l>'] = { 'snippet_forward', 'fallback' },
+        ['<C-h>'] = { 'snippet_backward', 'fallback' },
       },
 
       appearance = {
@@ -1100,13 +1082,14 @@ require('lazy').setup({
       --       -- },
 
       sources = {
-        -- FROM OLD
-        -- { name = 'nvim_lsp' },
-        -- { name = 'copilot' },
-        -- { name = 'luasnip', option = { use_show_condition = false } },
-        -- { name = 'vim-dadbod-completion' },
         default = { 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
+          lsp = {
+            score_offset = 10, -- Boost LSP above snippets
+          },
+          snippets = {
+            score_offset = -5, -- Lower priority for snippets
+          },
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
           dadbod = { name = 'Dadbod', module = 'vim_dadbod_completion.blink' },
         },
@@ -1244,7 +1227,6 @@ require('lazy').setup({
         'vhs',
         'asm',
         'tmux',
-        'vue',
       },
       auto_install = true,
       highlight = {
