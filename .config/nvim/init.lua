@@ -70,9 +70,9 @@ vim.opt.wrap = false -- Don't wrap lines
 vim.opt.backspace = { 'start', 'eol', 'indent' } -- Backspace over indentation, line breaks and insertion start
 vim.opt.wildmenu = true -- Better menu for autocomplete suggestions
 vim.opt.termguicolors = true -- Use true colours from terminal
-vim.opt.winblend = 0 -- Transparency of floating windows, e.g. lsp
+vim.opt.winblend = 10 -- Transparency of floating windows, e.g. lsp
 vim.opt.wildoptions = 'pum' -- Use popup menu when completing
-vim.opt.pumblend = 5 -- Set transparency of pop-up menu
+vim.opt.pumblend = 10 -- Set transparency of pop-up menu
 vim.opt.background = 'dark' -- Set dark background
 vim.opt.signcolumn = 'yes' -- Always show sign column
 vim.opt.colorcolumn = '80' -- Show vertical marker at column
@@ -131,6 +131,7 @@ require('lazy').setup({
       vim.g.go_fmt_options = {
         golines = '-m 80',
       }
+      vim.g.go_fmt_autosave = 0 -- Disable vim-go auto-formatting (use LSP instead)
     end,
   },
 
@@ -316,7 +317,6 @@ require('lazy').setup({
       ui = {
         winblend = 10,
         border = 'rounded',
-        colors = { normal_bg = '#181825' },
         code_action = '',
       },
       symbol_in_winbar = {
@@ -732,8 +732,10 @@ require('lazy').setup({
         opts = {
           notification = {
             window = {
-              winblend = 0,
+              winblend = 10,
               border = 'rounded',
+              normal_hl = 'NormalFloat',
+              border_hl = 'FloatBorder',
             },
           },
         },
@@ -901,6 +903,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua',
+        'gofumpt',
+        'golines',
       })
 
       require('mason-tool-installer').setup {
@@ -958,11 +962,17 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'gofumpt', 'golines' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        golines = {
+          prepend_args = { '-m', '80' },
+        },
       },
     },
   },
@@ -1057,9 +1067,9 @@ require('lazy').setup({
           auto_show = true,
           auto_show_delay_ms = 250,
           window = {
-            winblend = 0,
+            winblend = 10,
             border = 'rounded',
-            winhighlight = 'Normal:Normal',
+            winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder',
             scrollbar = false,
           },
         },
@@ -1167,9 +1177,35 @@ require('lazy').setup({
       }
 
       vim.cmd.colorscheme 'catppuccin'
-      vim.api.nvim_set_hl(0, 'CmpNormal', { background = '#181825' })
 
       vim.cmd [[ hi Normal guibg=NONE ctermbg=NONE ]]
+
+      -- Fix floating window backgrounds to match theme
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        pattern = '*',
+        callback = function()
+          local colors = require('catppuccin.palettes').get_palette()
+          vim.api.nvim_set_hl(0, 'NormalFloat', { bg = colors.mantle })
+          vim.api.nvim_set_hl(0, 'FloatBorder', { bg = colors.mantle, fg = colors.blue })
+          vim.api.nvim_set_hl(0, 'SagaNormal', { bg = colors.mantle })
+          vim.api.nvim_set_hl(0, 'SagaBorder', { bg = colors.mantle, fg = colors.blue })
+          vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = colors.mantle })
+          vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = colors.mantle, fg = colors.blue })
+        end,
+      })
+
+      -- Set highlights immediately as well
+      local colors = require('catppuccin.palettes').get_palette()
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = colors.mantle })
+      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = colors.mantle, fg = colors.blue })
+
+      -- Lspsaga specific highlights
+      vim.api.nvim_set_hl(0, 'SagaNormal', { bg = colors.mantle })
+      vim.api.nvim_set_hl(0, 'SagaBorder', { bg = colors.mantle, fg = colors.blue })
+
+      -- Fidget notification window highlights
+      vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = colors.mantle })
+      vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = colors.mantle, fg = colors.blue })
     end,
   },
 
