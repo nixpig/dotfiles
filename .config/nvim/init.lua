@@ -324,6 +324,28 @@ require('lazy').setup({
         separator = ' ' .. icons.ui.ArrowClosed .. ' ',
         respect_root = true,
       },
+      lightbulb = {
+        enable = true,
+      },
+      diagnostic = {
+        border_follow = true,
+      },
+      rename = {
+        in_select = false,
+      },
+      hover = {
+        open_browser = '!firefox',
+      },
+      finder = {
+        max_height = 0.6,
+      },
+      definition = {
+        width = 0.6,
+        height = 0.5,
+      },
+      outline = {
+        win_width = 50,
+      },
     },
   },
 
@@ -902,7 +924,7 @@ require('lazy').setup({
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',
+        -- 'stylua',
         'gofumpt',
         'golines',
       })
@@ -917,13 +939,15 @@ require('lazy').setup({
         automatic_enable = true,
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
-            -- -- This handles overriding only values explicitly passed
-            -- -- by the server configuration above. Useful when disabling
-            -- -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            vim.lsp.config(server_name, server)
-            vim.lsp.enable(server_name)
+            if servers[server_name] then
+              local server = servers[server_name]
+              -- -- This handles overriding only values explicitly passed
+              -- -- by the server configuration above. Useful when disabling
+              -- -- certain features of an LSP (for example, turning off formatting for ts_ls)
+              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+              vim.lsp.config(server_name, server)
+              vim.lsp.enable(server_name)
+            end
           end,
         },
       }
@@ -1427,6 +1451,33 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  {
+    'coder/claudecode.nvim',
+    dependencies = { 'folke/snacks.nvim' },
+    config = true,
+    keys = {
+      { '<leader>a', nil, desc = 'AI/Claude Code' },
+      { '<leader>ai', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
+      { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', desc = 'Focus Claude' },
+      { '<leader>ar', '<cmd>ClaudeCode --resume<cr>', desc = 'Resume Claude' },
+      { '<leader>aC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue Claude' },
+      { '<leader>am', '<cmd>ClaudeCodeSelectModel<cr>', desc = 'Select Claude model' },
+      { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Add current buffer' },
+      { '<leader>as', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Send to Claude' },
+      { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept diff' },
+      { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Deny diff' },
+    },
+    opts = {
+      terminal = {
+        split_side = 'right',
+        split_width_percentage = 0.24,
+        provider = 'auto',
+        auto_close = true,
+        snacks_win_opts = {}, -- Opts to pass to `Snacks.terminal.open()` - see Floating Window section below
+      },
+    },
   },
 }, {
   ui = {
