@@ -860,8 +860,86 @@ require('lazy').setup({
                   '*compose.yml',
                   '*compose.yaml',
                 },
-                ['https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json'] = '/*.k8s.yaml',
+                kubernetes = {
+                  -- Full resource names
+                  '**/*-deployment.yaml',
+                  '**/*-deployment.yml',
+                  '**/*-service.yaml',
+                  '**/*-service.yml',
+                  '**/*-configmap.yaml',
+                  '**/*-configmap.yml',
+                  '**/*-secret.yaml',
+                  '**/*-secret.yml',
+                  '**/*-ingress.yaml',
+                  '**/*-ingress.yml',
+                  '**/*-pod.yaml',
+                  '**/*-pod.yml',
+                  '**/*-statefulset.yaml',
+                  '**/*-statefulset.yml',
+                  '**/*-daemonset.yaml',
+                  '**/*-daemonset.yml',
+                  '**/*-job.yaml',
+                  '**/*-job.yml',
+                  '**/*-cronjob.yaml',
+                  '**/*-cronjob.yml',
+                  '**/*-namespace.yaml',
+                  '**/*-namespace.yml',
+                  '**/*-persistentvolume.yaml',
+                  '**/*-persistentvolume.yml',
+                  '**/*-persistentvolumeclaim.yaml',
+                  '**/*-persistentvolumeclaim.yml',
+                  '**/*-serviceaccount.yaml',
+                  '**/*-serviceaccount.yml',
+                  '**/*-role.yaml',
+                  '**/*-role.yml',
+                  '**/*-rolebinding.yaml',
+                  '**/*-rolebinding.yml',
+                  '**/*-clusterrole.yaml',
+                  '**/*-clusterrole.yml',
+                  '**/*-clusterrolebinding.yaml',
+                  '**/*-clusterrolebinding.yml',
+                  '**/*-networkpolicy.yaml',
+                  '**/*-networkpolicy.yml',
+                  '**/*-hpa.yaml',
+                  '**/*-hpa.yml',
+                  '**/*-replicaset.yaml',
+                  '**/*-replicaset.yml',
+                  -- Short resource names
+                  '**/*-deploy.yaml',
+                  '**/*-deploy.yml',
+                  '**/*-svc.yaml',
+                  '**/*-svc.yml',
+                  '**/*-cm.yaml',
+                  '**/*-cm.yml',
+                  '**/*-ing.yaml',
+                  '**/*-ing.yml',
+                  '**/*-sts.yaml',
+                  '**/*-sts.yml',
+                  '**/*-ds.yaml',
+                  '**/*-ds.yml',
+                  '**/*-cj.yaml',
+                  '**/*-cj.yml',
+                  '**/*-ns.yaml',
+                  '**/*-ns.yml',
+                  '**/*-pv.yaml',
+                  '**/*-pv.yml',
+                  '**/*-pvc.yaml',
+                  '**/*-pvc.yml',
+                  '**/*-sa.yaml',
+                  '**/*-sa.yml',
+                  '**/*-rb.yaml',
+                  '**/*-rb.yml',
+                  '**/*-crb.yaml',
+                  '**/*-crb.yml',
+                  '**/*-netpol.yaml',
+                  '**/*-netpol.yml',
+                  '**/*-rs.yaml',
+                  '**/*-rs.yml',
+                },
               },
+              validate = true,
+              completion = true,
+              hover = true,
             },
           },
         },
@@ -1451,6 +1529,24 @@ require('lazy').setup({
     icons = {},
   },
 })
+
+-- Enable Kubernetes schema for current YAML buffer
+vim.keymap.set('n', '<leader>yk', function()
+  local clients = vim.lsp.get_clients({ bufnr = 0, name = 'yamlls' })
+  if #clients == 0 then
+    vim.notify('yamlls not attached', vim.log.levels.WARN)
+    return
+  end
+  local client = clients[1]
+  local uri = vim.uri_from_bufnr(0)
+  local settings = client.config.settings or {}
+  settings.yaml = settings.yaml or {}
+  settings.yaml.schemas = settings.yaml.schemas or {}
+  settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
+  table.insert(settings.yaml.schemas.kubernetes, uri)
+  client:notify('workspace/didChangeConfiguration', { settings = settings })
+  vim.notify('Kubernetes schema enabled', vim.log.levels.INFO)
+end, { desc = 'Enable Kubernetes schema for YAML buffer' })
 
 -- Utility function to close any floating windows when you press escape
 -- Source: https://gist.github.com/benfrain/97f2b91087121b2d4ba0dcc4202d252f#file-mappings-lua
