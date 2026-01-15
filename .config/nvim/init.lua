@@ -111,26 +111,41 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -----------------------------------------------------------------------------
+  -- Simple plugins (no config)
+  -----------------------------------------------------------------------------
+  -- Language support
   'maralla/gomod.vim',
-  'unblevable/quick-scope',
-  'NMAC427/guess-indent.nvim',
+  'jose-elias-alvarez/typescript.nvim',
   'rafamadriz/friendly-snippets',
-  'nvim-telescope/telescope-fzf-native.nvim',
+
+  -- Editing
   'tpope/vim-repeat',
   'tpope/vim-unimpaired',
   'tpope/vim-surround',
   'tpope/vim-sleuth',
-  'duane9/nvim-rg',
-  'nvim-telescope/telescope-symbols.nvim',
-  'nvim-treesitter/nvim-treesitter-context',
-  'nvim-telescope/telescope-ui-select.nvim',
-  'debugloop/telescope-undo.nvim',
-  'nvim-treesitter/nvim-treesitter-refactor',
+  'NMAC427/guess-indent.nvim',
+  'unblevable/quick-scope',
   'christoomey/vim-tmux-navigator',
-  'jose-elias-alvarez/typescript.nvim',
+
+  -- Telescope extensions
+  'nvim-telescope/telescope-fzf-native.nvim',
+  'nvim-telescope/telescope-symbols.nvim',
+  'nvim-telescope/telescope-ui-select.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
+  'debugloop/telescope-undo.nvim',
+  'duane9/nvim-rg',
+
+  -- Treesitter extensions
+  'nvim-treesitter/nvim-treesitter-context',
+  'nvim-treesitter/nvim-treesitter-refactor',
+
+  -- UI
   'norcalli/nvim-colorizer.lua',
 
+  -----------------------------------------------------------------------------
+  -- Language support
+  -----------------------------------------------------------------------------
   {
     'fatih/vim-go',
     config = function()
@@ -173,6 +188,44 @@ require('lazy').setup({
     },
   },
 
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {
+      disable_filetype = { 'TelescopePrompt', 'vim' },
+    },
+  },
+
+  {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup {
+        pre_hook = function(ctx)
+          -- Only calculate commentstring for tsx filetypes
+          if vim.bo.filetype == 'typescriptreact' then
+            local U = require 'Comment.utils'
+
+            -- Determine whether to use linewise or blockwise commentstring
+            local type = ctx.ctype == U.ctype.linewise and '__default' or '__multiline'
+
+            -- Determine the location where to calculate commentstring from
+            local location = nil
+            if ctx.ctype == U.ctype.blockwise then
+              location = require('ts_context_commentstring.utils').get_cursor_location()
+            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+              location = require('ts_context_commentstring.utils').get_visual_start_location()
+            end
+
+            return require('ts_context_commentstring.internal').calculate_commentstring { key = type, location = location }
+          end
+        end,
+      }
+    end,
+  },
+
+  -----------------------------------------------------------------------------
+  -- UI
+  -----------------------------------------------------------------------------
   {
     'lukas-reineke/indent-blankline.nvim',
     tag = 'v2.20.8',
@@ -273,132 +326,6 @@ require('lazy').setup({
   },
 
   {
-    'ray-x/lsp_signature.nvim',
-    opts = {
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
-      hint_enable = false,
-      doc_lines = 0,
-      hi_parameter = 'LspSignatureActiveParameter',
-      always_trigger = true,
-      handler_opts = {
-        border = 'rounded',
-      },
-    },
-  },
-
-  {
-    'mrcjkb/rustaceanvim',
-    version = '^5',
-    lazy = false,
-    ft = { 'rust' },
-    config = function()
-      vim.g.rustaceanvim = {
-        tools = {
-          hover_actions = {
-            auto_focus = false,
-          },
-        },
-        server = {
-          on_attach = function(_, _)
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              pattern = { '*.rs' },
-              callback = function()
-                vim.lsp.buf.format { timeout_ms = 100 }
-              end,
-              group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
-            })
-          end,
-          default_settings = {
-            ['rust-analyzer'] = {
-              check = {
-                command = 'clippy',
-              },
-            },
-          },
-        },
-      }
-    end,
-  },
-
-  {
-    'nvimdev/lspsaga.nvim',
-    after = 'nvim-lspconfig',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    opts = {
-      devicon = 'true',
-      ui = {
-        winblend = 10,
-        border = 'rounded',
-        code_action = '',
-      },
-      symbol_in_winbar = {
-        enable = true,
-        separator = ' ' .. icons.ui.ArrowClosed .. ' ',
-        respect_root = true,
-      },
-      lightbulb = {
-        enable = true,
-      },
-      diagnostic = {
-        border_follow = true,
-      },
-      rename = {
-        in_select = false,
-      },
-      hover = {
-        open_browser = '!firefox',
-      },
-      finder = {
-        max_height = 0.6,
-      },
-      definition = {
-        width = 0.6,
-        height = 0.5,
-      },
-      outline = {
-        win_width = 50,
-      },
-    },
-  },
-
-  {
-    'windwp/nvim-autopairs',
-    event = 'InsertEnter',
-    opts = {
-      disable_filetype = { 'TelescopePrompt', 'vim' },
-    },
-  },
-
-  {
-    'dinhhuy258/git.nvim',
-    opts = {
-      blame = '<Leader>gb',
-      browse = '<Leader>go',
-    },
-  },
-
-  {
-    'akinsho/git-conflict.nvim',
-    opts = {
-      -- default_mappings = false,
-      highlights = {
-        incoming = 'DiffAdd',
-        current = 'DiffText',
-      },
-    },
-    -- config = function()
-    --   vim.keymap.set('n', 'co', '<Plug>(git-conflict-ours)', { desc = 'git-conflict choose ours' })
-    --   vim.keymap.set('n', 'ct', '<Plug>(git-conflict-theirs)', { desc = 'git-conflict choose theirs' })
-    --   vim.keymap.set('n', 'cb', '<Plug>(git-conflict-both)', { desc = 'git-conflict choose both' })
-    --   vim.keymap.set('n', 'c0', '<Plug>(git-conflict-none)', { desc = 'git-conflict choose none' })
-    --   vim.keymap.set('n', ']x', '<Plug>(git-conflict-next-conflict)', { desc = 'git-conflict next conflict' })
-    --   vim.keymap.set('n', ']x', '<Plug>(git-conflict-prev-conflict)', { desc = 'git-conflict previous conflict' })
-    -- end,
-  },
-
-  {
     'hiphish/rainbow-delimiters.nvim',
     config = function()
       vim.g.rainbow_delimiters = {
@@ -426,30 +353,86 @@ require('lazy').setup({
   },
 
   {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup {
-        pre_hook = function(ctx)
-          -- Only calculate commentstring for tsx filetypes
-          if vim.bo.filetype == 'typescriptreact' then
-            local U = require 'Comment.utils'
+    'folke/which-key.nvim',
+    event = 'VimEnter',
+    opts = {
+      delay = 1000,
+      icons = {
+        mappings = vim.g.have_nerd_font,
+        keys = vim.g.have_nerd_font and {} or {
+          Up = '<Up> ',
+          Down = '<Down> ',
+          Left = '<Left> ',
+          Right = '<Right> ',
+          C = '<C-…> ',
+          M = '<M-…> ',
+          D = '<D-…> ',
+          S = '<S-…> ',
+          CR = '<CR> ',
+          Esc = '<Esc> ',
+          ScrollWheelDown = '<ScrollWheelDown> ',
+          ScrollWheelUp = '<ScrollWheelUp> ',
+          NL = '<NL> ',
+          BS = '<BS> ',
+          Space = '<Space> ',
+          Tab = '<Tab> ',
+          F1 = '<F1>',
+          F2 = '<F2>',
+          F3 = '<F3>',
+          F4 = '<F4>',
+          F5 = '<F5>',
+          F6 = '<F6>',
+          F7 = '<F7>',
+          F8 = '<F8>',
+          F9 = '<F9>',
+          F10 = '<F10>',
+          F11 = '<F11>',
+          F12 = '<F12>',
+        },
+      },
+      spec = {
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      },
+    },
+  },
 
-            -- Determine whether to use linewise or blockwise commentstring
-            local type = ctx.ctype == U.ctype.linewise and '__default' or '__multiline'
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false },
+  },
 
-            -- Determine the location where to calculate commentstring from
-            local location = nil
-            if ctx.ctype == U.ctype.blockwise then
-              location = require('ts_context_commentstring.utils').get_cursor_location()
-            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-              location = require('ts_context_commentstring.utils').get_visual_start_location()
-            end
+  -----------------------------------------------------------------------------
+  -- Git
+  -----------------------------------------------------------------------------
+  {
+    'dinhhuy258/git.nvim',
+    opts = {
+      blame = '<Leader>gb',
+      browse = '<Leader>go',
+    },
+  },
 
-            return require('ts_context_commentstring.internal').calculate_commentstring { key = type, location = location }
-          end
-        end,
-      }
-    end,
+  {
+    'akinsho/git-conflict.nvim',
+    opts = {
+      -- default_mappings = false,
+      highlights = {
+        incoming = 'DiffAdd',
+        current = 'DiffText',
+      },
+    },
+    -- config = function()
+    --   vim.keymap.set('n', 'co', '<Plug>(git-conflict-ours)', { desc = 'git-conflict choose ours' })
+    --   vim.keymap.set('n', 'ct', '<Plug>(git-conflict-theirs)', { desc = 'git-conflict choose theirs' })
+    --   vim.keymap.set('n', 'cb', '<Plug>(git-conflict-both)', { desc = 'git-conflict choose both' })
+    --   vim.keymap.set('n', 'c0', '<Plug>(git-conflict-none)', { desc = 'git-conflict choose none' })
+    --   vim.keymap.set('n', ']x', '<Plug>(git-conflict-next-conflict)', { desc = 'git-conflict next conflict' })
+    --   vim.keymap.set('n', ']x', '<Plug>(git-conflict-prev-conflict)', { desc = 'git-conflict previous conflict' })
+    -- end,
   },
 
   {
@@ -513,57 +496,10 @@ require('lazy').setup({
     },
   },
 
-  { -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    opts = {
-      -- delay between pressing a key and opening which-key (milliseconds)
-      -- this setting is independent of vim.o.timeoutlen
-      delay = 1000,
-      icons = {
-        mappings = vim.g.have_nerd_font,
-        keys = vim.g.have_nerd_font and {} or {
-          Up = '<Up> ',
-          Down = '<Down> ',
-          Left = '<Left> ',
-          Right = '<Right> ',
-          C = '<C-…> ',
-          M = '<M-…> ',
-          D = '<D-…> ',
-          S = '<S-…> ',
-          CR = '<CR> ',
-          Esc = '<Esc> ',
-          ScrollWheelDown = '<ScrollWheelDown> ',
-          ScrollWheelUp = '<ScrollWheelUp> ',
-          NL = '<NL> ',
-          BS = '<BS> ',
-          Space = '<Space> ',
-          Tab = '<Tab> ',
-          F1 = '<F1>',
-          F2 = '<F2>',
-          F3 = '<F3>',
-          F4 = '<F4>',
-          F5 = '<F5>',
-          F6 = '<F6>',
-          F7 = '<F7>',
-          F8 = '<F8>',
-          F9 = '<F9>',
-          F10 = '<F10>',
-          F11 = '<F11>',
-          F12 = '<F12>',
-        },
-      },
-
-      -- Document existing key chains
-      spec = {
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      },
-    },
-  },
-
-  { -- Fuzzy Finder (files, lsp, etc)
+  -----------------------------------------------------------------------------
+  -- Telescope
+  -----------------------------------------------------------------------------
+  {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     dependencies = {
@@ -714,7 +650,100 @@ require('lazy').setup({
     end,
   },
 
-  -- LSP Plugins
+  -----------------------------------------------------------------------------
+  -- LSP
+  -----------------------------------------------------------------------------
+  {
+    'ray-x/lsp_signature.nvim',
+    opts = {
+      bind = true,
+      hint_enable = false,
+      doc_lines = 0,
+      hi_parameter = 'LspSignatureActiveParameter',
+      always_trigger = true,
+      handler_opts = {
+        border = 'rounded',
+      },
+    },
+  },
+
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^5',
+    lazy = false,
+    ft = { 'rust' },
+    config = function()
+      vim.g.rustaceanvim = {
+        tools = {
+          hover_actions = {
+            auto_focus = false,
+          },
+        },
+        server = {
+          on_attach = function(_, _)
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              pattern = { '*.rs' },
+              callback = function()
+                vim.lsp.buf.format { timeout_ms = 100 }
+              end,
+              group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
+            })
+          end,
+          default_settings = {
+            ['rust-analyzer'] = {
+              check = {
+                command = 'clippy',
+              },
+            },
+          },
+        },
+      }
+    end,
+  },
+
+  {
+    'nvimdev/lspsaga.nvim',
+    after = 'nvim-lspconfig',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    opts = {
+      devicon = 'true',
+      ui = {
+        winblend = 10,
+        border = 'rounded',
+        code_action = '',
+      },
+      symbol_in_winbar = {
+        enable = true,
+        separator = ' ' .. icons.ui.ArrowClosed .. ' ',
+        respect_root = true,
+      },
+      lightbulb = {
+        enable = true,
+      },
+      diagnostic = {
+        border_follow = true,
+      },
+      rename = {
+        in_select = false,
+      },
+      hover = {
+        open_browser = '!firefox',
+      },
+      finder = {
+        max_height = 0.6,
+      },
+      definition = {
+        width = 0.6,
+        height = 0.5,
+      },
+      outline = {
+        win_width = 50,
+      },
+    },
+  },
+
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -1011,6 +1040,9 @@ require('lazy').setup({
     end,
   },
 
+  -----------------------------------------------------------------------------
+  -- Formatting
+  -----------------------------------------------------------------------------
   {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -1061,6 +1093,9 @@ require('lazy').setup({
     },
   },
 
+  -----------------------------------------------------------------------------
+  -- Completion
+  -----------------------------------------------------------------------------
   {
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -1200,11 +1235,14 @@ require('lazy').setup({
     },
   },
 
+  -----------------------------------------------------------------------------
+  -- Database
+  -----------------------------------------------------------------------------
   {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
       { 'tpope/vim-dadbod', lazy = true },
-      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
     },
     cmd = {
       'DBUI',
@@ -1221,11 +1259,13 @@ require('lazy').setup({
     end,
   },
 
+  -----------------------------------------------------------------------------
+  -- Colorscheme
+  -----------------------------------------------------------------------------
   {
     'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
       require('catppuccin').setup {
         comment_italics = true,
         integrations = {
@@ -1280,27 +1320,23 @@ require('lazy').setup({
       })
 
       -- Set highlights immediately as well
-      local colors = require('catppuccin.palettes').get_palette()
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = colors.mantle })
-      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = colors.mantle, fg = colors.blue })
+      local palette = require('catppuccin.palettes').get_palette()
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = palette.mantle })
+      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = palette.mantle, fg = palette.blue })
 
       -- Lspsaga specific highlights
-      vim.api.nvim_set_hl(0, 'SagaNormal', { bg = colors.mantle })
-      vim.api.nvim_set_hl(0, 'SagaBorder', { bg = colors.mantle, fg = colors.blue })
+      vim.api.nvim_set_hl(0, 'SagaNormal', { bg = palette.mantle })
+      vim.api.nvim_set_hl(0, 'SagaBorder', { bg = palette.mantle, fg = palette.blue })
 
       -- Fidget notification window highlights
-      vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = colors.mantle })
-      vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = colors.mantle, fg = colors.blue })
+      vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = palette.mantle })
+      vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = palette.mantle, fg = palette.blue })
     end,
   },
 
-  {
-    'folke/todo-comments.nvim',
-    event = 'VimEnter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false },
-  },
-
+  -----------------------------------------------------------------------------
+  -- Treesitter
+  -----------------------------------------------------------------------------
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -1370,6 +1406,9 @@ require('lazy').setup({
     },
   },
 
+  -----------------------------------------------------------------------------
+  -- Debugging (DAP)
+  -----------------------------------------------------------------------------
   {
     'mfussenegger/nvim-dap',
     dependencies = {
@@ -1514,6 +1553,9 @@ require('lazy').setup({
     end,
   },
 
+  -----------------------------------------------------------------------------
+  -- AI
+  -----------------------------------------------------------------------------
   {
     'coder/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
@@ -1643,10 +1685,6 @@ vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h
 -- Completion menu options
 vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'preview' }
 vim.api.nvim_set_hl(0, 'CmpItemKind', { link = 'CmpItemMenuDefault', default = true })
-
--- Terminal undercurl support
-vim.o.t_Cs = [[\e[4:3m]]
-vim.o.t_Ce = [[\e[4:0m]]
 
 -- LSP (Lspsaga)
 vim.keymap.set('n', ']w', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Jump to next diagnostic' })
