@@ -412,26 +412,6 @@ require('lazy').setup({
   },
 
   {
-    'MunifTanjim/prettier.nvim',
-    config = function()
-      require('prettier').setup {
-        bin = 'prettierd',
-        filetypes = {
-          'css',
-          'javascript',
-          'javascriptreact',
-          'json',
-          'jsonc',
-          'less',
-          'typescript',
-          'typescriptreact',
-          'scss',
-        },
-      }
-    end,
-  },
-
-  {
     'numToStr/Comment.nvim',
     config = function()
       require('Comment').setup {
@@ -827,16 +807,9 @@ require('lazy').setup({
 
       local servers = {
         ts_ls = {
-          filetypes = {
-            'javascript',
-            'javascriptreact',
-            'typescript',
-            'typescriptreact',
-            'typescript.tsx',
-          },
-          cmd = { 'typescript-language-server', '--stdio' },
-          root_dir = function()
-            return vim.loop.cwd()
+          root_dir = function(bufnr, on_dir)
+            local root = vim.fs.root(bufnr, { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' })
+            on_dir(root or vim.uv.cwd())
           end,
         },
         bashls = {
@@ -860,15 +833,13 @@ require('lazy').setup({
           },
         },
         eslint = {
-          filetypes = {
-            'javascript',
-            'javascriptreact',
-            'typescript',
-            'typescriptreact',
-            'typescript.tsx',
-          },
-          root_dir = function()
-            return vim.loop.cwd()
+          root_dir = function(bufnr, on_dir)
+            local eslint_configs = { 'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', '.eslintrc.js', '.eslintrc.json', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc' }
+            local config_file = vim.fs.find(eslint_configs, { path = vim.api.nvim_buf_get_name(bufnr), upward = true })[1]
+            if config_file then
+              on_dir(vim.fs.dirname(config_file))
+            end
+            -- Don't call on_dir if no config found - this disables eslint for this buffer
           end,
         },
         ansiblels = {},
@@ -934,23 +905,16 @@ require('lazy').setup({
       }
 
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        automatic_enable = true,
-        handlers = {
-          function(server_name)
-            if servers[server_name] then
-              local server = servers[server_name]
-              -- -- This handles overriding only values explicitly passed
-              -- -- by the server configuration above. Useful when disabling
-              -- -- certain features of an LSP (for example, turning off formatting for ts_ls)
-              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-              vim.lsp.config(server_name, server)
-              vim.lsp.enable(server_name)
-            end
-          end,
-        },
+        ensure_installed = {},
+        automatic_enable = { exclude = { 'ts_ls', 'eslint' } },
       }
+
+      -- Configure and enable servers with custom settings
+      for server_name, server_config in pairs(servers) do
+        server_config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server_config.capabilities or {})
+        vim.lsp.config(server_name, server_config)
+        vim.lsp.enable(server_name)
+      end
     end,
   },
 
@@ -987,11 +951,14 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         go = { 'gofumpt', 'golines' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        jsonc = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        scss = { 'prettierd', 'prettier', stop_after_first = true },
       },
       formatters = {
         golines = {
