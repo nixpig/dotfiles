@@ -118,7 +118,7 @@ require('lazy').setup({
   'nvim-treesitter/nvim-treesitter-context',
   'nvim-telescope/telescope-ui-select.nvim',
   'debugloop/telescope-undo.nvim',
-  -- 'nvim-treesitter/nvim-treesitter-refactor', -- deprecated, incompatible with current nvim-treesitter
+  'nvim-treesitter/nvim-treesitter-refactor',
   'christoomey/vim-tmux-navigator',
   'jose-elias-alvarez/typescript.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
@@ -879,7 +879,51 @@ require('lazy').setup({
         dockerls = {},
         gopls = {},
         buf_ls = {},
-        -- yamlls configured separately in handlers below
+        yamlls = {
+          settings = {
+            yaml = {
+              schemas = {
+                ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = {
+                  'docker-compose*.yml',
+                  'docker-compose*.yaml',
+                  '*compose.yml',
+                  '*compose.yaml',
+                },
+                kubernetes = {
+                  '*-deploy.yaml', '*-deploy.yml',
+                  '*-deployment.yaml', '*-deployment.yml',
+                  '*-svc.yaml', '*-svc.yml',
+                  '*-service.yaml', '*-service.yml',
+                  '*-ing.yaml', '*-ing.yml',
+                  '*-ingress.yaml', '*-ingress.yml',
+                  '*-cm.yaml', '*-cm.yml',
+                  '*-configmap.yaml', '*-configmap.yml',
+                  '*-secret.yaml', '*-secret.yml',
+                  '*-pv.yaml', '*-pv.yml',
+                  '*-pvc.yaml', '*-pvc.yml',
+                  '*-ns.yaml', '*-ns.yml',
+                  '*-namespace.yaml', '*-namespace.yml',
+                  '*-sa.yaml', '*-sa.yml',
+                  '*-serviceaccount.yaml', '*-serviceaccount.yml',
+                  '*-role.yaml', '*-role.yml',
+                  '*-rolebinding.yaml', '*-rolebinding.yml',
+                  '*-clusterrole.yaml', '*-clusterrole.yml',
+                  '*-clusterrolebinding.yaml', '*-clusterrolebinding.yml',
+                  '*-job.yaml', '*-job.yml',
+                  '*-cronjob.yaml', '*-cronjob.yml',
+                  '*-sts.yaml', '*-sts.yml',
+                  '*-statefulset.yaml', '*-statefulset.yml',
+                  '*-ds.yaml', '*-ds.yml',
+                  '*-daemonset.yaml', '*-daemonset.yml',
+                  '*-pod.yaml', '*-pod.yml',
+                  '*-hpa.yaml', '*-hpa.yml',
+                  '*-networkpolicy.yaml', '*-networkpolicy.yml',
+                  '*.k8s.yaml', '*.k8s.yml',
+                },
+              },
+            },
+          },
+        },
         jdtls = {
           on_attach = function()
             require('jdtls').start_or_attach {
@@ -922,64 +966,21 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
+        automatic_enable = true,
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            if servers[server_name] then
+              local server = servers[server_name]
+              -- -- This handles overriding only values explicitly passed
+              -- -- by the server configuration above. Useful when disabling
+              -- -- certain features of an LSP (for example, turning off formatting for ts_ls)
+              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+              vim.lsp.config(server_name, server)
+              vim.lsp.enable(server_name)
+            end
           end,
-          ['yamlls'] = function() end, -- skip, configured below
         },
       }
-
-      -- Configure yamlls using vim.lsp.config (Neovim 0.11+)
-      vim.lsp.config('yamlls', {
-        capabilities = capabilities,
-        settings = {
-          yaml = {
-            validate = true,
-            schemaStore = {
-              enable = true,
-              url = 'https://www.schemastore.org/api/json/catalog.json',
-            },
-            schemaDownload = { enable = true },
-            schemas = {
-              kubernetes = {
-                '*-deploy.yaml', '*-deploy.yml',
-                '*-deployment.yaml', '*-deployment.yml',
-                '*-svc.yaml', '*-svc.yml',
-                '*-service.yaml', '*-service.yml',
-                '*-ing.yaml', '*-ing.yml',
-                '*-ingress.yaml', '*-ingress.yml',
-                '*-cm.yaml', '*-cm.yml',
-                '*-configmap.yaml', '*-configmap.yml',
-                '*-secret.yaml', '*-secret.yml',
-                '*-pv.yaml', '*-pv.yml',
-                '*-pvc.yaml', '*-pvc.yml',
-                '*-ns.yaml', '*-ns.yml',
-                '*-namespace.yaml', '*-namespace.yml',
-                '*-sa.yaml', '*-sa.yml',
-                '*-serviceaccount.yaml', '*-serviceaccount.yml',
-                '*-role.yaml', '*-role.yml',
-                '*-rolebinding.yaml', '*-rolebinding.yml',
-                '*-clusterrole.yaml', '*-clusterrole.yml',
-                '*-clusterrolebinding.yaml', '*-clusterrolebinding.yml',
-                '*-job.yaml', '*-job.yml',
-                '*-cronjob.yaml', '*-cronjob.yml',
-                '*-sts.yaml', '*-sts.yml',
-                '*-statefulset.yaml', '*-statefulset.yml',
-                '*-ds.yaml', '*-ds.yml',
-                '*-daemonset.yaml', '*-daemonset.yml',
-                '*-pod.yaml', '*-pod.yml',
-                '*-hpa.yaml', '*-hpa.yml',
-                '*-networkpolicy.yaml', '*-networkpolicy.yml',
-                '*.k8s.yaml', '*.k8s.yml',
-              },
-            },
-          },
-        },
-      })
-      vim.lsp.enable('yamlls')
     end,
   },
 
@@ -1271,10 +1272,11 @@ require('lazy').setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     build = ':TSUpdate',
-    config = function()
-      local ts = require('nvim-treesitter')
-      ts.install({
+    main = 'nvim-treesitter.configs',
+    opts = {
+      ensure_installed = {
         'markdown',
         'markdown_inline',
         'tsx',
@@ -1316,16 +1318,26 @@ require('lazy').setup({
         'vhs',
         'asm',
         'tmux',
-        'ruby',
-      })
-
-      -- Enable treesitter highlighting for all filetypes
-      vim.api.nvim_create_autocmd('FileType', {
-        callback = function(args)
-          pcall(vim.treesitter.start, args.buf)
-        end,
-      })
-    end,
+      },
+      auto_install = true,
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = { 'ruby' },
+      },
+      indent = { enable = true, disable = { 'ruby' } },
+      refactor = {
+        enable = true,
+        clear_on_cursor_move = true,
+        keymaps = { smart_rename = 'grr' },
+        navigation = {
+          enable = true,
+          keymaps = { goto_next_usage = 'gn', goto_previous_usage = 'gu' },
+        },
+        highlight_definitions = {
+          enable = true,
+        },
+      },
+    },
   },
 
   {
