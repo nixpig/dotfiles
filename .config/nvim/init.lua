@@ -8,87 +8,94 @@ local icons = {
   listchars = require('icons').get 'listchars',
 }
 
+local colors = require('colors').palette()
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.g.go_doc_keywordprg_enabled = false
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 
-vim.o.number = true
-vim.o.mouse = 'a'
-vim.o.showmode = false
-vim.o.breakindent = true
-vim.o.undofile = true
-vim.o.ignorecase = true
-vim.o.smartcase = true
--- vim.o.signcolumn = 'yes'
-vim.o.splitright = true
-vim.o.splitbelow = true
-vim.o.list = true
-vim.o.inccommand = 'split'
-vim.o.cursorline = true
-vim.o.scrolloff = 10
-vim.o.confirm = true
-vim.o.timeout = true
-vim.o.timeoutlen = 500
-vim.o.updatetime = 250
-vim.o.foldenable = false
-
-vim.wo.number = true -- Display line number
-vim.wo.relativenumber = true -- Display relative line numbers
-
 vim.scriptencoding = 'utf-8'
 
+-- Editor behavior
+vim.opt.mouse = 'a'
+vim.opt.showmode = false
+vim.opt.confirm = true
+vim.opt.timeout = true
+vim.opt.timeoutlen = 500
+vim.opt.updatetime = 250
+vim.opt.undofile = true
+vim.opt.backup = false
+vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.shell = 'bash'
+
+-- Display
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
+vim.opt.signcolumn = 'yes'
+vim.opt.colorcolumn = '80'
+vim.opt.title = true
+vim.opt.showcmd = true
+vim.opt.cmdheight = 1
+vim.opt.laststatus = 2
+vim.opt.termguicolors = true
+vim.opt.background = 'dark'
+vim.opt.winblend = 10
+vim.opt.pumblend = 10
+
+-- Search
+vim.opt.hlsearch = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.inccommand = 'split'
+
+-- Indentation
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.breakindent = true
+vim.opt.expandtab = true
+vim.opt.smarttab = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+
+-- Wrapping and scrolling
+vim.opt.wrap = false
+vim.opt.scrolloff = 15
+vim.opt.foldenable = false
+
+-- Splits
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
+-- Encoding
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
+
+-- Completion and wildcards
+vim.opt.wildmenu = true
+vim.opt.wildoptions = 'pum'
+vim.opt.path:append { '**' }
+vim.opt.wildignore:append { '*/node_modules/*', '^.git/' }
+
+-- Editing
+vim.opt.backspace = { 'start', 'eol', 'indent' }
+vim.opt.formatoptions:append { 'r' }
+
+-- List characters
+vim.opt.list = true
 vim.opt.listchars = {
   tab = icons.listchars.Tab,
   trail = icons.listchars.Trail,
   nbsp = icons.listchars.Nbsp,
+  space = icons.listchars.Space,
+  extends = icons.listchars.Extends,
+  precedes = icons.listchars.Precedes,
+  eol = icons.listchars.Eol,
 }
-vim.opt.title = true -- Show the title of the file
-vim.opt.autoindent = true -- New lines inherit the indentation of previous lines
-vim.opt.smartindent = true -- Use smart indent
-vim.opt.hlsearch = false -- Enable search highlighting
-vim.opt.backup = false -- Don't use backups
-vim.opt.showcmd = true -- Show last command after exit
-vim.opt.cmdheight = 1 -- Command line display height
-vim.opt.cursorline = true -- Highlight the cursorline
-vim.opt.cursorcolumn = true -- Highlight the cursorcolumn
-vim.opt.laststatus = 2 -- Always displat status bar
-vim.opt.expandtab = true -- Don't convert tabs to spaces
-vim.opt.scrolloff = 15 -- Screen lines to keep visible above and below cursor
-vim.opt.shell = 'bash' -- Shell to use when executing commands
-vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' } -- Skip backups for temp directories
-vim.opt.inccommand = 'split' -- Show replacements in split window before applying changes
-vim.opt.ignorecase = true -- Ignore case when searching
-vim.opt.smarttab = true -- Don't insert spaces when tab key pressed
-vim.opt.breakindent = true -- Add extra indentation to wrapped lines
-vim.opt.shiftwidth = 2 -- Indent using 4 spaces
-vim.opt.tabstop = 2 -- Indent using 4 spaces
-vim.opt.wrap = false -- Don't wrap lines
-vim.opt.backspace = { 'start', 'eol', 'indent' } -- Backspace over indentation, line breaks and insertion start
-vim.opt.wildmenu = true -- Better menu for autocomplete suggestions
-vim.opt.termguicolors = true -- Use true colours from terminal
-vim.opt.winblend = 10 -- Transparency of floating windows, e.g. lsp
-vim.opt.wildoptions = 'pum' -- Use popup menu when completing
-vim.opt.pumblend = 10 -- Set transparency of pop-up menu
-vim.opt.background = 'dark' -- Set dark background
-vim.opt.signcolumn = 'yes' -- Always show sign column
-vim.opt.colorcolumn = '80' -- Show vertical marker at column
-vim.opt.path:append { '**' } -- Search subdirectories when finding files
-vim.opt.wildignore:append { '*/node_modules/*', '^.git/' } -- Ignore node_modules when matching glob patterns
-vim.opt.formatoptions:append { 'r' } -- Auto-add asterisks in block comments
-vim.opt.clipboard = 'unnamedplus' -- Use system clipboard
-vim.opt.termguicolors = true
-vim.opt.list = true
-vim.opt.listchars:append 'space:·'
-vim.opt.listchars:append 'tab:» '
-vim.opt.listchars:append 'extends:›'
-vim.opt.listchars:append 'precedes:‹'
-vim.opt.listchars:append 'nbsp:␣'
-vim.opt.listchars:append 'trail:·'
-vim.opt.listchars:append 'eol:󰌑'
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -155,9 +162,15 @@ require('lazy').setup({
 
   {
     'rmagatti/alternate-toggler',
-    config = function()
-      vim.keymap.set('n', '<leader><space>', '<cmd>lua require("alternate-toggler").toggleAlternate()<CR>', { desc = 'Toggle boolean-like value' })
-    end,
+    keys = {
+      {
+        '<leader><space>',
+        function()
+          require('alternate-toggler').toggleAlternate()
+        end,
+        desc = 'Toggle boolean-like value',
+      },
+    },
   },
 
   {
@@ -184,16 +197,17 @@ require('lazy').setup({
         },
       }
 
-      vim.cmd [[highlight IndentBlanklineIndent0 guifg=#b4befe gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent1 guifg=#f38ba8 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent2 guifg=#fab387 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent3 guifg=#a6e3a1 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent4 guifg=#89dceb gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent5 guifg=#89b4fa gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent6 guifg=#cba6f7 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent7 guifg=#f5c2e7 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent8 guifg=#cdd6f4 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent9 guifg=#eba0ac gui=nocombine]]
+      local hl = vim.api.nvim_set_hl
+      hl(0, 'IndentBlanklineIndent0', { fg = colors.lavender, nocombine = true })
+      hl(0, 'IndentBlanklineIndent1', { fg = colors.red, nocombine = true })
+      hl(0, 'IndentBlanklineIndent2', { fg = colors.peach, nocombine = true })
+      hl(0, 'IndentBlanklineIndent3', { fg = colors.green, nocombine = true })
+      hl(0, 'IndentBlanklineIndent4', { fg = colors.sky, nocombine = true })
+      hl(0, 'IndentBlanklineIndent5', { fg = colors.blue, nocombine = true })
+      hl(0, 'IndentBlanklineIndent6', { fg = colors.mauve, nocombine = true })
+      hl(0, 'IndentBlanklineIndent7', { fg = colors.pink, nocombine = true })
+      hl(0, 'IndentBlanklineIndent8', { fg = colors.text, nocombine = true })
+      hl(0, 'IndentBlanklineIndent9', { fg = colors.maroon, nocombine = true })
     end,
   },
 
@@ -834,7 +848,8 @@ require('lazy').setup({
         },
         eslint = {
           root_dir = function(bufnr, on_dir)
-            local eslint_configs = { 'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', '.eslintrc.js', '.eslintrc.json', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc' }
+            local eslint_configs =
+              { 'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', '.eslintrc.js', '.eslintrc.json', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc' }
             local config_file = vim.fs.find(eslint_configs, { path = vim.api.nvim_buf_get_name(bufnr), upward = true })[1]
             if config_file then
               on_dir(vim.fs.dirname(config_file))
@@ -1199,9 +1214,10 @@ require('lazy').setup({
     },
     init = function()
       vim.g.db_ui_use_nerd_fonts = 1
-      vim.cmd [[ hi NotificationInfo guibg=NONE guifg=#a6e3a1]]
-      vim.cmd [[ hi NotificationWarning guibg=#fab387 guifg=#cdd6f4 ]]
-      vim.cmd [[ hi NotificationError guibg=#f38ba8 guifg=#cdd6f4 ]]
+      local hl = vim.api.nvim_set_hl
+      hl(0, 'NotificationInfo', { bg = 'NONE', fg = colors.green })
+      hl(0, 'NotificationWarning', { bg = colors.peach, fg = colors.text })
+      hl(0, 'NotificationError', { bg = colors.red, fg = colors.text })
     end,
   },
 
@@ -1247,7 +1263,7 @@ require('lazy').setup({
 
       vim.cmd.colorscheme 'catppuccin'
 
-      vim.cmd [[ hi Normal guibg=NONE ctermbg=NONE ]]
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
 
       -- Fix floating window backgrounds to match theme
       vim.api.nvim_create_autocmd('ColorScheme', {
@@ -1460,8 +1476,8 @@ require('lazy').setup({
         },
       }
 
-      vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#f38ba8' })
-      vim.api.nvim_set_hl(0, 'DapStop', { fg = '#fab387' })
+      vim.api.nvim_set_hl(0, 'DapBreak', { fg = colors.red })
+      vim.api.nvim_set_hl(0, 'DapStop', { fg = colors.peach })
       local breakpoint_icons = vim.g.have_nerd_font
           and {
             Breakpoint = icons.dap.Breakpoint,
@@ -1532,17 +1548,21 @@ require('lazy').setup({
 
 -- Enable Kubernetes schema for current YAML buffer
 vim.keymap.set('n', '<leader>yk', function()
-  local clients = vim.lsp.get_clients({ bufnr = 0, name = 'yamlls' })
+  local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
+
   if #clients == 0 then
     vim.notify('yamlls not attached', vim.log.levels.WARN)
     return
   end
+
   local client = clients[1]
   local uri = vim.uri_from_bufnr(0)
   local settings = client.config.settings or {}
+
   settings.yaml = settings.yaml or {}
   settings.yaml.schemas = settings.yaml.schemas or {}
   settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
+
   table.insert(settings.yaml.schemas.kubernetes, uri)
   client:notify('workspace/didChangeConfiguration', { settings = settings })
   vim.notify('Kubernetes schema enabled', vim.log.levels.INFO)
@@ -1558,101 +1578,149 @@ local function close_floating()
   end
 end
 
+-- Navigation
 vim.keymap.set('n', '[[', '_i', { desc = 'Jump to first non-blank character on line' })
 vim.keymap.set('n', ']]', '$a', { desc = 'Jump to end of line' })
+
+-- Editing
 vim.keymap.set('n', '+', '<C-a>', { desc = 'Increment number under cursor' })
 vim.keymap.set('n', '-', '<C-x>', { desc = 'Decrement number under cursor' })
-vim.keymap.set('n', '<C-a>', 'gg<S-v>G', { desc = 'Select all in current buffer' })
-vim.keymap.set('n', '<leader>d', ':bd<CR>', { desc = 'Delete current buffer' })
-vim.keymap.set('n', '<leader>D', ':bd!<CR>', { desc = 'Force delete current buffer' })
-vim.keymap.set('n', 'te', ':tabedit<Return>', { desc = 'Create new tab' })
-vim.keymap.set('n', 'tc', ':tabclose<Return>', { desc = 'Close tab' })
-vim.keymap.set('n', 'sh', ':split<Return><C-w>w', { desc = 'Split window horizontally' })
-vim.keymap.set('n', 'sv', ':vsplit<Return><C-w>w', { desc = 'Split window vertically' })
-vim.keymap.set('n', 'sc', ':only<Return>', { desc = 'Close all other splits' })
-vim.keymap.set('n', '<leader><S-h>', '<C-w><', { desc = 'Resize window Left' })
-vim.keymap.set('n', '<leader><S-j>', '<C-w>-', { desc = 'Resize window Down' })
-vim.keymap.set('n', '<leader><S-k>', '<C-w>+', { desc = 'Resize window Up' })
-vim.keymap.set('n', '<leader><S-l>', '<C-w>>', { desc = 'Resize window Right' })
-vim.keymap.set('n', '<esc>', function()
-  close_floating()
-  vim.cmd ':noh'
-end, { silent = true, desc = 'Remove Search Highlighting, Dismiss Popups' })
-vim.keymap.set('n', '<Leader>xc', ':g/console.lo/d<cr>', { desc = 'Remove all console.log statements' })
+vim.keymap.set('n', 'U', '<C-r>', { desc = 'Redo' })
+vim.keymap.set('v', 'y', 'ygv<Esc>', { desc = 'Yank and reposition cursor' })
 vim.keymap.set({ 'n', 'x' }, '[p', '<Cmd>exe "put! " . v:register<CR>', { desc = 'Paste on line above' })
 vim.keymap.set({ 'n', 'x' }, ']p', '<Cmd>exe "put "  . v:register<CR>', { desc = 'Paste on line below' })
-vim.keymap.set('n', '<S-Up>', ':m-2<CR>', { desc = 'Move current line up' })
-vim.keymap.set('n', '<S-k>', ':m-2<CR>', { desc = 'Move current line up' })
-vim.keymap.set('n', '<S-Down>', ':m+<CR>', { desc = 'Move current line down' })
-vim.keymap.set('n', '<S-j>', ':m+<CR>', { desc = 'Move current line down' })
-vim.keymap.set('v', '<S-Down>', ":m '>+1<CR>gv=gv", { desc = 'Move selected region up' })
+
+-- Move lines/characters
+vim.keymap.set('n', '<S-Up>', '<Cmd>m-2<CR>', { desc = 'Move current line up' })
+vim.keymap.set('n', '<S-k>', '<Cmd>m-2<CR>', { desc = 'Move current line up' })
+vim.keymap.set('n', '<S-Down>', '<Cmd>m+<CR>', { desc = 'Move current line down' })
+vim.keymap.set('n', '<S-j>', '<Cmd>m+<CR>', { desc = 'Move current line down' })
+vim.keymap.set('v', '<S-Down>', ":m '>+1<CR>gv=gv", { desc = 'Move selected region down' })
 vim.keymap.set('v', '<S-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selected region down' })
-vim.keymap.set('v', '<S-Up>', ":m '<-2<CR>gv=gv", { desc = 'Move selected region down' })
+vim.keymap.set('v', '<S-Up>', ":m '<-2<CR>gv=gv", { desc = 'Move selected region up' })
 vim.keymap.set('v', '<S-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selected region up' })
 vim.keymap.set('n', '<S-l>', 'xp', { desc = 'Move character under cursor right' })
 vim.keymap.set('n', '<S-h>', 'xhhp', { desc = 'Move character under cursor left' })
 vim.keymap.set('v', '<S-l>', 'dpgvlol', { desc = 'Move selected text right' })
 vim.keymap.set('v', '<S-h>', 'dhhpgvhoh', { desc = 'Move selected text left' })
-vim.keymap.set('v', 'y', 'ygv<Esc>', { desc = 'Yank and reposition cursor' })
-vim.keymap.set('n', 'U', '<C-r>', { desc = 'Redo' })
-vim.keymap.set('', '<leader>x', ':!chmod +x %<CR>', { desc = 'Make file in current buffer executable (chmod +x)' })
-vim.keymap.set('n', '<M-j>', ':cnext<CR>', { desc = 'Next item in quickfix list' })
-vim.keymap.set('n', '<M-k>', ':cprev<CR>', { desc = 'Previous item in quickfix list' })
+
+-- Selection
+vim.keymap.set('n', '<C-a>', 'gg<S-v>G', { desc = 'Select all in current buffer' })
+
+-- Buffers
+vim.keymap.set('n', '<leader>d', '<Cmd>bd<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<leader>D', '<Cmd>bd!<CR>', { desc = 'Force delete current buffer' })
+
+-- Tabs
+vim.keymap.set('n', 'te', '<Cmd>tabedit<CR>', { desc = 'Create new tab' })
+vim.keymap.set('n', 'tc', '<Cmd>tabclose<CR>', { desc = 'Close tab' })
+
+-- Splits
+vim.keymap.set('n', 'sh', '<Cmd>split<CR><C-w>w', { desc = 'Split window horizontally' })
+vim.keymap.set('n', 'sv', '<Cmd>vsplit<CR><C-w>w', { desc = 'Split window vertically' })
+vim.keymap.set('n', 'sc', '<Cmd>only<CR>', { desc = 'Close all other splits' })
+vim.keymap.set('n', '<leader><S-h>', '<C-w><', { desc = 'Resize window left' })
+vim.keymap.set('n', '<leader><S-j>', '<C-w>-', { desc = 'Resize window down' })
+vim.keymap.set('n', '<leader><S-k>', '<C-w>+', { desc = 'Resize window up' })
+vim.keymap.set('n', '<leader><S-l>', '<C-w>>', { desc = 'Resize window right' })
+
+-- Quickfix
+vim.keymap.set('n', '<M-j>', '<Cmd>cnext<CR>', { desc = 'Next item in quickfix list' })
+vim.keymap.set('n', '<M-k>', '<Cmd>cprev<CR>', { desc = 'Previous item in quickfix list' })
+
+-- Utilities
+vim.keymap.set('n', '<Esc>', function()
+  close_floating()
+  vim.cmd.noh()
+end, { silent = true, desc = 'Clear search highlighting and dismiss popups' })
+vim.keymap.set('n', '<leader>xc', '<Cmd>g/console.lo/d<CR>', { desc = 'Remove all console.log statements' })
+vim.keymap.set('', '<leader>x', '<Cmd>!chmod +x %<CR>', { desc = 'Make current file executable' })
+
+-- Tmux integration
 vim.keymap.set('n', '<C-f>', '<Cmd>silent !tmux neww tmux-sessionizer<CR>', { desc = 'Trigger tmux-sessionizer' })
-vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr<CR>', { desc = 'Trigger tldr.sh' })
-vim.keymap.set('i', '<C-e>', 'if err != nil {\n\treturn nil, err\n}')
+vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr<CR>', { desc = 'Trigger tldr' })
 
-vim.cmd [[
-  set completeopt=menu,menuone,noinsert,preview
-  highlight! default link CmpItemKind CmpItemMenuDefault
-]]
+-- Completion menu options
+vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'preview' }
+vim.api.nvim_set_hl(0, 'CmpItemKind', { link = 'CmpItemMenuDefault', default = true })
 
-vim.cmd [[let &t_Cs = '\e[4:3m']]
-vim.cmd [[let &t_Ce = '\e[4:0m']]
+-- Terminal undercurl support
+vim.o.t_Cs = [[\e[4:3m]]
+vim.o.t_Ce = [[\e[4:0m]]
 
-local opts = { noremap = true, silent = false }
-vim.keymap.set('n', ']w', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts) -- Jump to next diagnostic
-vim.keymap.set('n', '[w', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts) -- Jump to previous diagnostic
-vim.keymap.set('n', 'gl', '<Cmd>Lspsaga show_line_diagnostics<CR>', opts) -- Show diagnostics for line
-vim.keymap.set('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts) -- Show signature help
-vim.keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', opts) -- Show docs
-vim.keymap.set('n', 'gh', '<Cmd>Lspsaga finder<CR>', opts) -- Show definition and usage
-vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', opts) -- Peek at definition
-vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts) -- Rename all occurrences of hovered word in current file
-vim.keymap.set('n', 'gd', '<Cmd>Lspsaga goto_definition<CR>', opts) -- Go to definition
-vim.keymap.set('n', 'go', '<Cmd>Lspsaga outline<CR>', opts) -- Show outline
-vim.keymap.set({ 'n', 'v' }, 'ga', '<Cmd>Lspsaga code_action<CR>', opts) -- Code action
-vim.keymap.set('n', 'gt', '<Cmd>Lspsaga term_toggle<CR>', opts) -- Toggle floating terminal
+-- LSP (Lspsaga)
+vim.keymap.set('n', ']w', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Jump to next diagnostic' })
+vim.keymap.set('n', '[w', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Jump to previous diagnostic' })
+vim.keymap.set('n', 'gl', '<Cmd>Lspsaga show_line_diagnostics<CR>', { desc = 'Show line diagnostics' })
+vim.keymap.set('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', { desc = 'Show signature help' })
+vim.keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Show hover documentation' })
+vim.keymap.set('n', 'gh', '<Cmd>Lspsaga finder<CR>', { desc = 'Show definition and references' })
+vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', { desc = 'Peek definition' })
+vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename symbol' })
+vim.keymap.set('n', 'gd', '<Cmd>Lspsaga goto_definition<CR>', { desc = 'Go to definition' })
+vim.keymap.set('n', 'go', '<Cmd>Lspsaga outline<CR>', { desc = 'Show outline' })
+vim.keymap.set({ 'n', 'v' }, 'ga', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code action' })
+vim.keymap.set('n', 'gt', '<Cmd>Lspsaga term_toggle<CR>', { desc = 'Toggle floating terminal' })
 
--- Unfold and turn of folding
-vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, { pattern = '*', command = 'set nofoldenable foldmethod=manual foldlevelstart=99' })
+-- Autocommands
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
 
--- Turn off paste mode when leaving insert
-vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', command = 'set nopaste' })
+-- Editing behavior
+autocmd({ 'BufWritePost', 'BufEnter' }, {
+  group = augroup('DisableFolding', { clear = true }),
+  pattern = '*',
+  callback = function()
+    vim.opt_local.foldenable = false
+    vim.opt_local.foldmethod = 'manual'
+    vim.opt_local.foldlevelstart = 99
+  end,
+  desc = 'Disable folding',
+})
 
--- Highlight yanked text after yanking for 250ms
-vim.cmd [[
-  augroup highlight_yank
-  autocmd!
-  au TextYankPost * silent! lua vim.highlight.on_yank({ higroup='Visual', timeout=250 })
-  augroup END
-]]
+autocmd('InsertLeave', {
+  group = augroup('DisablePaste', { clear = true }),
+  pattern = '*',
+  callback = function()
+    vim.opt_local.paste = false
+  end,
+  desc = 'Turn off paste mode when leaving insert',
+})
 
--- Reload i3 on changes to config
-vim.api.nvim_create_autocmd('BufWritePost', { pattern = '*/i3/config', command = ':silent !i3-msg restart' })
+autocmd('TextYankPost', {
+  group = augroup('HighlightYank', { clear = true }),
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank { higroup = 'Visual', timeout = 250 }
+  end,
+  desc = 'Highlight yanked text',
+})
 
--- Re-source .tmux.conf on save
-vim.api.nvim_create_autocmd('BufWritePost', { pattern = '*/.tmux.conf', command = ':silent !tmux source ~/.tmux.conf' })
+-- Config file auto-reload
+autocmd('BufWritePost', {
+  group = augroup('I3Reload', { clear = true }),
+  pattern = '*/i3/config',
+  command = 'silent !i3-msg restart',
+  desc = 'Reload i3 on config save',
+})
 
--- Set Podfiles filetype to ruby
-vim.cmd [[autocmd BufNewFile,BufRead Podfile,*.podspec set filetype=ruby]]
+autocmd('BufWritePost', {
+  group = augroup('TmuxReload', { clear = true }),
+  pattern = '*/.tmux.conf',
+  command = 'silent !tmux source ~/.tmux.conf',
+  desc = 'Re-source tmux.conf on save',
+})
 
--- Add filetypes
+-- Filetype detection
 vim.filetype.add {
   extension = {
     pcss = 'css',
+    podspec = 'ruby',
     templ = 'templ',
     tf = 'terraform',
     tfvars = 'terraform',
+  },
+  filename = {
+    Podfile = 'ruby',
   },
 }

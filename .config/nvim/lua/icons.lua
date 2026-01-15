@@ -209,6 +209,10 @@ local data = {
     Tab = '» ',
     Trail = '·',
     Nbsp = '␣',
+    Space = '·',
+    Extends = '›',
+    Precedes = '‹',
+    Eol = '󰌑',
   },
 }
 
