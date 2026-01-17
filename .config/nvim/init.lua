@@ -1309,13 +1309,13 @@ require('lazy').setup({
       vim.api.nvim_create_autocmd('ColorScheme', {
         pattern = '*',
         callback = function()
-          local colors = require('catppuccin.palettes').get_palette()
-          vim.api.nvim_set_hl(0, 'NormalFloat', { bg = colors.mantle })
-          vim.api.nvim_set_hl(0, 'FloatBorder', { bg = colors.mantle, fg = colors.blue })
-          vim.api.nvim_set_hl(0, 'SagaNormal', { bg = colors.mantle })
-          vim.api.nvim_set_hl(0, 'SagaBorder', { bg = colors.mantle, fg = colors.blue })
-          vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = colors.mantle })
-          vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = colors.mantle, fg = colors.blue })
+          local palette = require('catppuccin.palettes').get_palette()
+          vim.api.nvim_set_hl(0, 'NormalFloat', { bg = palette.mantle })
+          vim.api.nvim_set_hl(0, 'FloatBorder', { bg = palette.mantle, fg = palette.blue })
+          vim.api.nvim_set_hl(0, 'SagaNormal', { bg = palette.mantle })
+          vim.api.nvim_set_hl(0, 'SagaBorder', { bg = palette.mantle, fg = palette.blue })
+          vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = palette.mantle })
+          vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = palette.mantle, fg = palette.blue })
         end,
       })
 
@@ -1390,7 +1390,7 @@ require('lazy').setup({
         enable = true,
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'yaml', 'ruby' } },
       refactor = {
         enable = true,
         clear_on_cursor_move = true,
