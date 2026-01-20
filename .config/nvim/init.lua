@@ -162,7 +162,7 @@ require('lazy').setup({
     ft = 'helm',
     opts = {
       conceal_templates = {
-        enabled = false, -- disable the replacement of templates with virtual text of their current values
+        enabled = false, -- enable the replacement of templates with virtual text of their current values
       },
       indent_hints = {
         enabled = true, -- enable hints for indent and nindent functions
@@ -1106,8 +1106,11 @@ require('lazy').setup({
         version = '2.*',
         dependencies = { 'rafamadriz/friendly-snippets' },
         config = function()
+          local luasnip = require 'luasnip'
           require('luasnip.loaders.from_vscode').lazy_load()
           require('luasnip.loaders.from_vscode').lazy_load { paths = { vim.fn.stdpath 'config' .. '/snippets' } }
+
+          luasnip.filetype_extend('helm', { 'yaml' })
         end,
         build = (function()
           if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
