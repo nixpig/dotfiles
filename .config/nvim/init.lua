@@ -138,7 +138,6 @@ require('lazy').setup({
 
   -- Treesitter extensions
   'nvim-treesitter/nvim-treesitter-context',
-  'nvim-treesitter/nvim-treesitter-refactor',
 
   -- UI
   'norcalli/nvim-colorizer.lua',
@@ -228,39 +227,34 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   {
     'lukas-reineke/indent-blankline.nvim',
-    tag = 'v2.20.8',
     main = 'ibl',
     config = function()
-      require('indent_blankline').setup {
-        show_current_context = true,
-        show_current_context_start = true,
-        show_end_of_line = true,
-        space_char_blankline = ' ',
-        char_highlight_list = {
-          'IndentBlanklineIndent0',
-          'IndentBlanklineIndent1',
-          'IndentBlanklineIndent2',
-          'IndentBlanklineIndent3',
-          'IndentBlanklineIndent4',
-          'IndentBlanklineIndent5',
-          'IndentBlanklineIndent6',
-          'IndentBlanklineIndent7',
-          'IndentBlanklineIndent8',
-          'IndentBlanklineIndent9',
-        },
+      local highlight = {
+        'RainbowRed',
+        'RainbowYellow',
+        'RainbowBlue',
+        'RainbowOrange',
+        'RainbowGreen',
+        'RainbowViolet',
+        'RainbowCyan',
       }
 
-      local hl = vim.api.nvim_set_hl
-      hl(0, 'IndentBlanklineIndent0', { fg = colors.lavender, nocombine = true })
-      hl(0, 'IndentBlanklineIndent1', { fg = colors.red, nocombine = true })
-      hl(0, 'IndentBlanklineIndent2', { fg = colors.peach, nocombine = true })
-      hl(0, 'IndentBlanklineIndent3', { fg = colors.green, nocombine = true })
-      hl(0, 'IndentBlanklineIndent4', { fg = colors.sky, nocombine = true })
-      hl(0, 'IndentBlanklineIndent5', { fg = colors.blue, nocombine = true })
-      hl(0, 'IndentBlanklineIndent6', { fg = colors.mauve, nocombine = true })
-      hl(0, 'IndentBlanklineIndent7', { fg = colors.pink, nocombine = true })
-      hl(0, 'IndentBlanklineIndent8', { fg = colors.text, nocombine = true })
-      hl(0, 'IndentBlanklineIndent9', { fg = colors.maroon, nocombine = true })
+      local hooks = require 'ibl.hooks'
+      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        local hl = vim.api.nvim_set_hl
+        hl(0, 'RainbowRed', { fg = colors.red })
+        hl(0, 'RainbowYellow', { fg = colors.yellow })
+        hl(0, 'RainbowBlue', { fg = colors.blue })
+        hl(0, 'RainbowOrange', { fg = colors.peach })
+        hl(0, 'RainbowGreen', { fg = colors.green })
+        hl(0, 'RainbowViolet', { fg = colors.mauve })
+        hl(0, 'RainbowCyan', { fg = colors.sky })
+      end)
+
+      require('ibl').setup {
+        indent = { highlight = highlight },
+        scope = { enabled = true },
+      }
     end,
   },
 
@@ -796,7 +790,7 @@ require('lazy').setup({
         icons.kind.Function,
         icons.kind.Constructor,
         icons.kind.Field,
-        icons.kind.variable,
+        icons.kind.Variable,
         icons.kind.Class,
         icons.kind.Interface,
         icons.kind.Module,
@@ -1139,31 +1133,31 @@ require('lazy').setup({
       appearance = {
         nerd_font_variant = 'mono',
         kind_icons = {
-          icons.kind.Text,
-          icons.kind.Method,
-          icons.kind.Function,
-          icons.kind.Constructor,
-          icons.kind.Field,
-          icons.kind.variable,
-          icons.kind.Class,
-          icons.kind.Interface,
-          icons.kind.Module,
-          icons.kind.Property,
-          icons.kind.Unit,
-          icons.kind.Value,
-          icons.kind.Enum,
-          icons.kind.Keyword,
-          icons.kind.Snippet,
-          icons.kind.Color,
-          icons.kind.File,
-          icons.kind.Reference,
-          icons.kind.Folder,
-          icons.kind.EnumMember,
-          icons.kind.Constant,
-          icons.kind.Struct,
-          icons.kind.Event,
-          icons.kind.Operator,
-          icons.kind.TypeParameter,
+          Text = icons.kind.Text,
+          Method = icons.kind.Method,
+          Function = icons.kind.Function,
+          Constructor = icons.kind.Constructor,
+          Field = icons.kind.Field,
+          Variable = icons.kind.Variable,
+          Class = icons.kind.Class,
+          Interface = icons.kind.Interface,
+          Module = icons.kind.Module,
+          Property = icons.kind.Property,
+          Unit = icons.kind.Unit,
+          Value = icons.kind.Value,
+          Enum = icons.kind.Enum,
+          Keyword = icons.kind.Keyword,
+          Snippet = icons.kind.Snippet,
+          Color = icons.kind.Color,
+          File = icons.kind.File,
+          Reference = icons.kind.Reference,
+          Folder = icons.kind.Folder,
+          EnumMember = icons.kind.EnumMember,
+          Constant = icons.kind.Constant,
+          Struct = icons.kind.Struct,
+          Event = icons.kind.Event,
+          Operator = icons.kind.Operator,
+          TypeParameter = icons.kind.TypeParameter,
           Copilot = icons.kind.Copilot,
         },
       },
@@ -1343,9 +1337,11 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    opts = {
-      ensure_installed = {
+    config = function()
+      require('nvim-treesitter').setup {}
+
+      -- Install parsers
+      local ensure_installed = {
         'markdown',
         'markdown_inline',
         'tsx',
@@ -1385,28 +1381,31 @@ require('lazy').setup({
         'query',
         'templ',
         'vhs',
-        'asm',
         'tmux',
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'yaml', 'ruby' } },
-      refactor = {
-        enable = true,
-        clear_on_cursor_move = true,
-        keymaps = { smart_rename = 'grr' },
-        navigation = {
-          enable = true,
-          keymaps = { goto_next_usage = 'gn', goto_previous_usage = 'gu' },
-        },
-        highlight_definitions = {
-          enable = true,
-        },
-      },
-    },
+      }
+
+      -- Auto-install missing parsers
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          local ft = vim.bo.filetype
+          local lang = vim.treesitter.language.get_lang(ft) or ft
+          if vim.tbl_contains(ensure_installed, lang) then
+            pcall(function()
+              if not pcall(vim.treesitter.language.inspect, lang) then
+                vim.cmd('TSInstall ' .. lang)
+              end
+            end)
+          end
+        end,
+      })
+
+      -- Enable treesitter-based highlighting
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
+    end,
   },
 
   -----------------------------------------------------------------------------
