@@ -1,0 +1,24 @@
+<scheme name="_@user_Catppuccin Mocha" version="142" parent_scheme="Darcula">
+  <option name="FONT_SCALE" value="1.0" />
+  <metaInfo>
+    <property name="created">2024-03-30T06:11:53</property>
+    <property name="ide">idea</property>
+    <property name="ideVersion">2023.3.6.0.0</property>
+    <property name="modified">2025-03-29T08:59:30</property>
+    <property name="originalScheme">Catppuccin Mocha</property>
+    <property name="partialSave">true</property>
+    <property name="pluginId">com.github.catppuccin.jetbrains</property>
+  </metaInfo>
+  <option name="CONSOLE_FONT_NAME" value="Operator Mono Lig" />
+  <option name="CONSOLE_FONT_SIZE" value="16" />
+  <option name="CONSOLE_LIGATURES" value="true" />
+  <option name="CONSOLE_LINE_SPACING" value="1.2" />
+  <attributes>
+    <option name="CTRL_CLICKABLE">
+      <value>
+        <option name="FOREGROUND" value="89b4fa" />
+        <option name="EFFECT_COLOR" value="89b4fa" />
+      </value>
+    </option>
+  </attributes>
+</scheme>

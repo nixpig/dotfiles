@@ -1,0 +1,5 @@
+Documents/**
+Downloads/**
+Pictures/**
+Recordings/**
+Streams/**

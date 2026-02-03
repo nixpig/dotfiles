@@ -1,0 +1,10 @@
+<application>
+  <component name="aeInstalledPlugins">
+    <option name="myPlugins">
+      <map>
+        <entry key="com.intellij.bigdatatools.core" value="1743478901986" />
+        <entry key="com.intellij.bigdatatools.kafka" value="1743478924280" />
+      </map>
+    </option>
+  </component>
+</application>

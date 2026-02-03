@@ -1,0 +1,617 @@
+<application>
+  <component name="VimHistorySettings">
+    <history>
+      <history-search>
+        <entry encoding="base64">c291cmNl</entry>
+        <entry encoding="base64">Z2VuZXI=</entry>
+        <entry encoding="base64">Z2Vu</entry>
+        <entry encoding="base64">cHJvZA==</entry>
+        <entry encoding="base64">Z29vZ2xl</entry>
+        <entry encoding="base64">bmV0dHk=</entry>
+        <entry encoding="base64">MjM=</entry>
+        <entry encoding="base64">L0ZST00gcGF0aWVudC9GUk9NIHVzZXIvZw==</entry>
+        <entry encoding="base64">RlJPTQ==</entry>
+        <entry encoding="base64">RlJPTSBwYXRpZW50</entry>
+        <entry encoding="base64">SU5UTyBwYXRpZW50</entry>
+        <entry encoding="base64">cGF0aWVudA==</entry>
+        <entry encoding="base64">SU5UTyB1c2Vy</entry>
+        <entry encoding="base64">RlJPTSB1c2Vy</entry>
+        <entry encoding="base64">dXNlciA=</entry>
+        <entry encoding="base64">dXNlcg==</entry>
+        <entry encoding="base64">XDxiaWxsaW5nXD4=</entry>
+        <entry encoding="base64">XDx1c2VyXD4=</entry>
+        <entry encoding="base64">ZW52aXJvbm1lbnQ=</entry>
+        <entry encoding="base64">a2Fma2FfYWQ=</entry>
+        <entry encoding="base64">dXNlci1iaWxsaW5nLXNlcnZpY2U=</entry>
+        <entry encoding="base64">ZG9ja2VyZmlsZQ==</entry>
+        <entry encoding="base64">NDAwMQ==</entry>
+        <entry encoding="base64">aHR0cA==</entry>
+        <entry encoding="base64">dXNlcl9zZXJ2aWNl</entry>
+        <entry encoding="base64">Y29udGV4dA==</entry>
+        <entry encoding="base64">dXNlci1zZXJ2aWNl</entry>
+        <entry encoding="base64">bmV0d29ya3M=</entry>
+        <entry encoding="base64">YWRkcmVzcw==</entry>
+        <entry encoding="base64">cG9ydHM=</entry>
+        <entry encoding="base64">ZGI=</entry>
+        <entry encoding="base64">NTQzMg==</entry>
+        <entry encoding="base64">bWFw</entry>
+        <entry encoding="base64">OTAwMQ==</entry>
+        <entry encoding="base64">NDAwNA==</entry>
+        <entry encoding="base64">XDwpXD4=</entry>
+        <entry encoding="base64">dmFsaWRhdA==</entry>
+        <entry encoding="base64">ODA4MA==</entry>
+        <entry encoding="base64">YXV0aA==</entry>
+        <entry encoding="base64">YXV0aC1zZXI=</entry>
+        <entry encoding="base64">and0X3NlY3JldA==</entry>
+        <entry encoding="base64">XDxyZXF1ZXN0XD4=</entry>
+        <entry encoding="base64">YXV0aF9zZXJ2aWNlX3BvcnQ=</entry>
+        <entry encoding="base64">Z2V0bWFwcGluZw==</entry>
+        <entry encoding="base64">Z2V0</entry>
+        <entry encoding="base64">XDxVc2VyUmVzcG9uc2VEVE9cPg==</entry>
+        <entry encoding="base64">bnVsbA==</entry>
+        <entry encoding="base64">dXNlcm5vdGZvdW5k</entry>
+        <entry encoding="base64">ZmluZGJ5ZW1haWw=</entry>
+        <entry encoding="base64">Z2V0YnllbWFpbA==</entry>
+      </history-search>
+      <history-cmd>
+        <entry encoding="base64">JzwsJz53</entry>
+        <entry encoding="base64">cyUvRlJPTSBwYXRpZW50L0ZST00gdXNlci9n</entry>
+        <entry encoding="base64">JXMvRlJPTS9UTy9n</entry>
+        <entry encoding="base64">JXMvRlJPTSBwYXRpZW50L0ZST00gdXNlci9n</entry>
+        <entry encoding="base64">JXMvSU5UTyBwYXRpZW50L0lOVE8gdXNlci9n</entry>
+        <entry encoding="base64">JXMvSU5UTyB1c2VyL0lOVE8gdXNlcnMvZw==</entry>
+        <entry encoding="base64">JXMvRlJPTSB1c2VyL0ZST00gdXNlcnMvZw==</entry>
+        <entry encoding="base64">MTM5</entry>
+        <entry encoding="base64">LiwuKzR3</entry>
+        <entry encoding="base64">d3c=</entry>
+        <entry encoding="base64">dw==</entry>
+      </history-cmd>
+      <history-expr />
+      <history-input />
+    </history>
+  </component>
+  <component name="VimJumpsSettings">
+    <project id="$USER_HOME$/IdeaProjects/patient-management">
+      <jump line="0" column="24" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/settings.gradle.kts" />
+      <jump line="31" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/build.gradle.kts" />
+      <jump line="3" column="20" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/resources/application.properties" />
+      <jump line="0" column="28" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/resources/application.properties" />
+      <jump line="3" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/proto/user_billing_service.proto" />
+      <jump line="2" column="19" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/proto/user_billing_service.proto" />
+      <jump line="0" column="10" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/proto/user_billing_service.proto" />
+      <jump line="6" column="13" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/billingservice/UserBillingServiceApplication.java" />
+      <jump line="12" column="1" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/billingservice/UserBillingServiceApplication.java" />
+      <jump line="21" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/billingservice/grpc/BillingGrpcService.java" />
+      <jump line="12" column="43" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/userbillingservice/grpc/UserBillingGrpcService.java" />
+      <jump line="11" column="11" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/userbillingservice/grpc/UserBillingGrpcService.java" />
+      <jump line="3" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/userbillingservice/grpc/UserBillingGrpcService.java" />
+      <jump line="32" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/java/com/pm/userbillingservice/grpc/UserBillingGrpcService.java" />
+      <jump line="8" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/grpc-requests/user-billing-service/create-billing-account.http" />
+      <jump line="6" column="20" filename="$USER_HOME$/IdeaProjects/patient-management/grpc-requests/user-billing-service/create-billing-account.http" />
+      <jump line="0" column="23" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/settings.gradle.kts" />
+      <jump line="12" column="50" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/build.gradle.kts" />
+      <jump line="6" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/application.properties" />
+      <jump line="3" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/proto/user_billing_service.proto" />
+      <jump line="2" column="20" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/proto/user_billing_service.proto" />
+      <jump line="9" column="17" filename="$USER_HOME$/IdeaProjects/patient-management/user-analytics-service/src/main/proto/user_event.proto" />
+      <jump line="5" column="11" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/proto/user_billing_service.proto" />
+      <jump line="9" column="11" filename="$USER_HOME$/IdeaProjects/patient-management/user-billing-service/src/main/proto/user_billing_service.proto" />
+      <jump line="12" column="49" filename="$USER_HOME$/IdeaProjects/patient-management/user-analytics-service/build.gradle.kts" />
+      <jump line="10" column="14" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/proto/user_billing_service.proto" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/proto/user_billing_service.proto" />
+      <jump line="10" column="14" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/proto/user_billing_service.proto" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/proto/user_billing_service.proto" />
+      <jump line="9" column="17" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/proto/user_event.proto" />
+      <jump line="6" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/patientservice/UserServiceApplication.java" />
+      <jump line="5" column="17" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/patientservice/UserServiceApplication.java" />
+      <jump line="0" column="21" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/UserServiceApplication.java" />
+      <jump line="13" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/UserServiceApplication.java" />
+      <jump line="52" column="43" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/PatientService.java" />
+      <jump line="18" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="3" column="46" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/repository/PatientRepository.java" />
+      <jump line="2" column="20" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/repository/UserRepository.java" />
+      <jump line="46" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/model/User.java" />
+      <jump line="9" column="17" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/repository/UserRepository.java" />
+      <jump line="27" column="22" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/mapper/PatientMapper.java" />
+      <jump line="22" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/dto/PatientRequestDTO.java" />
+      <jump line="7" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/dto/UserRequestDTO.java" />
+      <jump line="9" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/dto/PatientResponseDTO.java" />
+      <jump line="2" column="28" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/dto/UserResponseDTO.java" />
+      <jump line="2" column="41" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/dto/validators/CreateUserValidationGroup.java" />
+      <jump line="42" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/PatientController.java" />
+      <jump line="23" column="42" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="30" column="46" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="29" column="57" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="32" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="36" column="53" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="39" column="59" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="41" column="46" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="44" column="36" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="46" column="52" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="50" column="38" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="60" column="32" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="57" column="75" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="39" column="66" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="19" column="47" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="24" column="40" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="34" column="23" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="41" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="44" column="19" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="4" column="11" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/exception/PatientNotFoundException.java" />
+      <jump line="2" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/exception/UserNotFoundException.java" />
+      <jump line="8" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/exception/UserNotFoundException.java" />
+      <jump line="9" column="48" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/mapper/UserMapper.java" />
+      <jump line="20" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/mapper/UserMapper.java" />
+      <jump line="18" column="22" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="33" column="40" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="37" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="33" column="49" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/exception/GlobalExceptionHandler.java" />
+      <jump line="35" column="21" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/exception/GlobalExceptionHandler.java" />
+      <jump line="7" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/kafka/KafkaProducer.java" />
+      <jump line="11" column="58" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/kafka/KafkaProducer.java" />
+      <jump line="24" column="26" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/kafka/KafkaProducer.java" />
+      <jump line="34" column="40" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/kafka/KafkaProducer.java" />
+      <jump line="27" column="26" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="32" column="25" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="1" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="40" column="16" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="31" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="61" column="54" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="69" column="23" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="20" column="26" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="156" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="149" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="67" column="44" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="1" column="30" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/get-patients.http" />
+      <jump line="1" column="33" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/delete-patient.http" />
+      <jump line="1" column="33" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/delete-user.http" />
+      <jump line="1" column="30" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/get-users.http" />
+      <jump line="7" column="32" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/update-user.http" />
+      <jump line="2" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/create-user.http" />
+      <jump line="0" column="31" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/update-user.http" />
+      <jump line="6" column="33" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/user-service/update-user.http" />
+      <jump line="5" column="8" filename="$USER_HOME$/IdeaProjects/patient-management/grpc-requests/user-billing-service/create-billing-account.http" />
+      <jump line="2" column="33" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/Dockerfile" />
+    </project>
+    <project id="patient-management">
+      <jump line="16" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="144" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/resources/data.sql" />
+      <jump line="9" column="72" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/repository/PatientRepository.java" />
+      <jump line="11" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/repository/PatientRepository.java" />
+      <jump line="4" column="1" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/dto/PatientResponseDTO.java" />
+      <jump line="22" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/controller/PatientController.java" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/controller/PatientController.java" />
+      <jump line="1" column="29" filename="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" />
+      <jump line="0" column="0" filename="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" />
+      <jump line="26" column="65" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/get-patients.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/get-patients.http" />
+      <jump line="18" column="73" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/exception/GlobalExceptionHandler.java" />
+      <jump line="17" column="30" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/exception/GlobalExceptionHandler.java" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/exception/GlobalExceptionHandler.java" />
+      <jump line="27" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/exception/GlobalExceptionHandler.java" />
+      <jump line="14" column="37" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/exception/GlobalExceptionHandler.java" />
+      <jump line="39" column="139" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="30" column="64" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="26" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/controller/PatientController.java" />
+      <jump line="9" column="22" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/create-patient.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/api-requests/patient-service/create-patient.http" />
+      <jump line="30" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/controller/PatientController.java" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/Dockerfile" />
+      <jump line="18" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/Dockerfile" />
+      <jump line="17" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/Dockerfile" />
+      <jump line="22" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="6" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/resources/application.properties" />
+      <jump line="19" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="38" column="52" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="56" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="48" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="1" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="12" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/src/main/java/com/pm/billingservice/grpc/BillingGrpcService.java" />
+      <jump line="39" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/billing-service/build.gradle.kts" />
+      <jump line="11" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/resources/application.properties" />
+      <jump line="44" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="52" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="7" column="40" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="21" column="37" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="48" column="13" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/src/main/java/com/pm/patientservice/service/PatientService.java" />
+      <jump line="0" column="0" filename="/Dummy.txt" />
+      <jump line="31" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="55" column="23" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="29" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/analytics-service/build.gradle.kts" />
+      <jump line="4" column="12" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="4" column="4" filename="$USER_HOME$/IdeaProjects/patient-management/analytics-service/build.gradle.kts" />
+      <jump line="21" column="64" filename="$USER_HOME$/IdeaProjects/patient-management/analytics-service/src/main/java/com/pm/analyticsservice/kafka/KafkaConsumer.java" />
+      <jump line="49" column="15" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="31" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/analytics-service/build.gradle.kts" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/analytics-service/build.gradle.kts" />
+      <jump line="30" column="32" filename="$USER_HOME$/IdeaProjects/patient-management/patient-service/build.gradle.kts" />
+      <jump line="16" column="50" filename="$USER_HOME$/IdeaProjects/patient-management/user-analytics-service/src/main/java/com/pm/useranalyticsservice/kafka/KafkaConsumer.java" />
+      <jump line="27" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-analytics-service/src/main/java/com/pm/useranalyticsservice/kafka/KafkaConsumer.java" />
+      <jump line="4" column="22" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/application.properties" />
+      <jump line="60" column="32" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="23" column="34" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/kafka/KafkaProducer.java" />
+      <jump line="32" column="25" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="1" column="30" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="11" column="44" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="12" column="15" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="23" column="15" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="20" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="31" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="42" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="53" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="64" column="18" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="75" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="84" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="93" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="102" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="111" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="120" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="129" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="138" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="147" column="27" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="156" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="34" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="45" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="56" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="68" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="77" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="86" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="95" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="104" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="113" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="122" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="131" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="140" column="7" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="149" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/patient-management/user-service/src/main/resources/data.sql" />
+    </project>
+    <project id="$USER_HOME$/IdeaProjects/user-management">
+      <jump line="5" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/AuthServiceApplication.java" />
+      <jump line="23" column="42" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/config/SecurityConfig.java" />
+      <jump line="5" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/resources/application.properties" />
+      <jump line="2" column="15" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/resources/application.properties" />
+      <jump line="32" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="6" column="14" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/dto/LoginRequestDTO.java" />
+      <jump line="24" column="74" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="1" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/.idea/httpRequests/2025-04-05T063919.200.json" />
+      <jump line="45" column="4" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="26" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="35" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="15" column="18" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="47" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="30" column="27" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="41" column="24" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="20" column="46" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="43" column="40" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="46" column="8" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="47" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="48" column="8" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="37" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="34" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="42" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="34" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/validate.http" />
+      <jump line="5" column="17" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="7" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="6" column="20" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="8" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="14" column="26" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="11" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="10" column="14" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="1" column="11" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="15" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="22" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="24" column="10" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="27" column="26" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="28" column="24" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="38" column="10" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="107" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="89" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="96" column="12" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="33" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/validate.http" />
+      <jump line="3" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/validate.http" />
+      <jump line="5" column="15" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="2" column="7" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/validate.http" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-users.http" />
+      <jump line="33" column="20" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="30" column="12" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="31" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="11" column="33" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/exception/JwtValidationException.java" />
+      <jump line="12" column="30" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/exception/JwtValidationException.java" />
+      <jump line="13" column="38" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/exception/JwtValidationException.java" />
+      <jump line="14" column="33" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/exception/JwtValidationException.java" />
+      <jump line="37" column="16" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-users.http" />
+      <jump line="3" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/create-user.http" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/delete-user.http" />
+      <jump line="19" column="18" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="21" column="18" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="37" column="8" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="74" column="31" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="38" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="36" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="3" column="22" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-users.http" />
+      <jump line="3" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/update-user.http" />
+      <jump line="6" column="28" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/update-user.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-user.http" />
+      <jump line="2" column="29" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-user.http" />
+      <jump line="40" column="25" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="41" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="47" column="34" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="7" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/exception/UserNotFoundException.java" />
+      <jump line="7" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/exception/EmailAlreadyExistsException.java" />
+      <jump line="59" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="42" column="19" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="13" column="4" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/repository/UserRepository.java" />
+      <jump line="14" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/repository/UserRepository.java" />
+      <jump line="41" column="48" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="1" column="38" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-user.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/.idea/httpRequests/f-6.txt" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/exception/UserNotFoundException.java" />
+      <jump line="26" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="14" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="10" column="15" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="6" column="13" filename="$USER_HOME$/IdeaProjects/user-management/user-billing-service/src/main/java/com/pm/userbillingservice/UserBillingServiceApplication.java" />
+      <jump line="18" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-billing-service/src/main/java/com/pm/userbillingservice/grpc/UserBillingGrpcService.java" />
+      <jump line="16" column="7" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="73" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="9" column="20" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="52" column="33" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="49" column="54" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="38" column="4" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="3" column="32" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/get-user.http" />
+    </project>
+    <project id="user-management">
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/src/main/resources/Dockerfile" />
+      <jump line="6" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/Dockerfile" />
+      <jump line="35" column="11" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="68" column="22" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="10" column="28" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="51" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="20" column="14" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="73" column="15" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="30" column="2" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="41" column="24" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="66" column="2" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="69" column="15" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="12" column="28" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="86" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="4" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="60" column="32" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="70" column="32" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="37" column="22" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="89" column="21" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="47" column="14" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="48" column="11" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="95" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="44" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="59" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="72" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="78" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="64" column="40" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="87" column="24" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="91" column="48" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="93" column="41" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="11" column="19" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="46" column="9" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="88" column="21" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="18" column="9" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="6" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="16" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="32" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="61" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="74" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="9" column="14" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="62" column="13" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="75" column="21" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="25" column="43" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="33" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="55" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="23" column="12" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="15" column="25" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/model/User.java" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/build.gradle.kts" />
+      <jump line="23" column="65" filename="$USER_HOME$/IdeaProjects/user-management/user-service/build.gradle.kts" />
+      <jump line="2" column="4" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="76" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="45" column="14" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/resources/application.properties" />
+      <jump line="12" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/resources/application.properties" />
+      <jump line="90" column="29" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="7" column="9" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="39" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="8" column="14" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/resources/data.sql" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/resources/data.sql" />
+      <jump line="57" column="32" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="27" column="2" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="38" column="24" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="94" column="12" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="8" column="12" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="13" column="28" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="29" column="2" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="40" column="24" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="9" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="2" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="31" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="42" column="15" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="26" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/service/AuthService.java" />
+      <jump line="15" column="18" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/controller/AuthController.java" />
+      <jump line="20" column="46" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="38" column="64" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="43" column="40" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="28" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="46" column="8" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="17" column="0" filename="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" />
+      <jump line="5" column="17" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-requests/auth-service/login.http" />
+      <jump line="22" column="27" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/java/com/pm/apigateway/filter/JwtValidationGatewayFilterFactory.java" />
+      <jump line="33" column="0" filename="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" />
+      <jump line="96" column="12" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="14" column="6" filename="$USER_HOME$/IdeaProjects/user-management/compose.yml" />
+      <jump line="40" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="28" column="5" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="37" column="42" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="21" column="18" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="19" column="18" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="22" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="36" column="32" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+      <jump line="13" column="7" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/repository/UserRepository.java" />
+      <jump line="41" column="11" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="51" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="0" column="0" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="52" column="33" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" />
+      <jump line="27" column="21" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/grpc/BillingServiceGrpcClient.java" />
+      <jump line="49" column="54" filename="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" />
+    </project>
+  </component>
+  <component name="VimMarksSettings">
+    <globalmarks />
+    <localmarks>
+      <file name="$USER_HOME$/IdeaProjects/user-management/api-gateway/Containerfile" timestamp="1743908907642">
+        <mark key="&quot;" line="2" column="29" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/auth-service/src/main/java/com/pm/authservice/util/JwtUtil.java" timestamp="1743909097887">
+        <mark key="&quot;" line="11" column="26" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/controller/UserController.java" timestamp="1743909240081">
+        <mark key="&quot;" line="41" column="0" />
+        <mark key="'" line="49" column="54" />
+        <mark key="[" line="40" column="49" />
+        <mark key="]" line="41" column="66" />
+        <mark key="^" line="41" column="66" />
+        <mark key="." line="41" column="65" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/compose.yml" timestamp="1743909121779">
+        <mark key="&quot;" line="55" column="16" />
+        <mark key="[" line="1" column="2" />
+        <mark key="]" line="1" column="2" />
+        <mark key="^" line="1" column="2" />
+        <mark key="." line="1" column="1" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/src/test/java/com/pm/useranalyticsservice/UserAnalyticsServiceApplicationTests.java" timestamp="1743909119196">
+        <mark key="&quot;" line="0" column="28" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/api-gateway/settings.gradle.kts" timestamp="1743908908015">
+        <mark key="&quot;" line="0" column="31" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/src/main/java/com/pm/useranalyticsservice/kafka/KafkaConsumer.java" timestamp="1743909121501">
+        <mark key="&quot;" line="0" column="28" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/.run/usermgmt.run.xml" timestamp="1743909121819">
+        <mark key="&quot;" line="11" column="126" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/delete-user.http" timestamp="1743909100106">
+        <mark key="&quot;" line="0" column="26" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-service/src/main/java/com/pm/userservice/service/UserService.java" timestamp="1743909195365">
+        <mark key="&quot;" line="5" column="57" />
+        <mark key="'" line="52" column="33" />
+        <mark key="[" line="41" column="52" />
+        <mark key="]" line="41" column="52" />
+        <mark key="." line="41" column="51" />
+        <mark key="^" line="41" column="52" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/api-requests/user-service/create-user.http" timestamp="1743909100425">
+        <mark key="&quot;" line="6" column="14" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/.run/UserBillingServiceApplication.run.xml" timestamp="1743909100911">
+        <mark key="&quot;" line="0" column="44" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/src/main/java/com/pm/useranalyticsservice/UserAnalyticsServiceApplication.java" timestamp="1743909121617">
+        <mark key="&quot;" line="0" column="28" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/.run/UserAnalyticsServiceApplication.run.xml" timestamp="1743909121938">
+        <mark key="&quot;" line="1" column="52" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-service/build.gradle.kts" timestamp="1743908891502">
+        <mark key="&quot;" line="25" column="52" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-billing-service/gradlew" timestamp="1743909097673">
+        <mark key="&quot;" line="3" column="9" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/Containerfile" timestamp="1743909121657">
+        <mark key="&quot;" line="2" column="32" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/src/main/resources/application.properties" timestamp="1743909119440">
+        <mark key="&quot;" line="0" column="38" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/user-analytics-service/settings.gradle.kts" timestamp="1743909127189">
+        <mark key="&quot;" line="0" column="34" />
+      </file>
+      <file name="$USER_HOME$/IdeaProjects/user-management/api-gateway/src/main/resources/application.yml" timestamp="1743909097383">
+        <mark key="&quot;" line="9" column="21" />
+      </file>
+    </localmarks>
+  </component>
+  <component name="VimRegisterSettings">
+    <registers>
+      <register name="&quot;" type="LINE_WISE">
+        <text encoding="base64">ICAgIFVzZXIgZ2V0QnlJZChVVUlEIGlkKTsK</text>
+      </register>
+      <register name="+" type="LINE_WISE">
+        <text encoding="base64">ICAgIFVzZXIgZ2V0QnlJZChVVUlEIGlkKTsK</text>
+      </register>
+      <register name="-" type="CHARACTER_WISE">
+        <text encoding="base64">T3B0aW9uYWw=</text>
+      </register>
+      <register name="." type="CHARACTER_WISE">
+        <text encoding="base64" />
+      </register>
+      <register name="/" type="CHARACTER_WISE">
+        <text encoding="base64">Z2V0YnllbWFpbA==</text>
+      </register>
+      <register name="0" type="CHARACTER_WISE">
+        <text encoding="base64">am9obi5kb2VAZXhhbXBsZS5jb20=</text>
+      </register>
+      <register name="1" type="LINE_WISE">
+        <text encoding="base64">ICAgIFVzZXIgZ2V0QnlJZChVVUlEIGlkKTsK</text>
+      </register>
+      <register name="2" type="LINE_WISE">
+        <text encoding="base64">ICAgIAo=</text>
+      </register>
+      <register name="3" type="LINE_WISE">
+        <text encoding="base64">ICAgIHAK</text>
+      </register>
+      <register name="4" type="LINE_WISE">
+        <text encoding="base64">ICAgICAgICAK</text>
+      </register>
+      <register name="5" type="LINE_WISE">
+        <text encoding="base64">Cg==</text>
+      </register>
+      <register name="6" type="LINE_WISE">
+        <text encoding="base64">Cg==</text>
+      </register>
+      <register name="7" type="LINE_WISE">
+        <text encoding="base64">ICAgICAgICByZXR1cm4gT3B0aW9uYWwub2YodXNlcik7Cg==</text>
+      </register>
+      <register name="8" type="LINE_WISE">
+        <text encoding="base64">ICAgIFVzZXIgZ2V0QnlJZChVVUlEIGlkKTsK</text>
+      </register>
+      <register name="9" type="LINE_WISE">
+        <text encoding="base64">I0F1dGhvcml6YXRpb246IEJlYXJlciBhc2Rmc2YwCg==</text>
+      </register>
+      <register name=":" type="CHARACTER_WISE">
+        <text encoding="base64">dw==</text>
+      </register>
+    </registers>
+  </component>
+  <component name="VimSearchSettings">
+    <search>
+      <last-dir encoding="base64">MQ==</last-dir>
+      <show-last encoding="base64">ZmFsc2U=</show-last>
+    </search>
+  </component>
+  <component name="VimVariables">
+    <vim-variables />
+  </component>
+</application>
