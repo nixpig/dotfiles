@@ -2,8 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# set -o vi
-set show-mode-in-prompt on
+set -o vi
 
 # Initialise keychain with main SSH key
 eval $(keychain --eval --quiet id_rsa)
@@ -15,7 +14,7 @@ case $- in
 esac
 
 # Source blesh
-[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh --attach=non-text
+[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options

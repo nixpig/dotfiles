@@ -1,2 +1,10 @@
 # blerc
 ble-color-setface auto_complete fg=246,underline,italic
+
+# Vi mode cursor shapes (1=block blink, 2=block, 3=underline blink, 4=underline, 5=bar blink, 6=bar)
+bleopt keymap_vi_mode_show:=
+ble-bind -m vi_nmap --cursor 2
+ble-bind -m vi_imap --cursor 5
+ble-bind -m vi_omap --cursor 4
+ble-bind -m vi_xmap --cursor 2
+ble-bind -m vi_cmap --cursor 0
