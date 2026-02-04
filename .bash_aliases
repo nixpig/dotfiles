@@ -119,9 +119,14 @@ alias gsp='git stash pop'
 alias gsa='git stash apply'
 
 alias tf='terraform'
-
-alias n='sudo n'
+alias kc='kubectl'
 alias r='ranger'
 
-## Start SSH agent and add id_rsa key
-alias shutup='eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa'
+alias tctl='$HOME/projects/teleport/build/tctl'
+
+alias fdpass-teleport='$HOME/projects/teleport/build/fdpass'
+alias tbot='$HOME/projects/teleport/build/tbot'
+alias tctl='$HOME/projects/teleport/build/tctl'
+alias teleport='$HOME/projects/teleport/build/teleport'
+alias teleport-update='$HOME/projects/teleport/build/teleport'
+alias tsh='$HOME/projects/teleport/build/tsh'

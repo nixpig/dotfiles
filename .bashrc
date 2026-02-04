@@ -4,14 +4,14 @@
 
 set -o vi
 
-# Initialise keychain with main SSH key
-eval $(keychain --eval --quiet id_rsa)
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
+
+# Initialise keychain with main SSH key
+eval $(keychain --eval --quiet id_ed25519)
 
 # Source blesh
 [[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh
@@ -127,7 +127,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$HOME/go/bin:/opt/idea/bin:$FLYCTL_INSTALL/bin:$PATH"
+export PATH="$HOME/.local/bin/protobuf/bin:$HOME/.cargo/bin:$HOME/.local/bin:$ANDROID_HOME:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/debian:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.config/lsp/lua-language-server/bin:$HOME/go/bin:/usr/local/go/bin:/opt/idea/bin:$FLYCTL_INSTALL/bin:$PATH"
 
 export BAT_THEME="Catppuccin-mocha"
 
@@ -144,15 +144,6 @@ export GIT_EDITOR="nvim"
 
 export LC_CTYPE=en_GB.UTF-8
 
-export VAGRANT_HOME=/mnt/efe8b538-025d-4e8c-befc-fe22dcec7f15/Vagrant
-
-# Set up mcfly options
-export MCFLY_KEY_SCHEME=vim
-export MCFLY_FUZZY=2
-export MCFLY_RESULTS=25
-export MCFLY_DISABLE_MENU=TRUE
-export MCFLY_INTERFACE_VIEW=TOP
-export MCFLY_PROMPT=󰍉
 
 # Set up fzf options
 export FZF_DEFAULT_OPTS=" \
@@ -160,15 +151,9 @@ export FZF_DEFAULT_OPTS=" \
 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
-# Start mcfly
-eval "$(mcfly init bash)"
-
 # Open tmux-sessionizer
 bind -x '"\C-f": "bash -c \"tmux-sessionizer\""'
 bind -x '"\C-n": "bash -c \"rangerizer\""'
-
-# Check/Fix legacy_tiocsti and open mcfly
-bind -x '"\C-r": "bash -c \"mcfly_fix.sh\""'
 
 
 # Initialise starship
@@ -182,6 +167,9 @@ complete -C /home/nixpig/.local/bin/terraform terraform
 complete -W "" az
 
 source <(kubectl completion bash)
+complete -o default -F __start_kubectl kc
 
-# Turso
-export PATH="/home/nixpig/.turso:$PATH"
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash --disable-up-arrow)"

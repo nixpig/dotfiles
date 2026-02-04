@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/nixpig/.config/wallpaper/catppuccin-rainbow.webp' 
+feh --no-fehbg --bg-fill '/home/jward/.config/wallpaper/catppuccin-rainbow.webp' 
