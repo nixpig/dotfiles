@@ -148,14 +148,18 @@ require('lazy').setup({
   {
     'fatih/vim-go',
     config = function()
-      vim.g.go_fmt_command = 'golines'
-      vim.g.go_fmt_options = {
-        golines = '-m 80',
-      }
-      vim.g.go_fmt_autosave = 0 -- Disable vim-go auto-formatting (use LSP instead)
+      vim.g.go_fmt_command = 'gofumpt'
+      vim.g.go_fmt_autosave = 0
+      vim.g.go_gopls_enabled = 0
+      vim.g.go_code_completion_enabled = 0
+      vim.g.go_def_mapping_enabled = 0
     end,
   },
 
+  {
+    'towolf/vim-helm',
+    lazy = false,
+  },
   {
     'qvalentin/helm-ls.nvim',
     ft = 'helm',
@@ -249,11 +253,13 @@ require('lazy').setup({
         hl(0, 'RainbowGreen', { fg = colors.green })
         hl(0, 'RainbowViolet', { fg = colors.mauve })
         hl(0, 'RainbowCyan', { fg = colors.sky })
+        hl(0, 'IblIndent', { fg = colors.surface1 })
       end)
 
       require('ibl').setup {
-        indent = { highlight = highlight },
-        scope = { enabled = true },
+        indent = { highlight = 'IblIndent', char = '│', tab_char = '│' },
+        whitespace = { highlight = { 'Whitespace' }, remove_blankline_trail = false },
+        scope = { enabled = true, highlight = highlight },
       }
     end,
   },
@@ -276,7 +282,7 @@ require('lazy').setup({
             {
               'filename',
               file_status = true, -- displays file status (readonly status, modified status)
-              path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+              path = 1,           -- 0 = just filename, 1 = relative path, 2 = absolute path
             },
           },
           lualine_x = {
@@ -303,7 +309,7 @@ require('lazy').setup({
             {
               'filename',
               file_status = true, -- displays file status (readonly status, modified status)
-              path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
+              path = 1,           -- 0 = just filename, 1 = relative path, 2 = absolute path
             },
           },
           lualine_x = { 'location' },
@@ -514,7 +520,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       local telescope = require 'telescope'
@@ -559,10 +565,10 @@ require('lazy').setup({
             require('telescope.themes').get_dropdown {},
           },
           fzf = {
-            fuzzy = true, -- false will only do exact matching
+            fuzzy = true,                   -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true, -- override the file sorter
-            case_mode = 'smart_case', -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
+            override_file_sorter = true,    -- override the file sorter
+            case_mode = 'smart_case',       -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
           },
           file_browser = {
             hijack_netrw = true,
@@ -838,7 +844,9 @@ require('lazy').setup({
           end,
         },
         jump = {
-          float = true,
+          on_jump = function(diagnostic)
+            vim.diagnostic.open_float()
+          end,
         },
       }
 
@@ -872,8 +880,10 @@ require('lazy').setup({
         eslint = {
           root_dir = function(bufnr, on_dir)
             local eslint_configs =
-              { 'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', '.eslintrc.js', '.eslintrc.json', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc' }
-            local config_file = vim.fs.find(eslint_configs, { path = vim.api.nvim_buf_get_name(bufnr), upward = true })[1]
+            { 'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs', '.eslintrc.js', '.eslintrc.json',
+              '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc' }
+            local config_file = vim.fs.find(eslint_configs, { path = vim.api.nvim_buf_get_name(bufnr), upward = true })
+                [1]
             if config_file then
               on_dir(vim.fs.dirname(config_file))
             end
@@ -886,7 +896,13 @@ require('lazy').setup({
         docker_compose_language_service = {},
         html = {},
         dockerls = {},
-        gopls = {},
+        gopls = {
+          settings = {
+            gopls = {
+              gofumpt = true,
+            },
+          },
+        },
         buf_ls = {},
         yamlls = {
           settings = {
@@ -1069,7 +1085,6 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        go = { 'gofumpt', 'golines' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -1079,11 +1094,7 @@ require('lazy').setup({
         css = { 'prettierd', 'prettier', stop_after_first = true },
         scss = { 'prettierd', 'prettier', stop_after_first = true },
       },
-      formatters = {
-        golines = {
-          prepend_args = { '-m', '80' },
-        },
-      },
+      formatters = {},
     },
   },
 
@@ -1169,7 +1180,7 @@ require('lazy').setup({
             padding = 2,
             columns = {
               { 'kind_icon' },
-              { 'label', 'label_description', gap = 1 },
+              { 'label',    'label_description', gap = 1 },
               { 'kind' },
             },
             components = {},
@@ -1238,7 +1249,7 @@ require('lazy').setup({
   {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
-      { 'tpope/vim-dadbod', lazy = true },
+      { 'tpope/vim-dadbod',                     lazy = true },
       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
     },
     cmd = {
@@ -1313,6 +1324,8 @@ require('lazy').setup({
           vim.api.nvim_set_hl(0, 'SagaBorder', { bg = palette.mantle, fg = palette.blue })
           vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = palette.mantle })
           vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = palette.mantle, fg = palette.blue })
+          vim.api.nvim_set_hl(0, 'Whitespace', { fg = palette.surface0 })
+          vim.api.nvim_set_hl(0, 'NonText', { fg = palette.surface0 })
         end,
       })
 
@@ -1320,7 +1333,6 @@ require('lazy').setup({
       local palette = require('catppuccin.palettes').get_palette()
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = palette.mantle })
       vim.api.nvim_set_hl(0, 'FloatBorder', { bg = palette.mantle, fg = palette.blue })
-
       -- Lspsaga specific highlights
       vim.api.nvim_set_hl(0, 'SagaNormal', { bg = palette.mantle })
       vim.api.nvim_set_hl(0, 'SagaBorder', { bg = palette.mantle, fg = palette.blue })
@@ -1328,6 +1340,14 @@ require('lazy').setup({
       -- Fidget notification window highlights
       vim.api.nvim_set_hl(0, 'FidgetNormal', { bg = palette.mantle })
       vim.api.nvim_set_hl(0, 'FidgetBorder', { bg = palette.mantle, fg = palette.blue })
+
+      -- Make listchars (tabs, trailing spaces, etc.) subtle
+      vim.api.nvim_set_hl(0, 'Whitespace', { fg = palette.surface0 })
+      vim.api.nvim_set_hl(0, 'NonText', { fg = palette.surface0 })
+
+      -- Bright cursor for insert mode
+      vim.api.nvim_set_hl(0, 'iCursor', { fg = palette.base, bg = "#CDD6F4" })
+      vim.opt.guicursor:append('i-ci-ve:ver25-iCursor')
     end,
   },
 
@@ -1338,6 +1358,10 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
+      -- Add nvim-treesitter runtime queries to runtimepath
+      local ts_path = vim.fn.stdpath('data') .. '/lazy/nvim-treesitter'
+      vim.opt.runtimepath:prepend(ts_path .. '/runtime')
+
       require('nvim-treesitter').setup {}
 
       -- Install parsers
@@ -1384,25 +1408,49 @@ require('lazy').setup({
         'tmux',
       }
 
-      -- Auto-install missing parsers
-      vim.api.nvim_create_autocmd('FileType', {
+      -- Install missing parsers after startup
+      vim.api.nvim_create_autocmd('VimEnter', {
         callback = function()
-          local ft = vim.bo.filetype
-          local lang = vim.treesitter.language.get_lang(ft) or ft
-          if vim.tbl_contains(ensure_installed, lang) then
-            pcall(function()
-              if not pcall(vim.treesitter.language.inspect, lang) then
-                vim.cmd('TSInstall ' .. lang)
-              end
-            end)
+          local parser_dir = vim.fn.stdpath('data') .. '/site/parser/'
+          local to_install = {}
+          for _, lang in ipairs(ensure_installed) do
+            local parser_file = parser_dir .. lang .. '.so'
+            if vim.fn.filereadable(parser_file) == 0 then
+              table.insert(to_install, lang)
+            end
+          end
+          if #to_install > 0 then
+            vim.cmd('TSInstall ' .. table.concat(to_install, ' '))
           end
         end,
       })
 
+      -- Disable treesitter for helm files (use vim-helm syntax instead)
+      -- Register to a non-existent parser so treesitter skips it entirely
+      vim.treesitter.language.register('_noop', 'helm')
+
       -- Enable treesitter-based highlighting
       vim.api.nvim_create_autocmd('FileType', {
-        callback = function()
-          pcall(vim.treesitter.start)
+        group = vim.api.nvim_create_augroup('TreesitterHighlight', { clear = true }),
+        callback = function(args)
+          -- Skip special buffers
+          local buftype = vim.bo[args.buf].buftype
+          if buftype ~= '' then
+            return
+          end
+
+          -- Skip helm files - use vim syntax instead (handles YAML + Go templates)
+          if args.match == 'helm' then
+            return
+          end
+
+          -- Get the treesitter language for this filetype
+          local lang = vim.treesitter.language.get_lang(args.match) or args.match
+
+          -- Only start if parser is available
+          if pcall(vim.treesitter.language.inspect, lang) then
+            vim.treesitter.start(args.buf, lang)
+          end
         end,
       })
     end,
@@ -1527,13 +1575,13 @@ require('lazy').setup({
             LogPoint = icons.dap.LogPoint,
             Stopped = icons.dap.Stopped,
           }
-        or {
-          Breakpoint = icons.dap.Breakpoint,
-          BreakpointCondition = icons.dap.BreakpointCondition,
-          BreakpointRejected = icons.dap.BreakpointRejected,
-          LogPoint = icons.dap.LogPoint,
-          Stopped = icons.dap.Stopped,
-        }
+          or {
+            Breakpoint = icons.dap.Breakpoint,
+            BreakpointCondition = icons.dap.BreakpointCondition,
+            BreakpointRejected = icons.dap.BreakpointRejected,
+            LogPoint = icons.dap.LogPoint,
+            Stopped = icons.dap.Stopped,
+          }
       for type, icon in pairs(breakpoint_icons) do
         local tp = 'Dap' .. type
         local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
@@ -1563,16 +1611,16 @@ require('lazy').setup({
     dependencies = { 'folke/snacks.nvim' },
     config = true,
     keys = {
-      { '<leader>a', nil, desc = 'AI/Claude Code' },
-      { '<leader>ai', '<cmd>ClaudeCode<cr>', desc = 'Toggle Claude' },
-      { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', desc = 'Focus Claude' },
-      { '<leader>ar', '<cmd>ClaudeCode --resume<cr>', desc = 'Resume Claude' },
+      { '<leader>a',  nil,                              desc = 'AI/Claude Code' },
+      { '<leader>ai', '<cmd>ClaudeCode<cr>',            desc = 'Toggle Claude' },
+      { '<leader>af', '<cmd>ClaudeCodeFocus<cr>',       desc = 'Focus Claude' },
+      { '<leader>ar', '<cmd>ClaudeCode --resume<cr>',   desc = 'Resume Claude' },
       { '<leader>aC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue Claude' },
       { '<leader>am', '<cmd>ClaudeCodeSelectModel<cr>', desc = 'Select Claude model' },
-      { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Add current buffer' },
-      { '<leader>as', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Send to Claude' },
-      { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept diff' },
-      { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Deny diff' },
+      { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>',       desc = 'Add current buffer' },
+      { '<leader>as', '<cmd>ClaudeCodeSend<cr>',        mode = 'v',                  desc = 'Send to Claude' },
+      { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>',  desc = 'Accept diff' },
+      { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>',    desc = 'Deny diff' },
     },
     opts = {
       terminal = {
@@ -1585,6 +1633,9 @@ require('lazy').setup({
     },
   },
 }, {
+  rocks = {
+    enabled = false,
+  },
   ui = {
     icons = {},
   },
@@ -1682,7 +1733,8 @@ vim.keymap.set('', '<leader>x', '<Cmd>!chmod +x %<CR>', { desc = 'Make current f
 
 -- Tmux integration
 vim.keymap.set('n', '<C-f>', '<Cmd>silent !tmux neww tmux-sessionizer<CR>', { desc = 'Trigger tmux-sessionizer' })
-vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr<CR>', { desc = 'Trigger tldr' })
+vim.keymap.set('n', '<C-_>', '<Cmd>silent ![[ "$TMUX" ]] && tmux split-window -h -p 30 tldr<CR>',
+  { desc = 'Trigger tldr' })
 
 -- Completion menu options
 vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'preview' }
@@ -1731,7 +1783,7 @@ autocmd('TextYankPost', {
   group = augroup('HighlightYank', { clear = true }),
   pattern = '*',
   callback = function()
-    vim.highlight.on_yank { higroup = 'Visual', timeout = 250 }
+    vim.hl.on_yank { higroup = 'Visual', timeout = 250 }
   end,
   desc = 'Highlight yanked text',
 })
@@ -1759,8 +1811,27 @@ vim.filetype.add {
     templ = 'templ',
     tf = 'terraform',
     tfvars = 'terraform',
+    tpl = 'helm',
   },
   filename = {
     Podfile = 'ruby',
   },
+  pattern = {
+    -- Helm chart templates
+    ['.*/templates/.*%.yaml'] = 'helm',
+    ['.*/templates/.*%.yml'] = 'helm',
+    ['.*/templates/.*%.tpl'] = 'helm',
+    ['helmfile.*%.yaml'] = 'helm',
+    -- Dockerfiles (e.g. Dockerfile-arm, Dockerfile.dev)
+    ['.*Dockerfile.*'] = 'dockerfile',
+  },
 }
+
+-- Force Whitespace highlight after all plugins load
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    local palette = require('catppuccin.palettes').get_palette()
+    vim.api.nvim_set_hl(0, 'Whitespace', { fg = palette.surface0 })
+    vim.api.nvim_set_hl(0, 'NonText', { fg = palette.surface0 })
+  end,
+})
