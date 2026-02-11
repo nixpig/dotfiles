@@ -13,7 +13,6 @@ local colors = require('colors').palette()
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
-vim.g.go_doc_keywordprg_enabled = false
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 
 vim.scriptencoding = 'utf-8'
@@ -145,16 +144,6 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   -- Language support
   -----------------------------------------------------------------------------
-  {
-    'fatih/vim-go',
-    config = function()
-      vim.g.go_fmt_command = 'gofumpt'
-      vim.g.go_fmt_autosave = 0
-      vim.g.go_gopls_enabled = 0
-      vim.g.go_code_completion_enabled = 0
-      vim.g.go_def_mapping_enabled = 0
-    end,
-  },
 
   {
     'towolf/vim-helm',
@@ -897,6 +886,14 @@ require('lazy').setup({
         html = {},
         dockerls = {},
         gopls = {
+          root_dir = function(bufnr, cb)
+            local fname = vim.api.nvim_buf_get_name(bufnr)
+            -- Prefer go.work or .git root so a single gopls instance covers the whole repo
+            local root = vim.fs.root(bufnr, { 'go.work', '.git' })
+              or vim.fs.root(bufnr, { 'go.mod' })
+              or vim.fn.fnamemodify(fname, ':h')
+            cb(root)
+          end,
           settings = {
             gopls = {
               gofumpt = true,
@@ -1028,6 +1025,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- 'stylua',
+        'goimports',
         'gofumpt',
         'golines',
       })
@@ -1038,7 +1036,7 @@ require('lazy').setup({
 
       require('mason-lspconfig').setup {
         ensure_installed = {},
-        automatic_enable = { exclude = { 'ts_ls', 'eslint' } },
+        automatic_enable = { exclude = vim.tbl_keys(servers) },
       }
 
       -- Configure and enable servers with custom settings
@@ -1085,6 +1083,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'goimports', 'gofumpt' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -1651,6 +1650,7 @@ vim.keymap.set('n', '<leader>yk', function()
   end
 
   local client = clients[1]
+  local bufpath = vim.api.nvim_buf_get_name(0)
   local uri = vim.uri_from_bufnr(0)
   local settings = client.config.settings or {}
 
@@ -1658,10 +1658,60 @@ vim.keymap.set('n', '<leader>yk', function()
   settings.yaml.schemas = settings.yaml.schemas or {}
   settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
 
+  -- Remove any negation glob for this buffer
+  local neg = '!' .. bufpath
+  for i = #settings.yaml.schemas.kubernetes, 1, -1 do
+    if settings.yaml.schemas.kubernetes[i] == neg then
+      table.remove(settings.yaml.schemas.kubernetes, i)
+    end
+  end
+
   table.insert(settings.yaml.schemas.kubernetes, uri)
   client:notify('workspace/didChangeConfiguration', { settings = settings })
   vim.notify('Kubernetes schema enabled', vim.log.levels.INFO)
 end, { desc = 'Enable Kubernetes schema for YAML buffer' })
+
+-- Disable Kubernetes schema for current YAML buffer
+vim.keymap.set('n', '<leader>yK', function()
+  local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
+
+  if #clients == 0 then
+    vim.notify('yamlls not attached', vim.log.levels.WARN)
+    return
+  end
+
+  local client = clients[1]
+  local bufpath = vim.api.nvim_buf_get_name(0)
+  local settings = client.config.settings or {}
+
+  settings.yaml = settings.yaml or {}
+  settings.yaml.schemas = settings.yaml.schemas or {}
+  settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
+
+  -- Remove any direct URI entries for this buffer
+  local uri = vim.uri_from_bufnr(0)
+  for i = #settings.yaml.schemas.kubernetes, 1, -1 do
+    if settings.yaml.schemas.kubernetes[i] == uri then
+      table.remove(settings.yaml.schemas.kubernetes, i)
+    end
+  end
+
+  -- Add a negation glob to override any matching glob patterns
+  local neg = '!' .. bufpath
+  local already_negated = false
+  for _, v in ipairs(settings.yaml.schemas.kubernetes) do
+    if v == neg then
+      already_negated = true
+      break
+    end
+  end
+  if not already_negated then
+    table.insert(settings.yaml.schemas.kubernetes, neg)
+  end
+
+  client:notify('workspace/didChangeConfiguration', { settings = settings })
+  vim.notify('Kubernetes schema disabled', vim.log.levels.INFO)
+end, { desc = 'Disable Kubernetes schema for YAML buffer' })
 
 -- Utility function to close any floating windows when you press escape
 -- Source: https://gist.github.com/benfrain/97f2b91087121b2d4ba0dcc4202d252f#file-mappings-lua

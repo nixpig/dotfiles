@@ -44,7 +44,7 @@ symbol = " "
 symbol = " "
 
 [git_branch]
-symbol = " "
+symbol = " "
 style = "yellow"
 
 [git_metrics]
