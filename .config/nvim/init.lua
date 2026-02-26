@@ -394,6 +394,19 @@ require('lazy').setup({
     opts = { signs = false },
   },
 
+  {
+    "toppair/peek.nvim",
+    event = { "VeryLazy" },
+    build = "deno task --quiet build:fast",
+    config = function()
+      require("peek").setup({
+        app = "browser"
+      })
+      vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+      vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+    end,
+  },
+
   -----------------------------------------------------------------------------
   -- Git
   -----------------------------------------------------------------------------
@@ -402,6 +415,7 @@ require('lazy').setup({
     opts = {
       blame = '<Leader>gb',
       browse = '<Leader>go',
+      winbar = true,
     },
   },
 
@@ -481,6 +495,9 @@ require('lazy').setup({
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
+        map('n', '<leader>hm', function()
+          gitsigns.diffthis('master')
+        end, { desc = 'git diff against [m]aster' })
       end,
     },
   },
@@ -814,7 +831,7 @@ require('lazy').setup({
           spacing = 2,
           prefix = icons.ui.BigCircle,
         },
-        update_in_insert = true,
+        update_in_insert = false,
         underline = true,
         severity_sort = true,
         signs = {
@@ -890,13 +907,16 @@ require('lazy').setup({
             local fname = vim.api.nvim_buf_get_name(bufnr)
             -- Prefer go.work or .git root so a single gopls instance covers the whole repo
             local root = vim.fs.root(bufnr, { 'go.work', '.git' })
-              or vim.fs.root(bufnr, { 'go.mod' })
-              or vim.fn.fnamemodify(fname, ':h')
+                or vim.fs.root(bufnr, { 'go.mod' })
+                or vim.fn.fnamemodify(fname, ':h')
             cb(root)
           end,
           settings = {
             gopls = {
-              gofumpt = true,
+              -- gofumpt = true,
+              gofumpt = false,
+              -- Exclude large dirs from workspace indexing
+              directoryFilters = { '-vendor', '-testdata', '-node_modules' },
             },
           },
         },
@@ -1083,7 +1103,8 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        go = { 'goimports', 'gofumpt' },
+        -- go = { 'goimports', 'gofumpt' },
+        go = { 'goimports', 'gofmt' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -1429,27 +1450,32 @@ require('lazy').setup({
       vim.treesitter.language.register('_noop', 'helm')
 
       -- Enable treesitter-based highlighting
+      local function try_start_treesitter(buf, ft)
+        if not ft or ft == '' or ft == 'helm' then
+          return
+        end
+        if vim.bo[buf].buftype ~= '' and vim.bo[buf].buftype ~= 'nofile' then
+          return
+        end
+        local lang = vim.treesitter.language.get_lang(ft) or ft
+        if pcall(vim.treesitter.language.inspect, lang) then
+          vim.treesitter.start(buf, lang)
+        end
+      end
+
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('TreesitterHighlight', { clear = true }),
         callback = function(args)
-          -- Skip special buffers
-          local buftype = vim.bo[args.buf].buftype
-          if buftype ~= '' then
-            return
-          end
+          try_start_treesitter(args.buf, args.match)
+        end,
+      })
 
-          -- Skip helm files - use vim syntax instead (handles YAML + Go templates)
-          if args.match == 'helm' then
-            return
-          end
-
-          -- Get the treesitter language for this filetype
-          local lang = vim.treesitter.language.get_lang(args.match) or args.match
-
-          -- Only start if parser is available
-          if pcall(vim.treesitter.language.inspect, lang) then
-            vim.treesitter.start(args.buf, lang)
-          end
+      -- Safety net: catch buffers where FileType fired before this plugin
+      -- loaded, or where the buffer is displayed before FileType completes
+      vim.api.nvim_create_autocmd('BufWinEnter', {
+        group = vim.api.nvim_create_augroup('TreesitterHighlightFallback', { clear = true }),
+        callback = function(args)
+          try_start_treesitter(args.buf, vim.bo[args.buf].filetype)
         end,
       })
     end,
@@ -1640,78 +1666,67 @@ require('lazy').setup({
   },
 })
 
--- Enable Kubernetes schema for current YAML buffer
-vim.keymap.set('n', '<leader>yk', function()
-  local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
-
-  if #clients == 0 then
-    vim.notify('yamlls not attached', vim.log.levels.WARN)
-    return
-  end
-
-  local client = clients[1]
-  local bufpath = vim.api.nvim_buf_get_name(0)
-  local uri = vim.uri_from_bufnr(0)
-  local settings = client.config.settings or {}
-
-  settings.yaml = settings.yaml or {}
-  settings.yaml.schemas = settings.yaml.schemas or {}
-  settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
-
-  -- Remove any negation glob for this buffer
-  local neg = '!' .. bufpath
-  for i = #settings.yaml.schemas.kubernetes, 1, -1 do
-    if settings.yaml.schemas.kubernetes[i] == neg then
-      table.remove(settings.yaml.schemas.kubernetes, i)
+local function yaml_schema_keymaps(schema_key, enable_binding, disable_binding, label)
+  vim.keymap.set('n', enable_binding, function()
+    local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
+    if #clients == 0 then
+      vim.notify('yamlls not attached', vim.log.levels.WARN)
+      return
     end
-  end
-
-  table.insert(settings.yaml.schemas.kubernetes, uri)
-  client:notify('workspace/didChangeConfiguration', { settings = settings })
-  vim.notify('Kubernetes schema enabled', vim.log.levels.INFO)
-end, { desc = 'Enable Kubernetes schema for YAML buffer' })
-
--- Disable Kubernetes schema for current YAML buffer
-vim.keymap.set('n', '<leader>yK', function()
-  local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
-
-  if #clients == 0 then
-    vim.notify('yamlls not attached', vim.log.levels.WARN)
-    return
-  end
-
-  local client = clients[1]
-  local bufpath = vim.api.nvim_buf_get_name(0)
-  local settings = client.config.settings or {}
-
-  settings.yaml = settings.yaml or {}
-  settings.yaml.schemas = settings.yaml.schemas or {}
-  settings.yaml.schemas.kubernetes = settings.yaml.schemas.kubernetes or {}
-
-  -- Remove any direct URI entries for this buffer
-  local uri = vim.uri_from_bufnr(0)
-  for i = #settings.yaml.schemas.kubernetes, 1, -1 do
-    if settings.yaml.schemas.kubernetes[i] == uri then
-      table.remove(settings.yaml.schemas.kubernetes, i)
+    local client = clients[1]
+    local uri = vim.uri_from_bufnr(0)
+    local neg = '!' .. vim.api.nvim_buf_get_name(0)
+    local settings = client.config.settings or {}
+    settings.yaml = settings.yaml or {}
+    settings.yaml.schemas = settings.yaml.schemas or {}
+    settings.yaml.schemas[schema_key] = settings.yaml.schemas[schema_key] or {}
+    for i = #settings.yaml.schemas[schema_key], 1, -1 do
+      if settings.yaml.schemas[schema_key][i] == neg then
+        table.remove(settings.yaml.schemas[schema_key], i)
+      end
     end
-  end
+    table.insert(settings.yaml.schemas[schema_key], uri)
+    client:notify('workspace/didChangeConfiguration', { settings = settings })
+    vim.notify(label .. ' schema enabled', vim.log.levels.INFO)
+  end, { desc = 'Enable ' .. label .. ' schema for YAML buffer' })
 
-  -- Add a negation glob to override any matching glob patterns
-  local neg = '!' .. bufpath
-  local already_negated = false
-  for _, v in ipairs(settings.yaml.schemas.kubernetes) do
-    if v == neg then
-      already_negated = true
-      break
+  vim.keymap.set('n', disable_binding, function()
+    local clients = vim.lsp.get_clients { bufnr = 0, name = 'yamlls' }
+    if #clients == 0 then
+      vim.notify('yamlls not attached', vim.log.levels.WARN)
+      return
     end
-  end
-  if not already_negated then
-    table.insert(settings.yaml.schemas.kubernetes, neg)
-  end
+    local client = clients[1]
+    local uri = vim.uri_from_bufnr(0)
+    local neg = '!' .. vim.api.nvim_buf_get_name(0)
+    local settings = client.config.settings or {}
+    settings.yaml = settings.yaml or {}
+    settings.yaml.schemas = settings.yaml.schemas or {}
+    settings.yaml.schemas[schema_key] = settings.yaml.schemas[schema_key] or {}
+    for i = #settings.yaml.schemas[schema_key], 1, -1 do
+      if settings.yaml.schemas[schema_key][i] == uri then
+        table.remove(settings.yaml.schemas[schema_key], i)
+      end
+    end
+    local already_negated = false
+    for _, v in ipairs(settings.yaml.schemas[schema_key]) do
+      if v == neg then
+        already_negated = true
+        break
+      end
+    end
+    if not already_negated then
+      table.insert(settings.yaml.schemas[schema_key], neg)
+    end
+    client:notify('workspace/didChangeConfiguration', { settings = settings })
+    vim.notify(label .. ' schema disabled', vim.log.levels.INFO)
+  end, { desc = 'Disable ' .. label .. ' schema for YAML buffer' })
+end
 
-  client:notify('workspace/didChangeConfiguration', { settings = settings })
-  vim.notify('Kubernetes schema disabled', vim.log.levels.INFO)
-end, { desc = 'Disable Kubernetes schema for YAML buffer' })
+local cfg = vim.fn.stdpath 'config'
+yaml_schema_keymaps('kubernetes', '<leader>yk', '<leader>yK', 'Kubernetes')
+yaml_schema_keymaps(vim.uri_from_fname(cfg .. '/schemas/teleport/teleport-resource.json'), '<leader>yt', '<leader>yT',
+  'Teleport')
 
 -- Utility function to close any floating windows when you press escape
 -- Source: https://gist.github.com/benfrain/97f2b91087121b2d4ba0dcc4202d252f#file-mappings-lua
@@ -1808,6 +1823,21 @@ vim.keymap.set('n', 'gt', '<Cmd>Lspsaga term_toggle<CR>', { desc = 'Toggle float
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Align winbar for diff buffers (gitsigns sets buftype=nowrite on diff buffers)
+autocmd('OptionSet', {
+  group = augroup('DiffWinbar', { clear = true }),
+  pattern = 'diff',
+  callback = function()
+    vim.defer_fn(function()
+      for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if vim.wo[win].diff and vim.wo[win].winbar == '' then
+          vim.wo[win].winbar = ' '
+        end
+      end
+    end, 200)
+  end,
+})
+
 -- Editing behavior
 autocmd({ 'BufWritePost', 'BufEnter' }, {
   group = augroup('DisableFolding', { clear = true }),
@@ -1819,6 +1849,7 @@ autocmd({ 'BufWritePost', 'BufEnter' }, {
   end,
   desc = 'Disable folding',
 })
+
 
 autocmd('InsertLeave', {
   group = augroup('DisablePaste', { clear = true }),
