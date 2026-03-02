@@ -29,9 +29,6 @@ exec_always --no-startup-id picom -fb --config $HOME/.config/picom.conf
 # Set wallpaper
 exec --no-startup-id feh --bg-fill $HOME/.config/wallpaper/catppuccin-rainbow.webp
 
-# Remap keys
-exec --no-startup-id $HOME/.local/bin/remap-keys.sh
-
 # Hide mouse cursor when idle
 exec --no-startup-id unclutter --timeout 5
 
