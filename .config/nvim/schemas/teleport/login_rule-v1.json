@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport login_rule resource (version v1).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "login_rule"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "LoginRule resource definition v1 from Teleport",
+      "properties": {
+        "priority": {
+          "description": "Priority is the priority of the login rule relative to other login rules in the same cluster. Login rules with a lower numbered priority will be evaluated first.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "traits_expression": {
+          "description": "TraitsExpression is a predicate expression which should return the desired traits for the user upon login.",
+          "type": "string"
+        },
+        "traits_map": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": "TraitsMap is a map of trait keys to lists of predicate expressions which should evaluate to the desired values for that trait.",
+          "nullable": true,
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v1"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport login_rule v1",
+  "type": "object"
+}

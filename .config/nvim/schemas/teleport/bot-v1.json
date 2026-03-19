@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport bot resource (version v1).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "bot"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "Bot resource definition v1 from Teleport",
+      "properties": {
+        "max_session_ttl": {
+          "description": "The max session TTL value for the bot's internal role. Unless specified, bots may not request a value beyond the default maximum TTL of 12 hours. This value may not be larger than 7 days (168 hours).",
+          "format": "duration",
+          "type": "string"
+        },
+        "roles": {
+          "description": "The roles that the bot should be able to impersonate.",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "type": "array"
+        },
+        "traits": {
+          "description": "The traits that will be associated with the bot for the purposes of role templating.  Where multiple specified with the same name, these will be merged by the server.",
+          "items": {
+            "properties": {
+              "name": {
+                "description": "The name of the trait. This is what allows the trait to be queried in role templates.",
+                "type": "string"
+              },
+              "values": {
+                "description": "The values associated with the named trait.",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "nullable": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v1"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport bot v1",
+  "type": "object"
+}

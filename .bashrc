@@ -169,6 +169,8 @@ complete -W "" az
 source <(kubectl completion bash)
 complete -o default -F __start_kubectl kc
 
+export AWS_PROFILE=dev-teleport
+
 . "$HOME/.atuin/bin/env"
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh

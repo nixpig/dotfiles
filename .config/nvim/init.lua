@@ -337,6 +337,19 @@ require('lazy').setup({
           'RainbowDelimiterCyan',
         },
         blacklist = { 'php' },
+        condition = function(bufnr)
+          local ft = vim.bo[bufnr].filetype
+          local bt = vim.bo[bufnr].buftype
+          if bt ~= '' then
+            return false
+          end
+
+          if ft == 'beacon' or ft == 'fidget' or ft == 'TelescopePrompt' or ft == 'TelescopeResults' or ft == 'TelescopePreview' then
+            return false
+          end
+
+          return true
+        end,
       }
     end,
   },
@@ -1456,7 +1469,7 @@ require('lazy').setup({
         if not ft or ft == '' or ft == 'helm' then
           return
         end
-        if vim.bo[buf].buftype ~= '' and vim.bo[buf].buftype ~= 'nofile' then
+        if vim.bo[buf].buftype ~= '' then
           return
         end
         local lang = vim.treesitter.language.get_lang(ft) or ft

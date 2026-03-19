@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport inference_policy resource (version v1).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "inference_policy"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "InferencePolicy resource definition v1 from Teleport",
+      "properties": {
+        "filter": {
+          "description": "Filter is an optional filter expression using Teleport Predicate Language to select sessions for summarization. If it's empty, all sessions that match the list of kinds will be summarized using this model.",
+          "type": "string"
+        },
+        "kinds": {
+          "description": "Kinds are session kinds matched by this policy, e.g., \"ssh\", \"k8s\", \"db\"",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "type": "array"
+        },
+        "model": {
+          "description": "Model is the name of the `InferenceModel` resource to be used for summarization.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v1"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport inference_policy v1",
+  "type": "object"
+}

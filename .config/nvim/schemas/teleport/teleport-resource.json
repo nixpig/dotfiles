@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Any Teleport resource (role, access_list, user, …).",
+  "oneOf": [
+    {
+      "$ref": "./access_list-v1.json"
+    },
+    {
+      "$ref": "./access_monitoring_rule-v1.json"
+    },
+    {
+      "$ref": "./app-v3.json"
+    },
+    {
+      "$ref": "./autoupdate_config-v1.json"
+    },
+    {
+      "$ref": "./autoupdate_version-v1.json"
+    },
+    {
+      "$ref": "./bot-v1.json"
+    },
+    {
+      "$ref": "./db-v3.json"
+    },
+    {
+      "$ref": "./github-v3.json"
+    },
+    {
+      "$ref": "./inference_model-v1.json"
+    },
+    {
+      "$ref": "./inference_policy-v1.json"
+    },
+    {
+      "$ref": "./inference_secret-v1.json"
+    },
+    {
+      "$ref": "./login_rule-v1.json"
+    },
+    {
+      "$ref": "./node-v2.json"
+    },
+    {
+      "$ref": "./oidc-v3.json"
+    },
+    {
+      "$ref": "./okta_import_rule-v1.json"
+    },
+    {
+      "$ref": "./role-v5.json"
+    },
+    {
+      "$ref": "./role-v6.json"
+    },
+    {
+      "$ref": "./role-v7.json"
+    },
+    {
+      "$ref": "./role-v8.json"
+    },
+    {
+      "$ref": "./saml-v2.json"
+    },
+    {
+      "$ref": "./token-v2.json"
+    },
+    {
+      "$ref": "./trusted_cluster-v2.json"
+    },
+    {
+      "$ref": "./user-v2.json"
+    },
+    {
+      "$ref": "./workload_identity-v1.json"
+    }
+  ],
+  "title": "Teleport Resource"
+}

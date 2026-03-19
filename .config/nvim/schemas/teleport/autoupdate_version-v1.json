@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport autoupdate_version resource (version v1).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "autoupdate_version"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "AutoupdateVersion resource definition v1 from Teleport",
+      "properties": {
+        "agents": {
+          "nullable": true,
+          "properties": {
+            "mode": {
+              "description": "autoupdate_mode to use for the rollout",
+              "type": "string"
+            },
+            "schedule": {
+              "description": "schedule to use for the rollout",
+              "type": "string"
+            },
+            "start_version": {
+              "description": "start_version is the version used for newly installed agents before their update window.",
+              "type": "string"
+            },
+            "target_version": {
+              "description": "target_version is the version that all agents will update to during their update window.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "tools": {
+          "nullable": true,
+          "properties": {
+            "target_version": {
+              "description": "TargetVersion specifies the semantic version required for tools to establish a connection with the cluster. Client tools after connection to the cluster going to be updated to this version automatically.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v1"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport autoupdate_version v1",
+  "type": "object"
+}

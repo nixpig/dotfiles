@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport trusted_cluster resource (version v2).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "trusted_cluster"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "TrustedCluster resource definition v2 from Teleport",
+      "properties": {
+        "enabled": {
+          "description": "Enabled is a bool that indicates if the TrustedCluster is enabled or disabled. Setting Enabled to false has a side effect of deleting the user and host certificate authority (CA).",
+          "type": "boolean"
+        },
+        "role_map": {
+          "description": "RoleMap specifies role mappings to remote roles.",
+          "items": {
+            "properties": {
+              "local": {
+                "description": "Local specifies local roles to map to",
+                "items": {
+                  "type": "string"
+                },
+                "nullable": true,
+                "type": "array"
+              },
+              "remote": {
+                "description": "Remote specifies remote role name to map from",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "token": {
+          "description": "Token is the authorization token provided by another cluster needed by this cluster to join. This field supports secret lookup. See the operator documentation for more details.",
+          "type": "string"
+        },
+        "tunnel_addr": {
+          "description": "ReverseTunnelAddress is the address of the SSH proxy server of the cluster to join. If not set, it is derived from `\u003cmetadata.name\u003e:\u003cdefault reverse tunnel port\u003e`.",
+          "type": "string"
+        },
+        "web_proxy_addr": {
+          "description": "ProxyAddress is the address of the web proxy server of the cluster to join. If not set, it is derived from `\u003cmetadata.name\u003e:\u003cdefault web proxy server port\u003e`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v2"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport trusted_cluster v2",
+  "type": "object"
+}

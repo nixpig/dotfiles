@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Teleport user resource (version v2).",
+  "properties": {
+    "kind": {
+      "description": "Resource kind.",
+      "enum": [
+        "user"
+      ],
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Metadata is the resource metadata.",
+      "properties": {
+        "description": {
+          "description": "Description is a human-readable description.",
+          "type": "string"
+        },
+        "expires": {
+          "description": "Expires is when this resource expires (RFC3339).",
+          "format": "date-time",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are arbitrary key/value pairs attached to the resource.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Name is the resource name.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace is the resource namespace (usually left blank).",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Revision is used for optimistic concurrency control.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "spec": {
+      "description": "User resource definition v2 from Teleport",
+      "properties": {
+        "github_identities": {
+          "description": "GithubIdentities list associated Github OAuth2 identities that let user log in using externally verified identity",
+          "items": {
+            "properties": {
+              "connector_id": {
+                "description": "ConnectorID is id of registered OIDC connector, e.g. 'google-example.com'",
+                "type": "string"
+              },
+              "samlSingleLogoutUrl": {
+                "description": "SAMLSingleLogoutURL is the SAML Single log-out URL to initiate SAML SLO (single log-out), if applicable.",
+                "type": "string"
+              },
+              "user_id": {
+                "description": "UserID is the ID of the identity. Some connectors like GitHub have an unique ID apart from the username.",
+                "type": "string"
+              },
+              "username": {
+                "description": "Username is username supplied by external identity provider",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "oidc_identities": {
+          "description": "OIDCIdentities lists associated OpenID Connect identities that let user log in using externally verified identity",
+          "items": {
+            "properties": {
+              "connector_id": {
+                "description": "ConnectorID is id of registered OIDC connector, e.g. 'google-example.com'",
+                "type": "string"
+              },
+              "samlSingleLogoutUrl": {
+                "description": "SAMLSingleLogoutURL is the SAML Single log-out URL to initiate SAML SLO (single log-out), if applicable.",
+                "type": "string"
+              },
+              "user_id": {
+                "description": "UserID is the ID of the identity. Some connectors like GitHub have an unique ID apart from the username.",
+                "type": "string"
+              },
+              "username": {
+                "description": "Username is username supplied by external identity provider",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "roles": {
+          "description": "Roles is a list of roles assigned to user",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "type": "array"
+        },
+        "saml_identities": {
+          "description": "SAMLIdentities lists associated SAML identities that let user log in using externally verified identity",
+          "items": {
+            "properties": {
+              "connector_id": {
+                "description": "ConnectorID is id of registered OIDC connector, e.g. 'google-example.com'",
+                "type": "string"
+              },
+              "samlSingleLogoutUrl": {
+                "description": "SAMLSingleLogoutURL is the SAML Single log-out URL to initiate SAML SLO (single log-out), if applicable.",
+                "type": "string"
+              },
+              "user_id": {
+                "description": "UserID is the ID of the identity. Some connectors like GitHub have an unique ID apart from the username.",
+                "type": "string"
+              },
+              "username": {
+                "description": "Username is username supplied by external identity provider",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "traits": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": "Traits are key/value pairs received from an identity provider (through OIDC claims or SAML assertions) or from a system administrator for local accounts. Traits are used to populate role variables.",
+          "type": "object"
+        },
+        "trusted_device_ids": {
+          "description": "TrustedDeviceIDs contains the IDs of trusted devices enrolled by the user.  Note that SSO users are transient and thus may contain an empty TrustedDeviceIDs field, even though the user-\u003edevice association exists under the Device Trust subsystem. Do not rely on this field to determine device associations or ownership, it exists for legacy/informative purposes only.  Managed by the Device Trust subsystem, avoid manual edits.",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "version": {
+      "description": "Resource version.",
+      "enum": [
+        "v2"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "version",
+    "metadata"
+  ],
+  "title": "Teleport user v2",
+  "type": "object"
+}
