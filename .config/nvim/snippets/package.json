@@ -1,0 +1,19 @@
+{
+  "name": "custom-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "go",
+        "path": "./go.json"
+      },
+      {
+        "language": "helm",
+        "path": "./kubernetes.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./kubernetes.json"
+      }
+    ]
+  }
+}

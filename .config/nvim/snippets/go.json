@@ -1,0 +1,17 @@
+{
+  "if err != nil": {
+    "prefix": "inerr",
+    "body": "if err != nil {\n\treturn $0\n}",
+    "description": "Snippet for if err != nil"
+  },
+  "if err == nil": {
+    "prefix": "iferr",
+    "body": "if err == nil {\n\t$0\n}",
+    "description": "Snippet for if err == nil"
+  },
+  "benchmark function": {
+    "prefix": "bench",
+    "body": "func Benchmark$1(b *testing.B) {\n\tfor b.Loop() {\n\t\t$0\n\t}\n}",
+    "description": "Snippet for Benchmark function using b.Loop()"
+  }
+}

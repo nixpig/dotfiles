@@ -1,0 +1,196 @@
+[repo]
+# base = "origin/main"     # defaults to origin/HEAD, then the last commit
+# history = "full"         # or "branch"; chosen from the repository's size
+
+[state]
+paths."~/pipelines/rolebox" = "/home/beams/repo/rolebox"
+capture = ["/home/beams/repo/.rolebox", "~/.pi/agent/sessions"]
+
+[[launcher]]
+name = "OpenCode"
+agent = "opencode"
+setup = '''
+version=2.0.16
+opencode="$HOME/.opencode/bin/opencode"
+if ! "$opencode" --version 2>/dev/null | grep -qx "opencode v$version"; then
+  curl -fsSL https://opencode.ai/v2/install | bash -s -- --version "$version" --no-modify-path
+fi
+'''
+run = '''
+export OPENCODE_CONFIG_DIR="$HOME/.config/herdr-beams/opencode"
+mkdir -p "$OPENCODE_CONFIG_DIR"
+cat > "$OPENCODE_CONFIG_DIR/cli.json" <<'JSON'
+{
+  "theme": {"name": "catppuccin"},
+  "session": {"sidebar": "hide"},
+  "tabs": {"mode": "off"}
+}
+JSON
+export OPENCODE_CONFIG_CONTENT='{
+ "model": "claude/opus-5",
+ "small_model": "claude/sonnet-5",
+ "providers": {
+   "claude": {
+     "name": "Claude (Bedrock)",
+     "canonical": "anthropic",
+     "env": ["ANTHROPIC_AUTH_TOKEN"],
+     "package": "@opencode/ai/providers/anthropic",
+     "settings": {"baseURL": "{env:ANTHROPIC_BASE_URL}/v1"},
+     "models": {
+       "opus-5": {"modelID": "claude-opus-5", "name": "Claude Opus 5"},
+       "sonnet-5": {"modelID": "claude-sonnet-5", "name": "Claude Sonnet 5"}
+     }
+   },
+   "gpt": {
+     "name": "GPT (Bedrock)",
+     "canonical": "openai",
+     "env": ["OPENAI_API_KEY"],
+     "package": "@opencode/ai/providers/openai/responses",
+     "settings": {"baseURL": "{env:OPENAI_BASE_URL}/v1"},
+     "models": {
+       "luna": {"modelID": "gpt-5.6-luna", "name": "GPT-5.6 Luna"},
+       "sol": {"modelID": "gpt-5.6-sol", "name": "GPT-5.6 Sol"},
+       "terra": {"modelID": "gpt-5.6-terra", "name": "GPT-5.6 Terra"}
+     }
+   }
+}',
+
+cd "${REPO_DIR:-$HOME}"
+exec "$HOME/.opencode/bin/opencode" --standalone
+'''
+
+[[launcher]]
+name = "Pi"
+agent = "pi"
+setup = '''
+node_dir="$HOME/.local/share/pi-node/current"
+node_new_enough() {
+  command -v node >/dev/null 2>&1 || return 1
+  node -e 'const [a,b]=process.versions.node.split(".").map(Number);process.exit(a>22||(a===22&&b>=19)?0:1)'
+}
+if ! node_new_enough; then
+  if [ ! -x "$node_dir/bin/node" ]; then
+    base=https://nodejs.org/dist/latest-v22.x
+    archive=$(curl -fsSL "$base/SHASUMS256.txt" |
+      awk -v s="-linux-x64.tar.gz" '$2 ~ /^node-v/ && substr($2, length($2)-length(s)+1) == s {print $2; exit}')
+    [ -n "$archive" ] || { echo "no node build for linux-x64" >&2; exit 1; }
+    tmp=$(mktemp -d)
+    curl -fsSL "$base/$archive" -o "$tmp/$archive"
+    mkdir -p "$HOME/.local/share/pi-node"
+    tar -xzf "$tmp/$archive" -C "$HOME/.local/share/pi-node"
+    rm -f "$node_dir"
+    ln -s "$HOME/.local/share/pi-node/${archive%.tar.gz}" "$node_dir"
+    rm -rf "$tmp"
+  fi
+  export PATH="$node_dir/bin:$PATH"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+
+pi="$HOME/.pi/agent/bin/pi"
+if [ ! -x "$pi" ]; then
+  curl -fsSL https://pi.dev/install.sh | sh
+fi
+
+# Rolebox is the pipeline engine, and it is a Pi extension rather than something
+# Pi ships, so a beam has to be given it.
+pi="$HOME/.pi/agent/bin/pi"
+if ! "$pi" list 2>/dev/null | grep -q rolebox; then
+  "$pi" install npm:rolebox
+fi
+if ! "$pi" list 2>/dev/null | grep -q '@0xkahi/pi-vim-keys'; then
+  "$pi" install npm:@0xkahi/pi-vim-keys
+fi
+'''
+run = '''
+export PI_CODING_AGENT_DIR="$HOME/.pi/agent"
+mkdir -p "$PI_CODING_AGENT_DIR"
+
+cat > "$PI_CODING_AGENT_DIR/models.json" <<JSON
+{
+  "providers": {
+    "beam": {
+      "name": "Claude (beam proxy)",
+      "baseUrl": "$ANTHROPIC_BASE_URL",
+      "api": "anthropic-messages",
+      "apiKey": "\$ANTHROPIC_AUTH_TOKEN",
+      "models": [
+        { "id": "claude-opus-5", "name": "Claude Opus 5" },
+        { "id": "claude-sonnet-5", "name": "Claude Sonnet 5" }
+      ]
+    }
+  }
+}
+JSON
+
+# These keys are merged into whatever is already in settings.json rather than
+# written over it. Pi records its installed extensions under "packages" there,
+# and `pi install npm:rolebox` in setup writes that key -- so a plain `cat >`
+# here would run on every bind, after setup, and silently drop the registration
+# that made rolebox loadable. The result was a beam with rolebox unpacked in
+# node_modules and `pi list` reporting "No packages installed."
+#
+# The merge is a rename rather than a redirect, so a jq that is missing or
+# unhappy leaves the existing settings alone instead of a truncated file.
+settings="$PI_CODING_AGENT_DIR/settings.json"
+tmp=$(mktemp) || exit 1
+if [ -f "$settings" ]; then
+  existing=$(cat "$settings") || exit 1
+else
+  existing='{}'
+fi
+if printf '%s' "$existing" | jq -s \
+  '.[0] * {"theme":"dark","tuiMode":"fullscreen","defaultProvider":"beam","defaultModel":"claude-opus-5"}' \
+  > "$tmp"; then
+  mv "$tmp" "$settings"
+fi
+rm -f "$tmp"
+
+cd "${REPO_DIR:-$HOME}"
+
+# Pi runs inside a tmux session so it outlives this SSH connection.
+#
+# The pane's foreground process is `tsh ssh`, and locking the laptop takes the
+# network away, which hangs the connection up and kills Pi with it: a test suite
+# or a build that was half way through dies and its output is gone. The capture
+# restores the conversation, but not a process that was running. tmux's server
+# detaches from the client and keeps running, so a rebind reattaches to the same
+# Pi, mid-command if that is where it was.
+#
+# One fixed name is right rather than one per launch: a beam has a single
+# checkout at a single path, so there is never a second session to collide with,
+# and a name that changed per launch would give a new tmux session on every
+# rebind and never reattach to anything.
+session=pi
+
+# The status bar is turned off through ~/.tmux.conf rather than `set-option`,
+# because there is no tmux server to set an option on until the first session
+# starts: `tmux set-option -g status off` before that fails with "no server
+# running", and after it the bar has already been drawn once. The file is read
+# when the server starts, so writing it first is what makes the very first
+# session come up without a bar.
+#
+# A beam runs one session in one project, so a status bar has nothing on it to
+# say: no other window, no other session, and the clock is already in Herdr's
+# own tab bar. Leaving it off gives the agent the pane's full height.
+if ! tmux has-session -t "$session" 2>/dev/null; then
+  printf 'set -g status off\n' > "$HOME/.tmux.conf"
+fi
+
+# Ctrl-b d detaches and leaves Pi running. The pane then shows a shell, which is
+# what a beam looks like when its session has ended, so a rebind is how you get
+# back to it.
+if tmux has-session -t "$session" 2>/dev/null; then
+  exec tmux attach-session -t "$session"
+fi
+
+# --continue resumes the most recent session for this project. The beam's
+# ~/.pi/agent/sessions is restored from the capture before this runs, so the
+# session it finds is the one the beam that expired was in. Without it every
+# restart begins an empty conversation on top of state that says a plan is
+# already approved.
+#
+# It is only reached on the first start in a beam: after that the branch above
+# attaches to what is already running.
+exec tmux new-session -s "$session" -c "$PWD" \
+  "$PI_CODING_AGENT_DIR/bin/pi" --approve --continue
+'''

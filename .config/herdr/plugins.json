@@ -1,0 +1,379 @@
+[
+  {
+    "plugin_id": "assawalhy.stay-awake",
+    "name": "Stay Awake",
+    "version": "0.2.0",
+    "min_herdr_version": "0.7.0",
+    "description": "Keeps the machine from sleeping while any herdr agent pane is working (Linux, macOS, Windows, and WSL)",
+    "manifest_path": "/Users/jacobward/.config/herdr/plugins/github/assawalhy.stay-awake-4054e401fa22/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/.config/herdr/plugins/github/assawalhy.stay-awake-4054e401fa22",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "startup": [
+      {
+        "command": [
+          "node",
+          "index.js"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "disable",
+        "title": "Stay Awake: disable",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      },
+      {
+        "id": "doctor",
+        "title": "Stay Awake: doctor",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      },
+      {
+        "id": "enable",
+        "title": "Stay Awake: enable",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      },
+      {
+        "id": "open-settings",
+        "title": "Stay Awake: open settings",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      },
+      {
+        "id": "status",
+        "title": "Stay Awake: status",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      },
+      {
+        "id": "toggle",
+        "title": "Stay Awake: toggle",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "node",
+          "index.js"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "on": "pane.agent_status_changed",
+        "command": [
+          "node",
+          "index.js"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "settings",
+        "title": "Stay Awake Settings",
+        "placement": "popup",
+        "width": "80%",
+        "height": 20,
+        "command": [
+          "node",
+          "index.js"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "assawalhy",
+      "repo": "herdr-stay-awake",
+      "resolved_commit": "b290add911a43732491711bf39a8350a3c064940",
+      "managed_path": "/Users/jacobward/.config/herdr/plugins/github/assawalhy.stay-awake-4054e401fa22",
+      "installed_unix_ms": 1790829495034
+    }
+  },
+  {
+    "plugin_id": "herdr-beams",
+    "name": "Herdr Beams",
+    "version": "0.2.0",
+    "min_herdr_version": "0.9.1",
+    "description": "Bind Teleport Beams to Herdr workspaces and run Claude Code inside them",
+    "manifest_path": "/Users/jacobward/projects/herdr-beams/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/projects/herdr-beams",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "build": [
+      {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "herdr-beams",
+          "."
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "bind-new-beam",
+        "title": "Bind new beam to this workspace",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "./herdr-beams",
+          "bind-new-beam"
+        ]
+      },
+      {
+        "id": "refresh-beam-labels",
+        "title": "Refresh beam labels",
+        "command": [
+          "./herdr-beams",
+          "refresh-beam-labels"
+        ]
+      },
+      {
+        "id": "show-beams",
+        "title": "Show beams",
+        "command": [
+          "./herdr-beams",
+          "show-beams"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "beams-table",
+        "title": "Beams",
+        "placement": "overlay",
+        "command": [
+          "./herdr-beams",
+          "ui"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "local"
+    }
+  },
+  {
+    "plugin_id": "herdr-context",
+    "name": "Herdr Context",
+    "version": "0.6.0",
+    "min_herdr_version": "0.9.1",
+    "description": "See live Herdr agents and stage Neovim file references without submitting them",
+    "manifest_path": "/Users/jacobward/.config/herdr/plugins/github/herdr-context-5f08f6d958f1/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/.config/herdr/plugins/github/herdr-context-5f08f6d958f1",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "actions": [
+      {
+        "id": "pin-target",
+        "title": "Pin context target",
+        "contexts": [
+          "global"
+        ],
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "bash",
+          "scripts/open-target-picker.sh"
+        ]
+      },
+      {
+        "id": "pin-target-windows",
+        "title": "Pin context target",
+        "contexts": [
+          "global"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell.exe",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/open-target-picker.ps1"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "target-picker",
+        "title": "Pin context target",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "placement": "popup",
+        "width": "80%",
+        "height": 20,
+        "command": [
+          "bash",
+          "scripts/target-picker.sh"
+        ]
+      },
+      {
+        "id": "target-picker-windows",
+        "title": "Pin context target",
+        "platforms": [
+          "windows"
+        ],
+        "placement": "popup",
+        "width": "80%",
+        "height": 20,
+        "command": [
+          "powershell.exe",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/target-picker.ps1"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "makyinmars",
+      "repo": "herdr-context.nvim",
+      "resolved_commit": "2e99ef05c52e1a8ee71b630612a0f8ac18a9638e",
+      "managed_path": "/Users/jacobward/.config/herdr/plugins/github/herdr-context-5f08f6d958f1",
+      "installed_unix_ms": 1790828391273
+    }
+  },
+  {
+    "plugin_id": "herdr-nvim-nav",
+    "name": "Vim Nav",
+    "version": "0.1.0",
+    "min_herdr_version": "0.7.0",
+    "description": "Ctrl+h/j/k/l across herdr panes and Neovim splits, without a per-key process for detection",
+    "manifest_path": "/Users/jacobward/.config/herdr/plugins/github/herdr-nvim-nav-37d546a0d32b/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/.config/herdr/plugins/github/herdr-nvim-nav-37d546a0d32b",
+    "enabled": true,
+    "platforms": [
+      "macos",
+      "linux"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "macos",
+          "linux"
+        ],
+        "command": [
+          "cc",
+          "-O2",
+          "-o",
+          "herdr-nvim-nav",
+          "herdr-nvim-nav.c"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "down",
+        "title": "Navigate down",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "down"
+        ]
+      },
+      {
+        "id": "left",
+        "title": "Navigate left",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "left"
+        ]
+      },
+      {
+        "id": "right",
+        "title": "Navigate right",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "right"
+        ]
+      },
+      {
+        "id": "up",
+        "title": "Navigate up",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "up"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "aimdevlee",
+      "repo": "herdr-nvim-nav",
+      "resolved_commit": "ec047fd6d8d0269d54a34e9405af28d8aad4c8f0",
+      "managed_path": "/Users/jacobward/.config/herdr/plugins/github/herdr-nvim-nav-37d546a0d32b",
+      "installed_unix_ms": 1790695048631
+    }
+  }
+]
