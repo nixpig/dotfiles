@@ -375,5 +375,44 @@
       "managed_path": "/Users/jacobward/.config/herdr/plugins/github/herdr-nvim-nav-37d546a0d32b",
       "installed_unix_ms": 1790695048631
     }
+  },
+  {
+    "plugin_id": "herdr-worktree-layout",
+    "name": "Worktree Layout",
+    "version": "0.1.0",
+    "min_herdr_version": "0.9.1",
+    "description": "Applies a standard four-tab layout to every new worktree workspace",
+    "manifest_path": "/Users/jacobward/projects/herdr-worktree-layout/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/projects/herdr-worktree-layout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "actions": [
+      {
+        "id": "apply-layout",
+        "title": "Apply worktree layout",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "node",
+          "layout.ts"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "on": "worktree.created",
+        "command": [
+          "node",
+          "layout.ts"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "local"
+    }
   }
 ]
