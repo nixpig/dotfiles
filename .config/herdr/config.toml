@@ -22,7 +22,7 @@ delivery = "system"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "workspace", "tab"],
+  ["state_icon", "workspace", "agent"],
 ]
 
 [ui.sidebar.spaces]

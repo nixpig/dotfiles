@@ -26,34 +26,44 @@ cat > "$OPENCODE_CONFIG_DIR/cli.json" <<'JSON'
   "tabs": {"mode": "off"}
 }
 JSON
-export OPENCODE_CONFIG_CONTENT='{
- "model": "claude/opus-5",
- "small_model": "claude/sonnet-5",
- "providers": {
-   "claude": {
-     "name": "Claude (Bedrock)",
-     "canonical": "anthropic",
-     "env": ["ANTHROPIC_AUTH_TOKEN"],
-     "package": "@opencode/ai/providers/anthropic",
-     "settings": {"baseURL": "{env:ANTHROPIC_BASE_URL}/v1"},
-     "models": {
-       "opus-5": {"modelID": "claude-opus-5", "name": "Claude Opus 5"},
-       "sonnet-5": {"modelID": "claude-sonnet-5", "name": "Claude Sonnet 5"}
-     }
-   },
-   "gpt": {
-     "name": "GPT (Bedrock)",
-     "canonical": "openai",
-     "env": ["OPENAI_API_KEY"],
-     "package": "@opencode/ai/providers/openai/responses",
-     "settings": {"baseURL": "{env:OPENAI_BASE_URL}/v1"},
-     "models": {
-       "luna": {"modelID": "gpt-5.6-luna", "name": "GPT-5.6 Luna"},
-       "sol": {"modelID": "gpt-5.6-sol", "name": "GPT-5.6 Sol"},
-       "terra": {"modelID": "gpt-5.6-terra", "name": "GPT-5.6 Terra"}
-     }
-   }
-}',
+
+# The model configuration goes in a file rather than in
+# OPENCODE_CONFIG_CONTENT. As an inline single-quoted string it picked up a
+# trailing comma from the shell, which is not JSON, and OpenCode rejected the
+# whole document without saying so: no model, no enabled_providers, and no
+# baseURL override, so it dialled api.anthropic.com and came back with
+# "invalid x-api-key". A file has no quoting between the script and the JSON.
+cat > "$OPENCODE_CONFIG_DIR/opencode.json" <<'JSON'
+{
+  "model": "anthropic/opus-5",
+  "small_model": "anthropic/sonnet-5",
+  "enabled_providers": ["anthropic", "openai"],
+  "providers": {
+    "anthropic": {
+      "settings": {"baseURL": "{env:ANTHROPIC_BASE_URL}"},
+      "models": {
+        "opus-5": {"modelID": "claude-opus-5", "name": "Claude Opus 5.5"},
+        "sonnet-5": {"modelID": "claude-sonnet-5", "name": "Claude Sonnet 5"}
+      }
+    },
+    "openai": {
+      "settings": {"baseURL": "{env:OPENAI_BASE_URL}"},
+      "models": {
+        "luna": {"modelID": "gpt-5.6-luna", "name": "GPT-5.6 Luna"},
+        "sol": {"modelID": "gpt-5.6-sol", "name": "GPT-5.6 Sol"},
+        "terra": {"modelID": "gpt-5.6-terra", "name": "GPT-5.6 Terra"}
+      }
+    }
+  }
+}
+JSON
+export OPENCODE_CONFIG="$OPENCODE_CONFIG_DIR/opencode.json"
+
+# Kept only to catch a broken heredoc here rather than in the pane: a config
+# OpenCode cannot parse is silently ignored, and the symptom is a beam that
+# quietly comes up on the wrong model.
+python3 -c 'import json,sys;json.load(open(sys.argv[1]))' "$OPENCODE_CONFIG" \
+  || { echo "opencode.json is not valid JSON" >&2; exit 1; }
 
 cd "${REPO_DIR:-$HOME}"
 exec "$HOME/.opencode/bin/opencode" --standalone
@@ -114,7 +124,7 @@ cat > "$PI_CODING_AGENT_DIR/models.json" <<JSON
       "api": "anthropic-messages",
       "apiKey": "\$ANTHROPIC_AUTH_TOKEN",
       "models": [
-        { "id": "claude-opus-5", "name": "Claude Opus 5" },
+        { "id": "claude-opus-5-5", "name": "Claude Opus 5.5" },
         { "id": "claude-sonnet-5", "name": "Claude Sonnet 5" }
       ]
     }
@@ -139,7 +149,7 @@ else
   existing='{}'
 fi
 if printf '%s' "$existing" | jq -s \
-  '.[0] * {"theme":"dark","tuiMode":"fullscreen","defaultProvider":"beam","defaultModel":"claude-opus-5"}' \
+  '.[0] * {"theme":"dark","tuiMode":"fullscreen","defaultProvider":"beam","defaultModel":"claude-opus-5-5", "compaction": {"enabled":true,"reserveTokens":4096,"keepRecentTokens":25000}}' \
   > "$tmp"; then
   mv "$tmp" "$settings"
 fi
