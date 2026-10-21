@@ -1,5 +1,11 @@
 theme = Catppuccin Mocha
 font-family = Operator Mono for Powerline
 font-style = Medium
-font-size = 29
+font-size = 27
 mouse-scroll-multiplier = 0.5
+macos-titlebar-style = hidden
+background-opacity = 1.0
+background-image = /Users/jacobward/Pictures/e6bc0b7b-a810-413f-b57f-13c8c983b203.jpeg
+background-image-opacity = 0.0375
+background-image-position = bottom-center
+background-image-fit = cover

@@ -99,6 +99,8 @@ vim.opt.listchars = {
   eol = icons.listchars.Eol,
 }
 
+vim.opt.maxmempattern = 10000
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -116,6 +118,15 @@ rtp:prepend(lazypath)
 vim.lsp.config('markdown_oxide', {
   on_init = function(client)
     client.server_capabilities.semanticTokensProvider = nil
+  end,
+  root_dir = function(bufnr, on_dir)
+    local ok, uri = pcall(vim.uri_from_bufnr, bufnr)
+    if ok and not vim.startswith(uri, 'file://') then
+      on_dir(nil) -- refuse to attach
+      return
+    end
+    local root = vim.fs.root(bufnr, { '.git', 'mkdocs.yml', 'docs' })
+    on_dir(root or vim.uv.cwd())
   end,
 })
 
@@ -427,7 +438,7 @@ require('lazy').setup({
     'selimacerbas/markdown-preview.nvim',
     dependencies = { 'selimacerbas/live-server.nvim' },
     config = function()
-      require('markdown_preview').setup {
+      require('mdkite').setup {
         -- all optional; sane defaults shown
         instance_mode = 'takeover', -- "takeover" (one tab) or "multi" (tab per instance)
         port = 0, -- 0 = auto (8421 for takeover, OS-assigned for multi)
@@ -440,6 +451,53 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   -- Git
   -----------------------------------------------------------------------------
+  {
+    'pwntester/octo.nvim',
+    cmd = 'Octo',
+    opts = {
+      -- or "fzf-lua" or "snacks" or "default"
+      picker = 'telescope',
+      -- bare Octo command opens picker of commands
+      enable_builtin = true,
+    },
+    keys = {
+      {
+        '<leader>oi',
+        '<CMD>Octo issue list<CR>',
+        desc = 'List GitHub Issues',
+      },
+      {
+        '<leader>op',
+        '<CMD>Octo pr list<CR>',
+        desc = 'List GitHub PullRequests',
+      },
+      {
+        '<leader>od',
+        '<CMD>Octo discussion list<CR>',
+        desc = 'List GitHub Discussions',
+      },
+      {
+        '<leader>on',
+        '<CMD>Octo notification list<CR>',
+        desc = 'List GitHub Notifications',
+      },
+      {
+        '<leader>os',
+        function()
+          require('octo.utils').create_base_search_command { include_current_repo = true }
+        end,
+        desc = 'Search GitHub',
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR "ibhagwan/fzf-lua",
+      -- OR "folke/snacks.nvim",
+      'nvim-tree/nvim-web-devicons', -- optional if file_panel.icons is a function
+    },
+  },
+
   {
     'dinhhuy258/git.nvim',
     opts = {
@@ -685,19 +743,20 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   -- LSP
   -----------------------------------------------------------------------------
-  {
-    'ray-x/lsp_signature.nvim',
-    opts = {
-      bind = true,
-      hint_enable = false,
-      doc_lines = 0,
-      hi_parameter = 'LspSignatureActiveParameter',
-      always_trigger = true,
-      handler_opts = {
-        border = 'rounded',
-      },
-    },
-  },
+  -- Breaks octo.nvim
+  -- {
+  --   'ray-x/lsp_signature.nvim',
+  --   opts = {
+  --     bind = false,
+  --     hint_enable = false,
+  --     doc_lines = 0,
+  --     hi_parameter = 'LspSignatureActiveParameter',
+  --     always_trigger = true,
+  --     handler_opts = {
+  --       border = 'rounded',
+  --     },
+  --   },
+  -- },
 
   {
     'mrcjkb/rustaceanvim',
@@ -747,7 +806,7 @@ require('lazy').setup({
         code_action = '',
       },
       symbol_in_winbar = {
-        enable = true,
+        enable = false,
         separator = ' ' .. icons.ui.ArrowClosed .. ' ',
         respect_root = true,
       },
@@ -1654,7 +1713,31 @@ require('lazy').setup({
     'makyinmars/herdr-context.nvim',
     cond = vim.env.HERDR_ENV == '1',
     lazy = false, -- keeps :checkhealth herdr-context discoverable before the first mapping
-    opts = {},
+    opts = {
+      safety = {
+        enabled = true,
+        confirm_warnings = true,
+        submit = false,
+        exclude_patterns = { '.env', '.env.*', '*.pem', '*.key' },
+        secret_patterns = { -- Lua patterns
+          'AKIA[%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d][%u%d]',
+          '-----BEGIN .-PRIVATE KEY-----',
+          'api[_-]key%s*[:=]%s*%S+',
+          'token%s*[:=]%s*%S+',
+          'secret%s*[:=]%s*%S+',
+          'password%s*[:=]%s*%S+',
+          'gh[pousr]_%w+',
+          'github_pat_[%w_]+',
+          'xox[baprs]%-[%w%-]+',
+          '"type"%s*:%s*"service_account"',
+          'eyJ[%w_%-]+%.eyJ[%w_%-]+%.[%w_%-]+',
+        },
+        entropy_enabled = true,
+        entropy_threshold = 4.5,
+        entropy_min_length = 20,
+        entropy_keywords = { 'key', 'secret', 'token', 'password', 'credential' },
+      },
+    },
     keys = {
       {
         '<leader>ac',
@@ -1936,3 +2019,24 @@ vim.api.nvim_create_user_command('LspRestart', function()
   vim.lsp.stop_client(vim.lsp.get_clients { bufnr = 0 })
   vim.cmd 'edit'
 end, {})
+
+-- Hack around memory leak in lspsaga.
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    vim.defer_fn(function()
+      local seen = {}
+      for _, au in ipairs(vim.api.nvim_get_autocmds { event = 'User' }) do
+        local p = type(au.pattern) == 'table' and table.concat(au.pattern, ',') or au.pattern
+        if p == 'SagaSymbolUpdate' and au.group == 0 then
+          if seen[au.desc] then
+            pcall(vim.api.nvim_del_autocmd, au.id)
+          else
+            seen[au.desc] = true
+          end
+        end
+      end
+    end, 100)
+  end,
+})
+
+vim.lsp.config('gopls', { cmd = { vim.fn.expand '$HOME/go/bin/gopls' } })

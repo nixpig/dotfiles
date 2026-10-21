@@ -4,7 +4,21 @@
 
 [state]
 paths."~/pipelines/rolebox" = "/home/beams/repo/rolebox"
-capture = ["/home/beams/repo/.rolebox", "~/.pi/agent/sessions"]
+# Each agent keeps its session state somewhere of its own, so the capture names
+# a path per agent rather than one path all of them share. A path that is not in
+# this beam is skipped, which is why the Pi ones can stay: they cost nothing in
+# an OpenCode beam and the other way round.
+#
+# ~/.local/share/opencode is OpenCode's data directory, which is where its
+# session database lives (`opencode debug paths` calls it `data`). It is not the
+# config directory -- OPENCODE_CONFIG_DIR below is the config, and setting it
+# does not move the state, so capturing that would capture theme settings and
+# nothing else.
+capture = [
+  "/home/beams/repo/.rolebox",
+  "~/.pi/agent/sessions",
+  "~/.local/share/opencode",
+]
 
 [[launcher]]
 name = "OpenCode"
@@ -59,6 +73,55 @@ cat > "$OPENCODE_CONFIG_DIR/opencode.json" <<'JSON'
 JSON
 export OPENCODE_CONFIG="$OPENCODE_CONFIG_DIR/opencode.json"
 
+# $SYSTEM_PROMPT is the system prompt chosen in the table's form, and it reaches
+# the beam as an environment variable. It becomes a real system prompt here, as
+# `agents.beam.system` with `default_agent` pointing at it.
+#
+# Two other spellings do not work in OpenCode v2, and both were tried here
+# first. There is no --append-system-prompt flag; that is Claude Code's, and
+# passing it to opencode is an unknown-flag error. And the `instructions` array
+# is accepted by the config schema but never loaded -- the v2 docs say so
+# outright ("OpenCode accepts this field but does not load its entries") -- so a
+# prompt put there is silently ignored, which looks exactly like the prompt
+# having failed to arrive. `agents.<name>.system` is the one that is sent, ahead
+# of the environment context, where a system prompt belongs.
+#
+# It is a named agent rather than an override of `build` so that a session with
+# no prompt still gets OpenCode's own default behaviour, and so the repository's
+# own AGENTS.md keeps loading alongside it rather than being replaced by it.
+#
+# Written with python3 rather than interpolated into the heredoc above for the
+# same reason the config is in a file at all: a prompt is prose, and prose
+# brings quotes, backslashes and newlines with it. JSON-escaping that by hand in
+# shell is how the trailing comma happened. python3 is already a dependency of
+# this script, for the validation below.
+#
+# Both keys are removed again when there is no prompt, because this file is
+# rewritten on every bind and a prompt from a previous session must not outlive
+# the session that asked for it.
+python3 - "$OPENCODE_CONFIG" "$SYSTEM_PROMPT" <<'PY'
+import json, sys
+
+path, prompt = sys.argv[1], sys.argv[2]
+with open(path) as f:
+    config = json.load(f)
+
+if prompt.strip():
+    config.setdefault("agents", {})["beam"] = {
+        "mode": "primary",
+        "system": prompt,
+    }
+    config["default_agent"] = "beam"
+else:
+    config.pop("default_agent", None)
+    if isinstance(config.get("agents"), dict):
+        config["agents"].pop("beam", None)
+
+with open(path, "w") as f:
+    json.dump(config, f, indent=2)
+    f.write("\n")
+PY
+
 # Kept only to catch a broken heredoc here rather than in the pane: a config
 # OpenCode cannot parse is silently ignored, and the symptom is a beam that
 # quietly comes up on the wrong model.
@@ -66,7 +129,21 @@ python3 -c 'import json,sys;json.load(open(sys.argv[1]))' "$OPENCODE_CONFIG" \
   || { echo "opencode.json is not valid JSON" >&2; exit 1; }
 
 cd "${REPO_DIR:-$HOME}"
-exec "$HOME/.opencode/bin/opencode" --standalone
+
+# --continue reopens the last session for this directory, which is how work
+# carries across a beam that expired: the session database is put back from the
+# workspace's capture before this runs, so the session it finds is the one the
+# dead beam was in.
+#
+# It is gated on $SESSION_STATE because that is the only place the form's `state`
+# field is visible. The capture being withheld is not enough on its own -- an
+# agent with a store of its own opens that store when told to continue, and
+# nothing in the environment can talk it out of it. Without this, choosing
+# `fresh` in the table would start a new session on top of a database it had just
+# been denied.
+[ "$SESSION_STATE" = fresh ] || set -- --continue
+
+exec "$HOME/.opencode/bin/opencode" --standalone "$@"
 '''
 
 [[launcher]]
