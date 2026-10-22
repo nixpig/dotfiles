@@ -1,0 +1,17 @@
+theme = "custom"
+mode = "split"
+line_numbers = true
+wrap_lines = true
+hunk_headers = true
+menu_bar = false
+agent_notes = true
+copy_decorations = false
+cursor_line = "row"
+
+[custom_theme]
+base = "catppuccin-mocha"
+label = "Custom"
+background = "#1e1e2e"
+panel = "#1e1e2e"
+accent = "#f5c2e7"
+panelAlt = "#181825"
