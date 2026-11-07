@@ -509,37 +509,77 @@
     }
   },
   {
-    "plugin_id": "herdr-worktree-layout",
-    "name": "Worktree Layout",
+    "plugin_id": "pipe",
+    "name": "pipe",
     "version": "0.1.0",
-    "min_herdr_version": "0.9.1",
-    "description": "Applies a standard four-tab layout to every new worktree workspace",
-    "manifest_path": "/Users/jacobward/projects/herdr-worktree-layout/herdr-plugin.toml",
-    "plugin_root": "/Users/jacobward/projects/herdr-worktree-layout",
+    "min_herdr_version": "0.9.0",
+    "description": "Multi-step agent pipelines on Teleport Beams",
+    "manifest_path": "/Users/jacobward/.local/share/pipe/herdr-plugin/herdr-plugin.toml",
+    "plugin_root": "/Users/jacobward/.local/share/pipe/herdr-plugin",
     "enabled": true,
     "platforms": [
       "linux",
       "macos"
     ],
-    "actions": [
+    "startup": [
       {
-        "id": "apply-layout",
-        "title": "Apply worktree layout",
-        "contexts": [
-          "workspace"
-        ],
         "command": [
-          "node",
-          "layout.ts"
+          "/Users/jacobward/go/bin/pipe",
+          "herdr-action",
+          "startup"
         ]
       }
     ],
-    "events": [
+    "actions": [
       {
-        "on": "worktree.created",
+        "id": "attach",
+        "title": "pipe: attach to this run's agent",
+        "contexts": [
+          "workspace",
+          "pane"
+        ],
         "command": [
-          "node",
-          "layout.ts"
+          "/Users/jacobward/go/bin/pipe",
+          "herdr-action",
+          "attach"
+        ]
+      },
+      {
+        "id": "board",
+        "title": "pipe: open the board",
+        "contexts": [
+          "global",
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "/Users/jacobward/go/bin/pipe",
+          "herdr-action",
+          "board"
+        ]
+      },
+      {
+        "id": "done",
+        "title": "pipe: mark this run's interactive step done",
+        "contexts": [
+          "workspace",
+          "pane"
+        ],
+        "command": [
+          "/Users/jacobward/go/bin/pipe",
+          "herdr-action",
+          "done"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "board",
+        "title": "Pipelines",
+        "placement": "overlay",
+        "command": [
+          "/Users/jacobward/go/bin/pipe",
+          "board"
         ]
       }
     ],

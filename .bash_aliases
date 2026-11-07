@@ -114,6 +114,7 @@ alias gcz='git-cz'
 alias gss='git stash'
 alias gsp='git stash pop'
 alias gsa='git stash apply'
+alias gpai='git diff HEAD~1 | ollama run qwen2.5-coder:7b "Write a one paragraph PR description for this change. Write in third person, in imperative active voice. Do not start with \"This\" or \"The\"."'
 
 alias tf='terraform'
 alias kc='kubectl'

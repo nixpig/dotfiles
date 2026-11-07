@@ -36,6 +36,9 @@ rows = [
 name = "catppuccin"
 auto_switch = false
 
+[theme.custom]
+panel_bg = "reset"
+
 [keys]
 settings = "prefix+shift+s"
 workspace_picker = "prefix+s"
@@ -46,6 +49,8 @@ goto = "prefix+g"
 new_tab = "prefix+c"
 next_tab = "prefix+n"
 previous_tab = "prefix+p"
+next_agent = "prefix+period"
+previous_agent = "prefix+comma"
 focus_pane_left = "prefix+h"
 focus_pane_right = "prefix+l"
 navigate_workspace_down = "j"
@@ -113,7 +118,19 @@ command = "gh dash"
 description = "Open gh-dash in current directory"
 
 [[keys.command]]
+key = "ctrl+b"
+type = "pane"
+command = "btop"
+description = "Open btop in pane"
+
+[[keys.command]]
 key = "prefix+k"
 type = "plugin_action"
 command = "herdr-bar.open"
 description = "command bar"
+
+[[keys.command]]
+key = "prefix+P"
+type = "plugin_action"
+command = "pipe.board"
+description = "pipe: board"

@@ -7,6 +7,7 @@ menu_bar = false
 agent_notes = true
 copy_decorations = false
 cursor_line = "row"
+prompt_save_view_preferences = false
 
 [custom_theme]
 base = "catppuccin-mocha"

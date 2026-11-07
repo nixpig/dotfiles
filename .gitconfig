@@ -2,6 +2,8 @@
 	name = Jake Ward
 	email = jacob.ward@goteleport.com
 [core]
-    pager = hunk pager
+	pager = hunk pager
 [merge]
     conflictStyle = zdiff3
+[credential]
+	helper = osxkeychain
