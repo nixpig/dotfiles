@@ -1,7 +1,7 @@
 {
   "if err != nil": {
     "prefix": "inerr",
-    "body": "if err != nil {\n\treturn $0\n}",
+    "body": "if err != nil {\n\t${0:return trace.Wrap(err)}\n}",
     "description": "Snippet for if err != nil"
   },
   "if err == nil": {
@@ -9,9 +9,749 @@
     "body": "if err == nil {\n\t$0\n}",
     "description": "Snippet for if err == nil"
   },
-  "benchmark function": {
+  "if err := inline": {
+    "prefix": "iferrin",
+    "body": [
+      "if err := ${1:...}; err != nil {",
+      "\t$0",
+      "}"
+    ],
+    "description": "if err := ...; err != nil"
+  },
+  "benchmark function old": {
     "prefix": "bench",
     "body": "func Benchmark$1(b *testing.B) {\n\tfor b.Loop() {\n\t\t$0\n\t}\n}",
     "description": "Snippet for Benchmark function using b.Loop()"
+  },
+  "t.Parallel": {
+    "prefix": "tpar",
+    "body": [
+      "t.Parallel()"
+    ],
+    "description": "t.Parallel()"
+  },
+  "t.Helper": {
+    "prefix": "thelp",
+    "body": [
+      "t.Helper()"
+    ],
+    "description": "t.Helper()"
+  },
+  "t.Cleanup": {
+    "prefix": "tclup",
+    "body": [
+      "t.Cleanup(func() {",
+      "\trequire.NoError(t, ${1:res}.Close())",
+      "})"
+    ],
+    "description": "t.Cleanup with require.NoError"
+  },
+  "t.TempDir": {
+    "prefix": "ttmp",
+    "body": [
+      "t.TempDir()"
+    ],
+    "description": "t.TempDir()"
+  },
+  "t.Context": {
+    "prefix": "tctx",
+    "body": [
+      "ctx := t.Context()"
+    ],
+    "description": "ctx := t.Context()"
+  },
+  "t.Run": {
+    "prefix": "trun",
+    "body": [
+      "t.Run(\"${1:name}\", func(t *testing.T) {",
+      "\t$0",
+      "})"
+    ],
+    "description": "t.Run subtest"
+  },
+  "table-driven test struct": {
+    "prefix": "ttab",
+    "body": [
+      "tests := []struct {",
+      "\tname string",
+      "\t$1",
+      "}{",
+      "\t{$2},",
+      "}"
+    ],
+    "description": "table-driven test struct"
+  },
+  "table-driven test loop": {
+    "prefix": "tfor",
+    "body": [
+      "for _, test := range tests {",
+      "\tt.Run(test.name, func(t *testing.T) {",
+      "\t\tt.Parallel()",
+      "\t\t$0",
+      "\t})",
+      "}"
+    ],
+    "description": "table-driven test loop"
+  },
+  "require.NoError": {
+    "prefix": "reqnoerr",
+    "body": [
+      "require.NoError(t, err)"
+    ],
+    "description": "require.NoError(t, err)"
+  },
+  "require.Error": {
+    "prefix": "reqerr",
+    "body": [
+      "require.Error(t, err)"
+    ],
+    "description": "require.Error(t, err)"
+  },
+  "require.ErrorContains": {
+    "prefix": "reqerrcon",
+    "body": [
+      "require.ErrorContains(t, err, \"${1:msg}\")"
+    ],
+    "description": "require.ErrorContains"
+  },
+  "require.ErrorAs": {
+    "prefix": "reqerras",
+    "body": [
+      "require.ErrorAs(t, err, &${1:target})"
+    ],
+    "description": "require.ErrorAs"
+  },
+  "require.ErrorIs": {
+    "prefix": "reqerris",
+    "body": [
+      "require.ErrorIs(t, err, ${1:target})"
+    ],
+    "description": "require.ErrorIs"
+  },
+  "require.Equal": {
+    "prefix": "reqeq",
+    "body": [
+      "require.Equal(t, ${1:want}, ${2:got})"
+    ],
+    "description": "require.Equal"
+  },
+  "require.NotEqual": {
+    "prefix": "reqne",
+    "body": [
+      "require.NotEqual(t, ${1:want}, ${2:got})"
+    ],
+    "description": "require.NotEqual"
+  },
+  "require.True": {
+    "prefix": "reqtrue",
+    "body": [
+      "require.True(t, ${1:cond})"
+    ],
+    "description": "require.True"
+  },
+  "require.False": {
+    "prefix": "reqfalse",
+    "body": [
+      "require.False(t, ${1:cond})"
+    ],
+    "description": "require.False"
+  },
+  "require.Len": {
+    "prefix": "reqlen",
+    "body": [
+      "require.Len(t, ${1:slice}, ${2:n})"
+    ],
+    "description": "require.Len"
+  },
+  "require.Empty": {
+    "prefix": "reqempty",
+    "body": [
+      "require.Empty(t, ${1:val})"
+    ],
+    "description": "require.Empty"
+  },
+  "cmp.Diff check": {
+    "prefix": "reqcmp",
+    "body": [
+      "require.Empty(t, cmp.Diff(${1:want}, ${2:got}, protocmp.Transform()))"
+    ],
+    "description": "cmp.Diff check"
+  },
+  "Test function ft": {
+    "prefix": "tfunc",
+    "body": [
+      "func Test${1:Name}(t *testing.T) {",
+      "\tt.Parallel()",
+      "\t$0",
+      "}"
+    ],
+    "description": "Test function"
+  },
+  "return trace.Wrap(err)": {
+    "prefix": "rinerr",
+    "body": [
+      "if err != nil {",
+      "\treturn trace.Wrap(err)",
+      "}"
+    ],
+    "description": "return trace.Wrap(err)"
+  },
+  "return nil, trace.Wrap(err)": {
+    "prefix": "rnilerr",
+    "body": [
+      "if err != nil {",
+      "\treturn nil, trace.Wrap(err)",
+      "}"
+    ],
+    "description": "return nil, trace.Wrap(err)"
+  },
+  "return val, trace.Wrap(err)": {
+    "prefix": "rvalerr",
+    "body": [
+      "if err != nil {",
+      "\treturn ${1:val}, trace.Wrap(err)",
+      "}"
+    ],
+    "description": "return val, trace.Wrap(err)"
+  },
+  "fmt.Errorf wrap": {
+    "prefix": "fmterr",
+    "body": [
+      "fmt.Errorf(\"${1:msg}: %w\", err)"
+    ],
+    "description": "fmt.Errorf wrap"
+  },
+  "errors.Is": {
+    "prefix": "erris",
+    "body": [
+      "errors.Is(err, ${1:target})"
+    ],
+    "description": "errors.Is"
+  },
+  "errors.As": {
+    "prefix": "erras",
+    "body": [
+      "errors.As(err, &${1:target})"
+    ],
+    "description": "errors.As"
+  },
+  "trace.Wrap(err)": {
+    "prefix": "errwrap",
+    "body": [
+      "trace.Wrap(err)"
+    ],
+    "description": "trace.Wrap(err)"
+  },
+  "trace.BadParameter": {
+    "prefix": "errbp",
+    "body": [
+      "trace.BadParameter(${1:\"msg\"})"
+    ],
+    "description": "trace.BadParameter"
+  },
+  "trace.BadParameterError": {
+    "prefix": "errbpe",
+    "body": [
+      "trace.BadParameterError"
+    ],
+    "description": "trace.BadParameterError"
+  },
+  "trace.NotFound": {
+    "prefix": "errnf",
+    "body": [
+      "trace.NotFound(${1:err})"
+    ],
+    "description": "trace.NotFound"
+  },
+  "trace.NotFoundError": {
+    "prefix": "errnfe",
+    "body": [
+      "trace.NotFoundError"
+    ],
+    "description": "trace.NotFoundError"
+  },
+  "trace.AccessDenied": {
+    "prefix": "errad",
+    "body": [
+      "trace.AccessDenied(${1:\"msg\"})"
+    ],
+    "description": "trace.AccessDenied"
+  },
+  "trace.AccessDeniedError": {
+    "prefix": "errade",
+    "body": [
+      "trace.AccessDeniedError"
+    ],
+    "description": "trace.AccessDeniedError"
+  },
+  "trace.CompareFailed": {
+    "prefix": "errcf",
+    "body": [
+      "trace.CompareFailed(${1:\"msg\"})"
+    ],
+    "description": "trace.CompareFailed"
+  },
+  "trace.CompareFailedError": {
+    "prefix": "errcfe",
+    "body": [
+      "trace.CompareFailedError"
+    ],
+    "description": "trace.CompareFailedError"
+  },
+  "trace.LimitExceeded": {
+    "prefix": "errlim",
+    "body": [
+      "trace.LimitExceeded(${1:\"msg\"})"
+    ],
+    "description": "trace.LimitExceeded"
+  },
+  "trace.LimitExceededError": {
+    "prefix": "errlime",
+    "body": [
+      "trace.LimitExceededError"
+    ],
+    "description": "trace.LimitExceededError"
+  },
+  "trace.AlreadyExists": {
+    "prefix": "errexist",
+    "body": [
+      "trace.AlreadyExists(${1:\"msg\"})"
+    ],
+    "description": "trace.AlreadyExists"
+  },
+  "trace.AlreadyExistsError": {
+    "prefix": "errexiste",
+    "body": [
+      "trace.AlreadyExistsError"
+    ],
+    "description": "trace.AlreadyExistsError"
+  },
+  "trace.ConnectionProblem": {
+    "prefix": "errconn",
+    "body": [
+      "trace.ConnectionProblem(${1:\"msg\"})"
+    ],
+    "description": "trace.ConnectionProblem"
+  },
+  "trace.ConnectionProblemError": {
+    "prefix": "errconne",
+    "body": [
+      "trace.ConnectionProblemError"
+    ],
+    "description": "trace.ConnectionProblemError"
+  },
+  "trace.NotImplemented": {
+    "prefix": "errni",
+    "body": [
+      "trace.NotImplemented(${1:\"msg\"})"
+    ],
+    "description": "trace.NotImplemented"
+  },
+  "trace.NotImplementedError": {
+    "prefix": "errnie",
+    "body": [
+      "trace.NotImplementedError"
+    ],
+    "description": "trace.NotImplementedError"
+  },
+  "trace.Errorf": {
+    "prefix": "errf",
+    "body": [
+      "trace.Errorf(\"${1:msg}\")"
+    ],
+    "description": "trace.Errorf"
+  },
+  "trace.IsNotFound": {
+    "prefix": "errisnf",
+    "body": [
+      "trace.IsNotFound(err)"
+    ],
+    "description": "trace.IsNotFound"
+  },
+  "trace.IsBadParameter": {
+    "prefix": "errisbp",
+    "body": [
+      "trace.IsBadParameter(err)"
+    ],
+    "description": "trace.IsBadParameter"
+  },
+  "trace.IsAccessDenied": {
+    "prefix": "errisad",
+    "body": [
+      "trace.IsAccessDenied(err)"
+    ],
+    "description": "trace.IsAccessDenied"
+  },
+  "trace.IsCompareFailed": {
+    "prefix": "erriscf",
+    "body": [
+      "trace.IsCompareFailed(err)"
+    ],
+    "description": "trace.IsCompareFailed"
+  },
+  "trace.IsLimitExceeded": {
+    "prefix": "errislim",
+    "body": [
+      "trace.IsLimitExceeded(err)"
+    ],
+    "description": "trace.IsLimitExceeded"
+  },
+  "trace.IsAlreadyExists": {
+    "prefix": "errisexist",
+    "body": [
+      "trace.IsAlreadyExists(err)"
+    ],
+    "description": "trace.IsAlreadyExists"
+  },
+  "trace.IsConnectionProblem": {
+    "prefix": "errisconn",
+    "body": [
+      "trace.IsConnectionProblem(err)"
+    ],
+    "description": "trace.IsConnectionProblem"
+  },
+  "trace.IsNotImplemented": {
+    "prefix": "errisni",
+    "body": [
+      "trace.IsNotImplemented(err)"
+    ],
+    "description": "trace.IsNotImplemented"
+  },
+  "trace.IsAggregate": {
+    "prefix": "errisagg",
+    "body": [
+      "trace.IsAggregate(err)"
+    ],
+    "description": "trace.IsAggregate"
+  },
+  "slog WarnContext": {
+    "prefix": "logw",
+    "body": [
+      "${1:logger}.WarnContext(ctx, \"${2:msg}\", \"error\", err)"
+    ],
+    "description": "slog WarnContext"
+  },
+  "slog InfoContext": {
+    "prefix": "logi",
+    "body": [
+      "${1:logger}.InfoContext(ctx, \"${2:msg}\")"
+    ],
+    "description": "slog InfoContext"
+  },
+  "slog ErrorContext": {
+    "prefix": "loge",
+    "body": [
+      "${1:logger}.ErrorContext(ctx, \"${2:msg}\", \"error\", err)"
+    ],
+    "description": "slog ErrorContext"
+  },
+  "slog DebugContext": {
+    "prefix": "logd",
+    "body": [
+      "${1:logger}.DebugContext(ctx, \"${2:msg}\")"
+    ],
+    "description": "slog DebugContext"
+  },
+  "context.Background": {
+    "prefix": "cxbg",
+    "body": [
+      "context.Background()"
+    ],
+    "description": "context.Background()"
+  },
+  "context.WithTimeout": {
+    "prefix": "cxto",
+    "body": [
+      "ctx, cancel := context.WithTimeout(${1:ctx}, ${2:time.Second})",
+      "defer cancel()"
+    ],
+    "description": "context.WithTimeout"
+  },
+  "context.WithCancel": {
+    "prefix": "cxwc",
+    "body": [
+      "ctx, cancel := context.WithCancel(${1:ctx})",
+      "defer cancel()"
+    ],
+    "description": "context.WithCancel"
+  },
+  "ctx.Done case": {
+    "prefix": "cxdone",
+    "body": [
+      "case <-ctx.Done():",
+      "\treturn ctx.Err()"
+    ],
+    "description": "ctx.Done case"
+  },
+  "defer cancel": {
+    "prefix": "defcan",
+    "body": [
+      "defer cancel()"
+    ],
+    "description": "defer cancel()"
+  },
+  "defer Unlock": {
+    "prefix": "defunl",
+    "body": [
+      "defer ${1:mu}.Unlock()"
+    ],
+    "description": "defer Unlock"
+  },
+  "defer Done": {
+    "prefix": "defdone",
+    "body": [
+      "defer ${1:wg}.Done()"
+    ],
+    "description": "defer Done"
+  },
+  "defer Close": {
+    "prefix": "defclo",
+    "body": [
+      "defer ${1:f}.Close()"
+    ],
+    "description": "defer Close"
+  },
+  "defer Body.Close": {
+    "prefix": "defbody",
+    "body": [
+      "defer resp.Body.Close()"
+    ],
+    "description": "defer resp.Body.Close()"
+  },
+  "proto builder": {
+    "prefix": "pbb",
+    "body": [
+      "${1:Type}_builder{${2:Field}: ${3:val}}.Build()"
+    ],
+    "description": "protobuf builder"
+  },
+  "constructor": {
+    "prefix": "funcn",
+    "body": [
+      "func New${1:Foo}(${2:...}) (*${1:Foo}, error) {",
+      "\t${3:f} := &${1:Foo}{}",
+      "\t$0",
+      "\treturn ${3:f}, nil",
+      "}"
+    ],
+    "description": "constructor"
+  },
+  "goroutine": {
+    "prefix": "funcg",
+    "body": [
+      "go func() {",
+      "\t$0",
+      "}()"
+    ],
+    "description": "goroutine"
+  },
+  "clockwork.NewFakeClock": {
+    "prefix": "clockfake",
+    "body": [
+      "clock := clockwork.NewFakeClock()"
+    ],
+    "description": "clockwork.NewFakeClock"
+  },
+  "clockwork.NewRealClock": {
+    "prefix": "clockreal",
+    "body": [
+      "clock := clockwork.NewRealClock()"
+    ],
+    "description": "clockwork.NewRealClock"
+  },
+  "clock.Advance": {
+    "prefix": "clockadv",
+    "body": [
+      "clock.Advance(time.${1:Minute})"
+    ],
+    "description": "clock.Advance"
+  },
+  "for range": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:k}, ${2:v} := range ${3:slice} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "for range loop"
+  },
+  "for integer": {
+    "prefix": "fori",
+    "body": [
+      "for ${0:i} := range ${1} {",
+      "\t$1",
+      "}"
+    ],
+    "description": "for integer loop"
+  },
+  "for select": {
+    "prefix": "forsel",
+    "body": [
+      "for {",
+      "\tselect {",
+      "\tcase ${1:v} := <-${2:ch}:",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "for select"
+  },
+  "select": {
+    "prefix": "select",
+    "body": [
+      "select {",
+      "case ${1:v} := <-${2:ch}:",
+      "\t$0",
+      "}"
+    ],
+    "description": "select"
+  },
+  "switch": {
+    "prefix": "switch",
+    "body": [
+      "switch ${1:v} {",
+      "case ${2:val}:",
+      "\t$0",
+      "}"
+    ],
+    "description": "switch"
+  },
+  "type switch": {
+    "prefix": "switcht",
+    "body": [
+      "switch ${1:v}.(type) {",
+      "case ${2:Type}:",
+      "\t$0",
+      "}"
+    ],
+    "description": "type switch"
+  },
+  "if !ok": {
+    "prefix": "ifok",
+    "body": [
+      "if ${0:!}ok {",
+      "\t$1",
+      "}"
+    ],
+    "description": "if !ok"
+  },
+  "anonymous func": {
+    "prefix": "funca",
+    "body": [
+      "${1:fn} := func() {",
+      "\t$0",
+      "}"
+    ],
+    "description": "anonymous func"
+  },
+  "append assignment": {
+    "prefix": "append",
+    "body": [
+      "${1:slice} = append($1, ${0:value})"
+    ],
+    "description": "append assignment"
+  },
+  "case": {
+    "prefix": "case",
+    "body": [
+      "case ${1:value}:",
+      "\t$0"
+    ],
+    "description": "case"
+  },
+  "default": {
+    "prefix": "default",
+    "body": [
+      "default:",
+      "\t$0"
+    ],
+    "description": "default"
+  },
+  "http handler": {
+    "prefix": "funch",
+    "body": [
+      "func ${1:handler}(w http.ResponseWriter, r *http.Request) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "http handler"
+  },
+  "json tag": {
+    "prefix": "json",
+    "body": [
+      "`json:\"${1:key}\"`"
+    ],
+    "description": "json tag"
+  },
+  "yaml tag": {
+    "prefix": "yaml",
+    "body": [
+      "`yaml:\"${1:key}\"`"
+    ],
+    "description": "yaml tag"
+  },
+  "benchmark function b.Loop": {
+    "prefix": "bench",
+    "body": [
+      "func Benchmark$1(b *testing.B) {",
+      "\tfor b.Loop() {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Benchmark function using b.Loop()"
+  },
+  "type struct": {
+    "prefix": "struct",
+    "body": [
+      "type ${1:Name} struct {",
+      "\t$0",
+      "}"
+    ],
+    "description": "type struct"
+  },
+  "type interface": {
+    "prefix": "interface",
+    "body": [
+      "type ${1:Name} interface {",
+      "\t$0",
+      "}"
+    ],
+    "description": "type interface"
+  },
+  "func": {
+    "prefix": "func",
+    "body": [
+      "func ${1:Name}(${2:ctx context.Context}) ${3:error} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "func with context"
+  },
+  "method": {
+    "prefix": "funcm",
+    "body": [
+      "func (${1:s} *${2:Type}) ${3:Method}(${4:ctx context.Context}) ${5:error} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "method"
+  },
+  "CheckAndSetDefaults": {
+    "prefix": "funccad",
+    "body": [
+      "// CheckAndSetDefaults validates the config and sets defaults where possible.",
+      "func (c *${1:Config}) CheckAndSetDefaults() error {",
+      "\t$0",
+      "}"
+    ],
+    "description": "CheckAndSetDefaults method"
+  },
+  "var interface satisfaction": {
+    "prefix": "interfaceeq",
+    "body": [
+      "var _ ${1:Interface} = (*${2:Type})(nil)"
+    ],
+    "description": "interface satisfaction assertion"
   }
 }

@@ -13,12 +13,12 @@ local colors = require('colors').palette()
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
-vim.g.go_doc_keywordprg_enabled = false
-vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 
 vim.scriptencoding = 'utf-8'
 
 vim.opt.exrc = true
+
+vim.o.winborder = 'rounded'
 
 -- Editor behavior
 vim.opt.mouse = 'a'
@@ -81,7 +81,7 @@ vim.opt.fileencoding = 'utf-8'
 vim.opt.wildmenu = true
 vim.opt.wildoptions = 'pum'
 vim.opt.path:append { '**' }
-vim.opt.wildignore:append { '*/node_modules/*', '^.git/' }
+vim.opt.wildignore:append { '*/node_modules/*', '*/.git/*' }
 
 -- Editing
 vim.opt.backspace = { 'start', 'eol', 'indent' }
@@ -135,26 +135,27 @@ require('lazy').setup({
   -- Simple plugins (no config)
   -----------------------------------------------------------------------------
   -- Language support
-  'maralla/gomod.vim',
-  'jose-elias-alvarez/typescript.nvim',
-  'rafamadriz/friendly-snippets',
+  -- TODO: Is this actually needed or does ts_ls + code actions work? Maybe this is only useful for imports organizing?
+  -- 'jose-elias-alvarez/typescript.nvim',
 
   -- Editing
   'tpope/vim-repeat',
   'tpope/vim-unimpaired',
   'tpope/vim-surround',
   'tpope/vim-sleuth',
-  'NMAC427/guess-indent.nvim',
+  -- 'NMAC427/guess-indent.nvim', -- Disabled and let vim-sleuth do it. TODO: Remove if no issues.
   'unblevable/quick-scope',
   'christoomey/vim-tmux-navigator',
 
   -- Telescope extensions
   'nvim-telescope/telescope-fzf-native.nvim',
-  'nvim-telescope/telescope-symbols.nvim',
+  -- 'nvim-telescope/telescope-symbols.nvim', -- Disabled. I think this was only used for an emoji picker (which isn't installed any more). TODO: Disable, or re-enable if any issues.
   'nvim-telescope/telescope-ui-select.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
   'debugloop/telescope-undo.nvim',
-  'duane9/nvim-rg',
+  'benfowler/telescope-luasnip.nvim',
+
+  -- 'duane9/nvim-rg', -- Disable. TODO: See if Telescope live_grep suffices.
 
   -- Treesitter extensions
   'nvim-treesitter/nvim-treesitter-context',
@@ -165,17 +166,6 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   -- Language support
   -----------------------------------------------------------------------------
-  {
-    'fatih/vim-go',
-    config = function()
-      vim.g.go_fmt_command = 'gofumpt'
-      vim.g.go_fmt_autosave = 0
-      vim.g.go_gopls_enabled = 0
-      vim.g.go_code_completion_enabled = 0
-      vim.g.go_def_mapping_enabled = 0
-    end,
-  },
-
   {
     'towolf/vim-helm',
     lazy = false,
@@ -217,33 +207,6 @@ require('lazy').setup({
     opts = {
       disable_filetype = { 'TelescopePrompt', 'vim' },
     },
-  },
-
-  {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup {
-        pre_hook = function(ctx)
-          -- Only calculate commentstring for tsx filetypes
-          if vim.bo.filetype == 'typescriptreact' then
-            local U = require 'Comment.utils'
-
-            -- Determine whether to use linewise or blockwise commentstring
-            local type = ctx.ctype == U.ctype.linewise and '__default' or '__multiline'
-
-            -- Determine the location where to calculate commentstring from
-            local location = nil
-            if ctx.ctype == U.ctype.blockwise then
-              location = require('ts_context_commentstring.utils').get_cursor_location()
-            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-              location = require('ts_context_commentstring.utils').get_visual_start_location()
-            end
-
-            return require('ts_context_commentstring.internal').calculate_commentstring { key = type, location = location }
-          end
-        end,
-      }
-    end,
   },
 
   -----------------------------------------------------------------------------
@@ -327,6 +290,7 @@ require('lazy').setup({
               end
               return require('herdr-context').statusline()
             end,
+            require 'minuet.lualine',
           },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
@@ -499,14 +463,6 @@ require('lazy').setup({
   },
 
   {
-    'dinhhuy258/git.nvim',
-    opts = {
-      blame = '<Leader>gb',
-      browse = '<Leader>go',
-    },
-  },
-
-  {
     'akinsho/git-conflict.nvim',
     opts = {
       -- default_mappings = false,
@@ -528,6 +484,7 @@ require('lazy').setup({
   {
     'lewis6991/gitsigns.nvim',
     opts = {
+      watch_gitdir = { enable = false, follow_files = false },
       signs = {
         add = { text = icons.git.Add },
         change = { text = icons.git.Mod_alt },
@@ -578,6 +535,7 @@ require('lazy').setup({
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
         map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
         map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
+        map('n', '<leader>hB', gitsigns.blame, { desc = 'git [b]lame all' })
         map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
@@ -624,6 +582,7 @@ require('lazy').setup({
       telescope.load_extension 'fzf'
       telescope.load_extension 'ui-select'
       telescope.load_extension 'undo'
+      telescope.load_extension 'luasnip'
 
       telescope.setup {
         defaults = {
@@ -737,30 +696,19 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>u', '<cmd>Telescope undo<CR>', { desc = 'Telescope: Browse undo history' })
 
       vim.keymap.set('n', '<leader>k', '<cmd>Telescope keymaps<CR>', { desc = 'Telescope: Browse keymaps' })
+
+      vim.keymap.set('n', '<leader>s', function()
+        extensions.luasnip.luasnip()
+      end, { desc = 'Telescope: Browse LuaSnip snippets' })
     end,
   },
 
   -----------------------------------------------------------------------------
   -- LSP
   -----------------------------------------------------------------------------
-  -- Breaks octo.nvim
-  -- {
-  --   'ray-x/lsp_signature.nvim',
-  --   opts = {
-  --     bind = false,
-  --     hint_enable = false,
-  --     doc_lines = 0,
-  --     hi_parameter = 'LspSignatureActiveParameter',
-  --     always_trigger = true,
-  --     handler_opts = {
-  --       border = 'rounded',
-  --     },
-  --   },
-  -- },
-
   {
     'mrcjkb/rustaceanvim',
-    version = '^5',
+    version = '^9',
     lazy = false,
     ft = { 'rust' },
     config = function()
@@ -790,49 +738,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-
-  {
-    'nvimdev/lspsaga.nvim',
-    after = 'nvim-lspconfig',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    opts = {
-      devicon = 'true',
-      ui = {
-        winblend = 10,
-        border = 'rounded',
-        code_action = '',
-      },
-      symbol_in_winbar = {
-        enable = false,
-        separator = ' ' .. icons.ui.ArrowClosed .. ' ',
-        respect_root = true,
-      },
-      lightbulb = {
-        enable = true,
-      },
-      diagnostic = {
-        border_follow = true,
-      },
-      rename = {
-        in_select = false,
-      },
-      hover = {
-        open_browser = '!firefox',
-      },
-      finder = {
-        max_height = 0.6,
-      },
-      definition = {
-        width = 0.6,
-        height = 0.5,
-      },
-      outline = {
-        win_width = 50,
-      },
-    },
   },
 
   {
@@ -871,7 +776,6 @@ require('lazy').setup({
           notification = {
             window = {
               winblend = 10,
-              border = 'rounded',
               normal_hl = 'NormalFloat',
               border_hl = 'FloatBorder',
             },
@@ -883,34 +787,6 @@ require('lazy').setup({
       'saghen/blink.cmp',
     },
     config = function()
-      vim.lsp.protocol.CompletionItemKind = {
-        icons.kind.Text,
-        icons.kind.Method,
-        icons.kind.Function,
-        icons.kind.Constructor,
-        icons.kind.Field,
-        icons.kind.Variable,
-        icons.kind.Class,
-        icons.kind.Interface,
-        icons.kind.Module,
-        icons.kind.Property,
-        icons.kind.Unit,
-        icons.kind.Value,
-        icons.kind.Enum,
-        icons.kind.Keyword,
-        icons.kind.Snippet,
-        icons.kind.Color,
-        icons.kind.File,
-        icons.kind.Reference,
-        icons.kind.Folder,
-        icons.kind.EnumMember,
-        icons.kind.Constant,
-        icons.kind.Struct,
-        icons.kind.Event,
-        icons.kind.Operator,
-        icons.kind.TypeParameter,
-      }
-
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       vim.diagnostic.config {
@@ -919,7 +795,7 @@ require('lazy').setup({
           prefix = icons.ui.BigCircle,
         },
         update_in_insert = false,
-        underline = false,
+        underline = true,
         severity_sort = true,
         signs = {
           text = {
@@ -931,14 +807,16 @@ require('lazy').setup({
         },
         float = {
           source = 'if_many',
-          border = 'rounded',
+          scope = 'cursor',
           format = function(d)
             return ('%s (%s) [%s]'):format(d.message, d.source, d.code or d.user_data.lsp.code)
           end,
         },
         jump = {
-          on_jump = function(diagnostic)
-            vim.diagnostic.open_float()
+          on_jump = function(diagnostic, bufnr)
+            if diagnostic then
+              vim.diagnostic.open_float(bufnr, { scope = 'cursor', focus = false })
+            end
           end,
         },
       }
@@ -977,6 +855,7 @@ require('lazy').setup({
         html = {},
         dockerls = {},
         gopls = {
+          cmd = { vim.fn.expand '$HOME/go/bin/gopls' },
           settings = {
             gopls = {
               gofumpt = true,
@@ -1077,15 +956,6 @@ require('lazy').setup({
             },
           },
         },
-        jdtls = {
-          on_attach = function()
-            require('jdtls').start_or_attach {
-              cmd = '~/.local/share/nvim/mason/bin/jdtls',
-              root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
-            }
-          end,
-        },
-        gradle_ls = {},
         helm_ls = {
           settings = {
             ['helm-ls'] = {
@@ -1234,7 +1104,31 @@ require('lazy').setup({
         ['<Up>'] = { 'select_prev', 'fallback' },
         ['<C-j>'] = { 'scroll_documentation_down', 'fallback' },
         ['<C-k>'] = { 'scroll_documentation_up', 'fallback' },
-        ['<Tab>'] = { 'accept', 'fallback' },
+        ['<Tab>'] = {
+          function(cmp)
+            -- Accept completion while the menu is open (keeps auto-complete usable
+            -- when editing a snippet placeholder); otherwise jump to the next snippet
+            -- placeholder, falling back to a normal tab.
+            if cmp.is_menu_visible() then
+              return cmp.accept()
+            end
+            if cmp.snippet_active() then
+              return cmp.snippet_forward()
+            end
+          end,
+          'fallback',
+        },
+        ['<S-Tab>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return cmp.select_prev()
+            end
+            if cmp.snippet_active() then
+              return cmp.snippet_backward()
+            end
+          end,
+          'fallback',
+        },
         ['<C-l>'] = { 'snippet_forward', 'fallback' },
         ['<C-h>'] = { 'snippet_backward', 'fallback' },
       },
@@ -1293,10 +1187,22 @@ require('lazy').setup({
           auto_show_delay_ms = 250,
           window = {
             winblend = 10,
-            border = 'rounded',
             winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder',
             scrollbar = false,
           },
+        },
+      },
+
+      signature = {
+        enabled = true,
+        trigger = {
+          enabled = true,
+          show_on_trigger_character = true,
+          show_on_keyword = false,
+        },
+        window = {
+          winblend = 10,
+          show_documentation = true,
         },
       },
 
@@ -1325,8 +1231,15 @@ require('lazy').setup({
           snippets = {
             score_offset = -5, -- Lower priority for snippets
           },
-          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-          dadbod = { name = 'Dadbod', module = 'vim_dadbod_completion.blink' },
+          lazydev = {
+            module = 'lazydev.integrations.blink',
+            score_offset = 100,
+          },
+          dadbod = {
+            name = 'Dadbod',
+            module = 'vim_dadbod_completion.blink',
+            score_offset = -20,
+          },
         },
         per_filetype = {
           sql = { 'dadbod', 'snippets', 'buffer' },
@@ -1394,14 +1307,11 @@ require('lazy').setup({
               information = { 'underline' },
             },
           },
-          cmp = true,
           dap = true,
           fidget = true,
           gitsigns = true,
-          lsp_saga = true,
           neotest = true,
           notify = true,
-          nvimtree = true,
           telescope = true,
           treesitter_context = true,
           which_key = true,
@@ -1432,7 +1342,6 @@ require('lazy').setup({
       local palette = require('catppuccin.palettes').get_palette()
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = palette.mantle })
       vim.api.nvim_set_hl(0, 'FloatBorder', { bg = palette.mantle, fg = palette.blue })
-      -- Lspsaga specific highlights
       vim.api.nvim_set_hl(0, 'SagaNormal', { bg = palette.mantle })
       vim.api.nvim_set_hl(0, 'SagaBorder', { bg = palette.mantle, fg = palette.blue })
 
@@ -1459,7 +1368,7 @@ require('lazy').setup({
     config = function()
       -- Add nvim-treesitter runtime queries to runtimepath
       local ts_path = vim.fn.stdpath 'data' .. '/lazy/nvim-treesitter'
-      vim.opt.runtimepath:prepend(ts_path .. '/runtime')
+      vim.opt.runtimepath:prepend(ts_path .. '/runtime') -- TODO: is this needed?
 
       require('nvim-treesitter').setup {}
 
@@ -1508,6 +1417,7 @@ require('lazy').setup({
       }
 
       -- Install missing parsers after startup
+      -- TODO: Is this really necessary? Doesn't it just duplicate ensure_installed?
       vim.api.nvim_create_autocmd('VimEnter', {
         callback = function()
           local parser_dir = vim.fn.stdpath 'data' .. '/site/parser/'
@@ -1709,6 +1619,55 @@ require('lazy').setup({
   -----------------------------------------------------------------------------
   -- AI
   -----------------------------------------------------------------------------
+  {
+    'milanglacier/minuet-ai.nvim',
+    config = function()
+      require('minuet').setup {
+        provider = 'openai_fim_compatible',
+        n_completions = 1,
+        context_window = 768,
+        context_ratio = 0.75,
+        throttle = 800,
+        debounce = 300,
+        request_timeout = 4,
+        before_cursor_filter_length = 8, -- trim up to 3 chars of repeated prefix
+        provider_options = {
+          openai_fim_compatible = {
+            api_key = 'TERM',
+            name = 'Ollama',
+            end_point = 'http://localhost:11434/v1/completions',
+            model = 'qwen2.5-coder:14b',
+            stream = true,
+            optional = {
+              max_tokens = 64,
+              top_p = 0.9,
+              stop = { '\n\n' },
+            },
+          },
+        },
+        virtualtext = {
+          show_on_completion_menu = true,
+          auto_trigger_ft = {},
+          keymap = {
+            -- accept whole completion
+            accept = '<C-F>',
+            -- accept one line
+            accept_line = '<C-f>',
+            -- accept n lines (prompts for number)
+            -- e.g. "A-z 2 CR" will accept 2 lines
+            accept_n_lines = '<A-z>',
+            -- Cycle to prev completion item, or manually invoke completion
+            prev = '<C-,>',
+            -- Cycle to next completion item, or manually invoke completion
+            next = '<C-.>',
+            dismiss = '<A-e>',
+          },
+        },
+        blink = { enable_auto_complete = false },
+        cmp = { enable_auto_complete = false },
+      }
+    end,
+  },
   {
     'makyinmars/herdr-context.nvim',
     cond = vim.env.HERDR_ENV == '1',
@@ -1915,21 +1874,34 @@ vim.keymap.set('', '<leader>x', '<Cmd>!chmod +x %<CR>', { desc = 'Make current f
 
 -- Completion menu options
 vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'preview' }
-vim.api.nvim_set_hl(0, 'CmpItemKind', { link = 'CmpItemMenuDefault', default = true })
 
--- LSP (Lspsaga)
-vim.keymap.set('n', ']w', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Jump to next diagnostic' })
-vim.keymap.set('n', '[w', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Jump to previous diagnostic' })
-vim.keymap.set('n', 'gl', '<Cmd>Lspsaga show_line_diagnostics<CR>', { desc = 'Show line diagnostics' })
-vim.keymap.set('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', { desc = 'Show signature help' })
-vim.keymap.set('n', 'gk', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Show hover documentation' })
-vim.keymap.set('n', 'gh', '<Cmd>Lspsaga finder<CR>', { desc = 'Show definition and references' })
-vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', { desc = 'Peek definition' })
-vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename symbol' })
-vim.keymap.set('n', 'gd', '<Cmd>Lspsaga goto_definition<CR>', { desc = 'Go to definition' })
-vim.keymap.set('n', 'go', '<Cmd>Lspsaga outline<CR>', { desc = 'Show outline' })
-vim.keymap.set({ 'n', 'v' }, 'ga', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code action' })
-vim.keymap.set('n', 'gt', '<Cmd>Lspsaga term_toggle<CR>', { desc = 'Toggle floating terminal' })
+-- LSP
+vim.keymap.set('n', ']w', function()
+  vim.diagnostic.jump { count = 1 }
+end, { desc = 'Jump to next diagnostic' })
+vim.keymap.set('n', '[w', function()
+  vim.diagnostic.jump { count = -1 }
+end, { desc = 'Jump to previous diagnostic' })
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Show line diagnostics' })
+vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, { desc = 'Show signature help' })
+vim.keymap.set('n', 'gk', vim.lsp.buf.hover, { desc = 'Show hover documentation' })
+vim.keymap.set('n', 'gh', function()
+  require('telescope.builtin').lsp_references()
+end, { desc = 'Show definition and references' })
+vim.keymap.set('n', 'gr', vim.lsp.buf.rename, { desc = 'Rename symbol' })
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+vim.keymap.set('n', 'gp', function()
+  vim.cmd 'vsplit'
+  vim.lsp.buf.definition()
+end, { desc = 'Peek definition' })
+vim.keymap.set('n', 'go', function()
+  require('telescope.builtin').lsp_document_symbols()
+end, { desc = 'Show outline document symbols' })
+vim.keymap.set({ 'n', 'v' }, 'ga', vim.lsp.buf.code_action, { desc = 'Code action' })
+vim.keymap.set('n', 'gI', function()
+  require('telescope.builtin').lsp_implementations()
+end, { desc = 'Implementations' })
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Declaration' })
 
 -- Autocommands
 local augroup = vim.api.nvim_create_augroup
@@ -1937,7 +1909,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 -- Editing behavior
 autocmd({ 'BufWritePost', 'BufEnter' }, {
-  group = augroup('DisableFolding', { clear = true }),
+  -- group = augroup('DisableFolding', { clear = true }), -- TODO: Is this needed, given foldenable = false below?
   pattern = '*',
   callback = function()
     vim.opt_local.foldenable = false
@@ -2020,23 +1992,5 @@ vim.api.nvim_create_user_command('LspRestart', function()
   vim.cmd 'edit'
 end, {})
 
--- Hack around memory leak in lspsaga.
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(args)
-    vim.defer_fn(function()
-      local seen = {}
-      for _, au in ipairs(vim.api.nvim_get_autocmds { event = 'User' }) do
-        local p = type(au.pattern) == 'table' and table.concat(au.pattern, ',') or au.pattern
-        if p == 'SagaSymbolUpdate' and au.group == 0 then
-          if seen[au.desc] then
-            pcall(vim.api.nvim_del_autocmd, au.id)
-          else
-            seen[au.desc] = true
-          end
-        end
-      end
-    end, 100)
-  end,
-})
-
-vim.lsp.config('gopls', { cmd = { vim.fn.expand '$HOME/go/bin/gopls' } })
+-- TODO: Review if merge to servers.gopls has introduced any issues.
+-- vim.lsp.config('gopls', { cmd = { vim.fn.expand '$HOME/go/bin/gopls' } })
