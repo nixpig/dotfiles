@@ -1,0 +1,41 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "model": "anthropic/opus-5",
+  "providers": {
+    "anthropic": {
+      "settings": {
+        "baseURL": "{env:ANTHROPIC_BASE_URL}"
+      },
+      "models": {
+        "opus-5": {
+          "modelID": "claude-opus-5",
+          "name": "Claude Opus 5"
+        },
+        "sonnet-5": {
+          "modelID": "claude-sonnet-5",
+          "name": "Claude Sonnet 5"
+        }
+      }
+    },
+    "openai": {
+      "settings": {
+        "baseURL": "{env:OPENAI_BASE_URL}"
+      },
+      "models": {
+        "sol": {
+          "modelID": "gpt-6.1-sol",
+          "name": "GPT-6.1 Sol"
+        },
+        "terra": {
+          "modelID": "gpt-6.1-terra",
+          "name": "GPT-6.1 Terra"
+        },
+        "luna": {
+          "modelID": "gpt-6.1-luna",
+          "name": "GPT-6.1 Luna"
+        }
+      },
+    }
+  }
+}

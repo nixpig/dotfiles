@@ -1,0 +1,88 @@
+name: feature
+description: A basic multi-stage pipeline for AI-assisted, developer-driven development of a small feature.
+agent: opencode
+setup: default
+budget: 15.00
+base:
+  # repo: ~/src/app
+  ref: main
+steps:
+  - id: brief
+    description: Engineer and Agent discuss requirements and create a brief.
+    mode: interactive
+    model: anthropic/claude-sonnet-5
+    tools: [read, search]
+    prompt: prompts/brief.md
+    outputs: [brief.md]
+    checks:
+      - nonempty
+      - headings:
+          [Problem, Outcome, Requirements, Scope, Constraints, Open questions]
+        file: brief.md
+
+  - id: research
+    description: Agent researches how to implement the brief.
+    mode: headless
+    model: anthropic/claude-opus-5
+    tools: [read, search, web, task]
+    prompt: prompts/research.md
+    inputs: [brief.md]
+    outputs: [research.md]
+    checks:
+      - nonempty
+      - headings:
+          [
+            Summary,
+            Files involved,
+            What this affects,
+            Constraints from the code,
+            Outside behaviour relied on,
+            Prior art,
+            Risks,
+          ]
+        file: research.md
+
+  - id: plan
+    description: Engineer directs Agent to turn the brief and research into a plan.
+    mode: interactive
+    model: anthropic/claude-opus-5
+    tools: [read, search, web]
+    prompt: prompts/plan.md
+    inputs: [brief.md, research.md]
+    outputs: [plan.md]
+    checks:
+      - nonempty
+      - headings: [Details, Steps, Tests]
+        file: plan.md
+    judge:
+      model: anthropic/claude-sonnet-5
+      rubric: rubrics/plan.md
+    retries: 2
+    timeout: 30m
+
+  - id: execute
+    description: Engineer executes the plan with Agent support.
+    mode: interactive
+    model: anthropic/claude-opus-5
+    prompt: prompts/execution.md
+    tools: [read, search]
+    inputs: [brief.md, plan.md]
+    outputs: [changes.md]
+    checks: [nonempty]
+
+  - id: verify
+    description: Agent verifies the changes against the brief, requirements, and plan.
+    mode: headless
+    model: anthropic/claude-sonnet-5
+    tools: [read, search, web, bash, task]
+    prompt: prompts/verify.md
+    inputs: [brief.md, plan.md, changes.md]
+    outputs: [verify.json]
+    checks:
+      - json_required: [pass, reasons]
+        file: verify.json
+      - verdict: verify.json
+    timeout: 45m
+    on_fail:
+      goto: execute
+      max: 3

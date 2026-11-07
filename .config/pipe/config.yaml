@@ -1,0 +1,64 @@
+# pipe configuration (~/.config/pipe/config.yaml).
+# Every setting is optional; the values shown are the defaults.
+
+# Where pipeline specs and setup profiles live (relative paths are relative
+# to this file).
+# specs_dir: specs
+# setups_dir: setups
+# Where run worktrees are created.
+# worktrees_dir: ~/.local/share/pipe/worktrees
+
+# Runs that may be active at once (waiting for you still holds a slot).
+concurrency: 16
+
+# Model providers specs may use (Beams inject credentials for these).
+# providers: [openai, anthropic]
+
+# How often interactive agent sessions are checkpointed locally.
+# checkpoint_interval: 2m
+
+# Keep the machine from idle-sleeping while runs are running or queued
+# (caffeinate on macOS, systemd-inhibit on Linux).
+# keep_awake: false
+
+# notifications:
+#   enabled: true        # desktop notifications when a run needs you
+
+# beams:
+#   destroy_delay: 30m   # keep a finished step's beam this long
+#   ttl: 24h             # Beams' fixed lifetime
+#   ttl_notice: 20m      # warn this long before an interactive beam expires
+#   ttl_auto_rotate: 5m  # move an interactive step to a new beam at this point
+#   refresh: 15s         # how often `tsh beams ls` is polled
+#   poll_interval: 5s    # how often a running step is checked
+#   home: /home/beams    # home directory on a beam
+#   # How Mutagen reaches a beam: "tsh" passes its ssh and scp through
+#   # `tsh beams exec` (plain ssh can't reach beams); "system" uses your ssh.
+#   ssh: tsh
+#   ssh_target: "{{.Name}}"                       # the host Mutagen connects to
+#   sync_url: "{{.SSHTarget}}:{{.Home}}/work"     # Mutagen's beam endpoint
+#   shell: ["{{.Tsh}}", "beams", "ssh", "{{.Name}}"]
+#   # attach: unset uses `pipe beam attach` (via tsh beams ssh); set an argv
+#   # here to attach some other way.
+
+# budget:
+#   warn_at: 0.8         # warn at 80% of a run's budget
+
+# sync:
+#   ignore: [".DS_Store", "._*", ".pipe/"]   # never synced (in addition to .git)
+#   mode: two-way-safe                        # conflicts are reported, never resolved
+
+# retries:
+#   infra: 3             # retries after infrastructure failures (lost beam, setup)
+
+tools:
+  herdr: /tmp/herdr-wrapper.sh
+
+# herdr:
+#   enabled: true        # a Herdr workspace and console per run
+#   session: ""          # a named Herdr session (empty: the default)
+
+# Remap board keys by action name; alternatives are comma-separated.
+# keymap:
+#   cancel: "dd"
+#   next_you: "]n,tab"
