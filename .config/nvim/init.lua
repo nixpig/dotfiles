@@ -1089,17 +1089,25 @@ require('lazy').setup({
           local function go_return_values()
             local bufnr = vim.api.nvim_get_current_buf()
             local ok, parser = pcall(vim.treesitter.get_parser, bufnr, 'go')
-            if not ok or not parser then return nil end
+            if not ok or not parser then
+              return nil
+            end
             local tree = parser:parse()[1]
-            if not tree then return nil end
+            if not tree then
+              return nil
+            end
             local cursor = vim.api.nvim_win_get_cursor(0)
             local node = vim.treesitter.get_node { bufnr = bufnr, pos = { cursor[1] - 1, cursor[2] } }
             while node and node:type() ~= 'function_declaration' and node:type() ~= 'method_declaration' do
               node = node:parent()
             end
-            if not node then return nil end
+            if not node then
+              return nil
+            end
             local result = node:field('result')[1]
-            if not result then return nil end
+            if not result then
+              return nil
+            end
             local types = {}
             if result:type() == 'parameter_list' then
               for i = 0, result:named_child_count() - 1 do
@@ -1115,8 +1123,12 @@ require('lazy').setup({
             else
               table.insert(types, vim.treesitter.get_node_text(result, bufnr))
             end
-            if #types == 0 then return nil end
-            if types[#types] ~= 'error' then return nil end
+            if #types == 0 then
+              return nil
+            end
+            if types[#types] ~= 'error' then
+              return nil
+            end
             local vals = {}
             for idx, t in ipairs(types) do
               t = vim.trim(t)
@@ -1124,7 +1136,7 @@ require('lazy').setup({
                 table.insert(vals, 'trace.Wrap(err)')
               elseif t == 'string' then
                 table.insert(vals, '""')
-              elseif t:match('^int') or t:match('^uint') or t:match('^float') or t == 'byte' or t == 'rune' or t == 'complex64' or t == 'complex128' then
+              elseif t:match '^int' or t:match '^uint' or t:match '^float' or t == 'byte' or t == 'rune' or t == 'complex64' or t == 'complex128' then
                 table.insert(vals, '0')
               elseif t == 'bool' then
                 table.insert(vals, 'false')
@@ -1151,6 +1163,91 @@ require('lazy').setup({
             s('rnerr', {
               f(rnerr_body, {}),
             }),
+          })
+
+          local function go_return_types()
+            local bufnr = vim.api.nvim_get_current_buf()
+            local ok, parser = pcall(vim.treesitter.get_parser, bufnr, 'go')
+            if not ok or not parser then
+              return nil
+            end
+            local tree = parser:parse()[1]
+            if not tree then
+              return nil
+            end
+            local cursor = vim.api.nvim_win_get_cursor(0)
+            local node = vim.treesitter.get_node { bufnr = bufnr, pos = { cursor[1] - 1, cursor[2] } }
+            while node and node:type() ~= 'function_declaration' and node:type() ~= 'method_declaration' do
+              node = node:parent()
+            end
+            if not node then
+              return nil
+            end
+            local result = node:field('result')[1]
+            if not result then
+              return nil
+            end
+            local types = {}
+            if result:type() == 'parameter_list' then
+              for i = 0, result:named_child_count() - 1 do
+                local p = result:named_child(i)
+                local tn = p:field('type')[1]
+                if not tn and p:named_child_count() > 0 then
+                  tn = p:named_child(p:named_child_count() - 1)
+                end
+                if tn then
+                  table.insert(types, vim.treesitter.get_node_text(tn, bufnr))
+                end
+              end
+            else
+              table.insert(types, vim.treesitter.get_node_text(result, bufnr))
+            end
+            if #types == 0 then
+              return nil
+            end
+            return types
+          end
+
+          local function zero_value(t)
+            t = vim.trim(t)
+            if t == 'string' then
+              return '""'
+            end
+            if t:match '^int' or t:match '^uint' or t:match '^float' or t == 'byte' or t == 'rune' or t == 'complex64' or t == 'complex128' then
+              return '0'
+            end
+            if t == 'bool' then
+              return 'false'
+            end
+            return 'nil'
+          end
+
+          local t = ls.text_node
+          local d = ls.dynamic_node
+          local i = ls.insert_node
+          local sn = ls.snippet_node
+          ls.add_snippets('go', {
+            s(
+              'rval',
+              d(1, function()
+                local types = go_return_types()
+                if not types then
+                  return sn(nil, { t 'return nil' })
+                end
+                local nodes = { t 'return ' }
+                for idx, typ in ipairs(types) do
+                  if idx > 1 then
+                    table.insert(nodes, t ', ')
+                  end
+                  if idx == #types and typ == 'error' then
+                    table.insert(nodes, t 'nil')
+                  else
+                    table.insert(nodes, i(idx, zero_value(typ)))
+                  end
+                end
+                return sn(nil, nodes)
+              end, {})
+            ),
           })
         end,
         build = (function()
