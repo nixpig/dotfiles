@@ -795,7 +795,7 @@ require('lazy').setup({
           prefix = icons.ui.BigCircle,
         },
         update_in_insert = false,
-        underline = true,
+        underline = false,
         severity_sort = true,
         signs = {
           text = {
@@ -1994,3 +1994,4 @@ end, {})
 
 -- TODO: Review if merge to servers.gopls has introduced any issues.
 -- vim.lsp.config('gopls', { cmd = { vim.fn.expand '$HOME/go/bin/gopls' } })
+--
