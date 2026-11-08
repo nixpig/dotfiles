@@ -1165,19 +1165,19 @@ require('lazy').setup({
           local sn = ls.snippet_node
 
           ls.add_snippets('go', {
-            -- irerr: if err != nil { return <zeros>, trace.Wrap(err) }
-            s('irerr', {
+            -- rnerr: if err != nil { return <zeros>, trace.Wrap(err) }
+            s({ trig = 'irerr', desc = 'Snippet for if err != nil { return ..., trace.Wrap(err) }' }, {
               f(function()
                 local rv = go_return_values()
                 if not rv then
-                  vim.notify('irerr: enclosing function has no error return', vim.log.levels.WARN)
+                  vim.notify('rnerr: enclosing function has no error return', vim.log.levels.WARN)
                   return ''
                 end
                 return { 'if err != nil {', '\treturn ' .. rv, '}' }
               end, {}),
             }),
             -- rerr: return <zeros>, trace.Wrap(err)
-            s('rerr', {
+            s({ trig = 'rerr', desc = 'Snippet for return ..., trace.Wrap(err)' }, {
               f(function()
                 local rv = go_return_values()
                 if not rv then
@@ -1187,11 +1187,11 @@ require('lazy').setup({
                 return 'return ' .. rv
               end, {}),
             }),
-            -- irval: if err == nil { return <tabbable zeros> }
-            s('irval', d(1, function()
+            -- rnval: if err == nil { return <tabbable zeros> }
+            s({ trig = 'irval', desc = 'Snippet for if err == nil { return ... }' }, d(1, function()
               local types = go_return_types()
               if not types or #types == 0 or types[#types] ~= 'error' then
-                vim.notify('irval: enclosing function has no error return', vim.log.levels.WARN)
+                vim.notify('rnval: enclosing function has no error return', vim.log.levels.WARN)
                 return sn(nil, { t('') })
               end
               local nodes = { t('if err == nil {'), t({'', '\treturn '}) }
@@ -1205,7 +1205,7 @@ require('lazy').setup({
               return sn(nil, nodes)
             end, {})),
             -- rval: return <tabbable zeros>
-            s('rval', d(1, function()
+            s({ trig = 'rval', desc = 'Snippet for return ...' }, d(1, function()
               local types = go_return_types()
               if not types or #types == 0 then
                 return sn(nil, { t('return') })
