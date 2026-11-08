@@ -855,10 +855,11 @@ require('lazy').setup({
         html = {},
         dockerls = {},
         gopls = {
-          cmd = { vim.fn.expand '$HOME/go/bin/gopls' },
           settings = {
             gopls = {
               gofumpt = true,
+              ['ui.completion.usePlaceholders'] = true,
+              ['ui.completion.completeFunctionCalls'] = true,
             },
           },
         },
@@ -1227,6 +1228,20 @@ require('lazy').setup({
         providers = {
           lsp = {
             score_offset = 10, -- Boost LSP above snippets
+            transform_items = function(ctx, items)
+              for _, item in ipairs(items) do
+                for _, field in ipairs { 'insertText', 'textEdit.newText' } do
+                  -- navigate nested textEdit.newText
+                end
+                if item.insertText then
+                  item.insertText = item.insertText:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
+                end
+                if item.textEdit and item.textEdit.newText then
+                  item.textEdit.newText = item.textEdit.newText:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
+                end
+              end
+              return items
+            end,
           },
           snippets = {
             score_offset = -5, -- Lower priority for snippets
@@ -1902,6 +1917,17 @@ vim.keymap.set('n', 'gI', function()
   require('telescope.builtin').lsp_implementations()
 end, { desc = 'Implementations' })
 vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Declaration' })
+
+-- Auto-fill struct.
+vim.keymap.set('n', '<leader>cf', function()
+  vim.lsp.buf.code_action {
+    context = { only = { 'refactor.rewrite.fillStruct' } },
+    filter = function(action)
+      return action.title:match 'Fill' ~= nil
+    end,
+    apply = true,
+  }
+end, { desc = 'Fill struct' })
 
 -- Autocommands
 local augroup = vim.api.nvim_create_augroup

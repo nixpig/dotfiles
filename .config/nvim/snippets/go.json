@@ -852,8 +852,22 @@
       "rve",
       "rverr"
     ],
-    "body": "if err != nil {\n\treturn ${1:val}, trace.Wrap(err)\n}",
+    "body": "if err != nil {\n\treturn $1, trace.Wrap(err)\n}",
     "description": "Snippet for return val, trace.Wrap(err)"
+  },
+  "return nil": {
+    "prefix": [
+      "rnil"
+    ],
+    "body": "return nil",
+    "description": "Snippet for return nil"
+  },
+  "return val, nil": {
+    "prefix": [
+      "rvnil"
+    ],
+    "body": "return $1, nil",
+    "description": "Snippet for return nil"
   },
   "benchmark function": {
     "prefix": [
