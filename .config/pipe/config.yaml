@@ -52,7 +52,7 @@ concurrency: 16
 #   infra: 3             # retries after infrastructure failures (lost beam, setup)
 
 tools:
-  herdr: /tmp/herdr-wrapper.sh
+  herdr: herdr
 
 # herdr:
 #   enabled: true        # a Herdr workspace and console per run
