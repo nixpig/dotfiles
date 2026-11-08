@@ -1085,6 +1085,73 @@ require('lazy').setup({
           require('luasnip.loaders.from_vscode').lazy_load { paths = { vim.fn.stdpath 'config' .. '/snippets' } }
 
           luasnip.filetype_extend('helm', { 'yaml' })
+
+          local function go_return_values()
+            local bufnr = vim.api.nvim_get_current_buf()
+            local ok, parser = pcall(vim.treesitter.get_parser, bufnr, 'go')
+            if not ok or not parser then return nil end
+            local tree = parser:parse()[1]
+            if not tree then return nil end
+            local cursor = vim.api.nvim_win_get_cursor(0)
+            local node = vim.treesitter.get_node { bufnr = bufnr, pos = { cursor[1] - 1, cursor[2] } }
+            while node and node:type() ~= 'function_declaration' and node:type() ~= 'method_declaration' do
+              node = node:parent()
+            end
+            if not node then return nil end
+            local result = node:field('result')[1]
+            if not result then return nil end
+            local types = {}
+            if result:type() == 'parameter_list' then
+              for i = 0, result:named_child_count() - 1 do
+                local p = result:named_child(i)
+                local tn = p:field('type')[1]
+                if not tn and p:named_child_count() > 0 then
+                  tn = p:named_child(p:named_child_count() - 1)
+                end
+                if tn then
+                  table.insert(types, vim.treesitter.get_node_text(tn, bufnr))
+                end
+              end
+            else
+              table.insert(types, vim.treesitter.get_node_text(result, bufnr))
+            end
+            if #types == 0 then return nil end
+            if types[#types] ~= 'error' then return nil end
+            local vals = {}
+            for idx, t in ipairs(types) do
+              t = vim.trim(t)
+              if idx == #types and t == 'error' then
+                table.insert(vals, 'trace.Wrap(err)')
+              elseif t == 'string' then
+                table.insert(vals, '""')
+              elseif t:match('^int') or t:match('^uint') or t:match('^float') or t == 'byte' or t == 'rune' or t == 'complex64' or t == 'complex128' then
+                table.insert(vals, '0')
+              elseif t == 'bool' then
+                table.insert(vals, 'false')
+              else
+                table.insert(vals, 'nil')
+              end
+            end
+            return table.concat(vals, ', ')
+          end
+
+          local function rnerr_body()
+            local rv = go_return_values()
+            if not rv then
+              vim.notify('rnerr: enclosing function has no error return', vim.log.levels.WARN)
+              return ''
+            end
+            return { 'if err != nil {', '\treturn ' .. rv, '}' }
+          end
+
+          local ls = require 'luasnip'
+          local s = ls.snippet
+          local f = ls.function_node
+          ls.add_snippets('go', {
+            s('rnerr', {
+              f(rnerr_body, {}),
+            }),
+          })
         end,
         build = (function()
           if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
@@ -1230,9 +1297,6 @@ require('lazy').setup({
             score_offset = 10, -- Boost LSP above snippets
             transform_items = function(ctx, items)
               for _, item in ipairs(items) do
-                for _, field in ipairs { 'insertText', 'textEdit.newText' } do
-                  -- navigate nested textEdit.newText
-                end
                 if item.insertText then
                   item.insertText = item.insertText:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
                 end

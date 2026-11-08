@@ -831,30 +831,6 @@
     "body": "if err := ${1:...}; err != nil {\n\t$0\n}",
     "description": "Snippet for if err := ...; err != nil"
   },
-  "return trace.Wrap(err)": {
-    "prefix": [
-      "re",
-      "rerr"
-    ],
-    "body": "if err != nil {\n\treturn trace.Wrap(err)\n}",
-    "description": "Snippet for return trace.Wrap(err)"
-  },
-  "return nil, trace.Wrap(err)": {
-    "prefix": [
-      "rne",
-      "rnerr"
-    ],
-    "body": "if err != nil {\n\treturn nil, trace.Wrap(err)\n}",
-    "description": "Snippet for return nil, trace.Wrap(err)"
-  },
-  "return val, trace.Wrap(err)": {
-    "prefix": [
-      "rve",
-      "rverr"
-    ],
-    "body": "if err != nil {\n\treturn $1, trace.Wrap(err)\n}",
-    "description": "Snippet for return val, trace.Wrap(err)"
-  },
   "return nil": {
     "prefix": [
       "rnil"
