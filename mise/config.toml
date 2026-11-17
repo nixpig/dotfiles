@@ -46,7 +46,9 @@ protoc-gen-go = "latest"
 protoc-gen-go-grpc = "latest"
 grpcurl = "latest"
 goreleaser = "latest"
-"go:golang.org/x/perf/cmd/benchstat" = "latest"
+# x/perf has no releases, so every commit is a new version. mise skips versions
+# under 24h old by default, which leaves none for a day after each commit.
+"go:golang.org/x/perf/cmd/benchstat" = { version = "latest", minimum_release_age = "0" }
 
 # Benchmarking and certificates
 hyperfine = "latest"
