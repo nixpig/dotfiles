@@ -1,0 +1,416 @@
+#!/usr/bin/env bash
+#
+# yadm bootstrap: set up macOS or Debian/Ubuntu/Raspberry Pi OS from these dotfiles.
+#
+#   yadm bootstrap                              run every step
+#   ~/.config/yadm/bootstrap --list             list the steps for this OS
+#   ~/.config/yadm/bootstrap --only a,b         run just those steps
+#   (yadm doesn't pass arguments through; BOOTSTRAP_ONLY=a,b yadm bootstrap also works)
+#
+# Every step skips itself if its work is already done, so re-running after a
+# failure only retries what's missing. Prerequisites stop the run if they fail;
+# every other step carries on, and the results are summarised at the end.
+#
+# What gets installed:
+#   ~/.config/yadm/Brewfile        macOS packages, apps and fonts
+#   ~/.config/yadm/packages.apt    Debian/Ubuntu packages
+#   ~/.config/mise/config.toml     dev tools and language runtimes (both)
+#   the step_* functions below     everything with its own installer
+#
+# Written for bash 3.2 so it runs on a fresh Mac's /bin/bash.
+
+set -uo pipefail
+cd "$HOME"
+
+YADM_DIR="$HOME/.config/yadm"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/bootstrap"
+mkdir -p "$STATE_DIR"
+LOG="$STATE_DIR/$(date +%Y%m%d-%H%M%S).log"
+MANUAL_FILE="$(mktemp)"
+trap 'rm -f "$MANUAL_FILE"' EXIT
+
+HERDR_PLUGINS="aimdevlee/herdr-nvim-nav makyinmars/herdr-context.nvim jeffarese/herdr-bar"
+HERDR_PLUGINS_MACOS="assawalhy/herdr-stay-awake"
+OPERATOR_MONO_REPO="nixpig/operator-mono-powerline-ligatures"
+
+case "$(uname -s)" in
+  Darwin) OS=macos ;;
+  Linux)  OS=linux ;;
+  *) echo "Unsupported OS: $(uname -s)" >&2; exit 1 ;;
+esac
+
+# ---------------------------------------------------------------- helpers ---
+
+# Steps run in subshells, so `exit` leaves just the current step.
+log()          { printf '    %s\n' "$*"; }
+skip()         { log "already done: $*"; exit 99; }
+manual()       { printf '%s\n' "$*" >> "$MANUAL_FILE"; }
+needs_manual() { manual "$*"; exit 98; }
+have()         { command -v "$1" >/dev/null 2>&1; }
+
+# Put tools installed earlier in this run on PATH for the steps after it.
+refresh_path() {
+  local b d
+  for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [ -x "$b" ]; then eval "$("$b" shellenv)"; break; fi
+  done
+  for d in "$HOME/.local/share/mise/shims" "$HOME/.atuin/bin" "$HOME/.hunk/bin" \
+           "$HOME/.cargo/bin" "$HOME/.local/bin"; do
+    if [ -d "$d" ]; then
+      case ":$PATH:" in *":$d:"*) ;; *) PATH="$d:$PATH" ;; esac
+    fi
+  done
+  export PATH
+}
+
+# Run an installer, then undo any edits it made to tracked shell rc files.
+# The dotfiles already set up PATH etc., and installers like to append to these.
+RC_FILES=".bashrc .bash_profile .profile"
+guard_rc() {
+  local clean="" f rc=0
+  for f in $RC_FILES; do
+    yadm diff --quiet -- "$f" >/dev/null 2>&1 && clean="$clean $f"
+  done
+  "$@" || rc=$?
+  for f in $clean; do
+    if ! yadm diff --quiet -- "$f" >/dev/null 2>&1; then
+      yadm checkout -- "$f" && log "reverted the installer's edits to ~/$f (the dotfiles already cover it)"
+    fi
+  done
+  return $rc
+}
+
+# install_script <sh|bash> <url> [args...]: download an install script, then run it.
+# Downloading first means a failed download fails the step instead of running half a script.
+install_script() {
+  local shell=$1 url=$2 tmp rc=0
+  shift 2
+  tmp=$(mktemp)
+  curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"
+  guard_rc "$shell" "$tmp" "$@" || rc=$?
+  rm -f "$tmp"
+  return $rc
+}
+
+gh_ready() { have gh && gh auth status >/dev/null 2>&1; }
+
+os_release() { . /etc/os-release; }
+is_ubuntu()  { os_release; case " $ID ${ID_LIKE:-} " in *" ubuntu "*) return 0 ;; esac; return 1; }
+
+# ------------------------------------------------------------ both platforms ---
+
+step_network() {
+  curl -fsS --max-time 15 -o /dev/null https://github.com
+}
+
+step_sudo() {
+  sudo -v
+  # Keep the sudo timestamp fresh until this script exits ($$ is the main script's PID).
+  ( while kill -0 $$ 2>/dev/null; do sudo -n true; sleep 50; done ) >/dev/null 2>&1 &
+}
+
+step_mise_tools() {
+  mise install
+}
+
+step_rust() {
+  { have rustup || [ -x "$HOME/.cargo/bin/rustup" ]; } && skip "rustup"
+  install_script sh https://sh.rustup.rs -y --no-modify-path
+}
+
+step_atuin() {
+  { have atuin || [ -x "$HOME/.atuin/bin/atuin" ]; } && skip "atuin"
+  install_script sh https://setup.atuin.sh
+}
+
+step_hunk() {
+  { have hunk || [ -x "$HOME/.hunk/bin/hunk" ]; } && skip "hunk"
+  install_script sh https://hunk.dev/install.sh
+}
+
+step_claude() {
+  { have claude || [ -x "$HOME/.local/bin/claude" ]; } && skip "Claude Code"
+  install_script bash https://claude.ai/install.sh
+}
+
+step_herdr() {
+  have herdr && skip "herdr"
+  install_script sh https://herdr.dev/install.sh
+}
+
+step_herdr_plugins() {
+  local list="$HERDR_PLUGINS" installed todo="" p
+  [ "$OS" = macos ] && list="$list $HERDR_PLUGINS_MACOS"
+  installed=$(herdr plugin list 2>/dev/null || true)
+  for p in $list; do
+    case "$installed" in *"github:$p@"*) ;; *) todo="$todo $p" ;; esac
+  done
+  [ -n "$todo" ] || skip "herdr plugins"
+  for p in $todo; do herdr plugin install "$p"; done
+}
+
+step_blesh() {
+  [ -f "$HOME/.local/share/blesh/ble.sh" ] && skip "ble.sh"
+  local tmp
+  tmp=$(mktemp -d)
+  git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git "$tmp/ble.sh"
+  make -C "$tmp/ble.sh" install PREFIX="$HOME/.local"
+  rm -rf "$tmp"
+}
+
+step_tpm() {
+  [ -d "$HOME/.tmux/plugins/tpm" ] && skip "tpm"
+  git clone --depth 1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+}
+
+step_ranger_devicons() {
+  [ -d "$HOME/.config/ranger/plugins/ranger_devicons" ] && skip "ranger_devicons"
+  git clone --depth 1 https://github.com/alexanderjeurissen/ranger_devicons "$HOME/.config/ranger/plugins/ranger_devicons"
+}
+
+step_bat_cache() {
+  # Compiles the tracked Catppuccin theme into bat's cache (Debian/Ubuntu call the binary batcat).
+  local bat
+  bat=$(command -v bat || command -v batcat) || { log "bat is not installed"; return 1; }
+  "$bat" cache --build
+}
+
+step_gh_dash() {
+  local exts
+  have gh || { log "gh is not installed (it comes from mise-tools)"; return 1; }
+  gh_ready || needs_manual "Run 'gh auth login', then '~/.config/yadm/bootstrap --only gh-dash'."
+  exts=$(gh extension list 2>/dev/null || true)
+  case "$exts" in *dlvhdr/gh-dash*) skip "gh-dash" ;; esac
+  gh extension install dlvhdr/gh-dash
+}
+
+# ------------------------------------------------------------------ macOS ---
+
+step_xcode_clt() {
+  xcode-select -p >/dev/null 2>&1 && skip "Xcode Command Line Tools"
+  xcode-select --install || true
+  log "Finish the Command Line Tools installer that just opened; waiting for it..."
+  local waited=0
+  until xcode-select -p >/dev/null 2>&1; do
+    sleep 15
+    waited=$((waited + 15))
+    [ "$waited" -lt 3600 ] || { log "gave up waiting after an hour"; return 1; }
+  done
+}
+
+step_homebrew() {
+  have brew && skip "Homebrew"
+  NONINTERACTIVE=1 install_script bash https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+}
+
+step_mise_macos() {
+  have mise && skip "mise"
+  brew install mise
+}
+
+step_brew_bundle() {
+  brew bundle check --file "$YADM_DIR/Brewfile" >/dev/null 2>&1 && skip "everything in the Brewfile"
+  manual "Open Docker Desktop, InstantSpaceSwitcher, UnnaturalScrollWheels and Logi Tune once and grant any permissions they ask for."
+  # Carries on past individual failures and reports them; a non-zero exit marks this step failed.
+  # If Amphetamine fails: sign into the App Store (and 'Get' it once if this Apple ID never has).
+  brew bundle --file "$YADM_DIR/Brewfile"
+}
+
+step_operator_mono() {
+  compgen -G "$HOME/Library/Fonts/*[Oo]perator*" >/dev/null && skip "Operator Mono"
+  gh_ready || needs_manual "Run 'gh auth login', then '~/.config/yadm/bootstrap --only operator-mono'."
+  local tmp
+  tmp=$(mktemp -d)
+  gh repo clone "$OPERATOR_MONO_REPO" "$tmp/fonts" -- --depth 1
+  find "$tmp/fonts" -type f \( -iname '*.otf' -o -iname '*.ttf' \) -exec cp {} "$HOME/Library/Fonts/" \;
+  rm -rf "$tmp"
+}
+
+# ------------------------------------------------------------------ Linux ---
+
+apt_list() { sed -e 's/#.*//' "$YADM_DIR/packages.apt" | tr -s ' \t' '\n' | grep -v '^$'; }
+apt_installed() { [ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null)" = "install ok installed" ]; }
+apt_has_candidate() {
+  local policy
+  policy=$(apt-cache policy "$1" 2>/dev/null)
+  case "$policy" in *"Candidate: (none)"*|"") return 1 ;; esac
+}
+
+step_apt_packages() {
+  local missing="" p
+  for p in $(apt_list); do apt_installed "$p" || missing="$missing $p"; done
+  [ -n "$missing" ] || skip "all apt packages"
+  log "installing:$missing"
+  sudo apt-get update
+  # shellcheck disable=SC2086
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $missing
+}
+
+step_mise_linux() {
+  have mise && skip "mise"
+  install_script sh https://mise.run
+}
+
+step_docker_linux() {
+  if have docker; then
+    case " $(id -nG) " in
+      *" docker "*) ;;
+      *) sudo usermod -aG docker "$USER"
+         manual "Log out and back in so the docker group applies (then check: docker run --rm hello-world)." ;;
+    esac
+    skip "Docker Engine"
+  fi
+  os_release
+  local repo=debian codename=$VERSION_CODENAME
+  if is_ubuntu; then repo=ubuntu; codename=${UBUNTU_CODENAME:-$VERSION_CODENAME}; fi
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL "https://download.docker.com/linux/$repo/gpg" -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$repo $codename stable" \
+    | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+  sudo apt-get update
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  sudo usermod -aG docker "$USER"
+  manual "Log out and back in so the docker group applies (then check: docker run --rm hello-world)."
+}
+
+step_azure_cli_linux() {
+  have az && skip "Azure CLI"
+  if is_ubuntu; then
+    # Microsoft's repo; Ubuntu's own azure-cli package is old.
+    local tmp
+    tmp=$(mktemp)
+    curl -fsSL https://aka.ms/InstallAzureCLIDeb -o "$tmp"
+    sudo bash "$tmp"
+    rm -f "$tmp"
+  else
+    # Microsoft has no repo for Debian 13 (trixie); Debian's own package is current enough.
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y azure-cli
+  fi
+}
+
+step_aws_cli_linux() {
+  have aws && skip "AWS CLI"
+  if apt_has_candidate awscli; then
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+  else
+    # Ubuntu 24.04 dropped the awscli package; use AWS's official installer.
+    local tmp
+    tmp=$(mktemp -d)
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "$tmp/awscli.zip"
+    unzip -q "$tmp/awscli.zip" -d "$tmp"
+    sudo "$tmp/aws/install"
+    rm -rf "$tmp"
+  fi
+}
+
+# ------------------------------------------------------------------ steps ---
+
+# add_step <name> <function> [required]
+STEP_NAMES=(); STEP_FNS=(); STEP_REQUIRED=()
+add_step() { STEP_NAMES+=("$1"); STEP_FNS+=("$2"); STEP_REQUIRED+=("${3:-}"); }
+
+add_step network         step_network         required
+add_step sudo            step_sudo            required
+if [ "$OS" = macos ]; then
+  add_step xcode-clt     step_xcode_clt       required
+  add_step homebrew      step_homebrew        required
+  add_step mise          step_mise_macos      required
+  add_step brew-bundle   step_brew_bundle
+else
+  add_step apt-packages  step_apt_packages    required
+  add_step mise          step_mise_linux      required
+fi
+add_step mise-tools      step_mise_tools
+add_step rust            step_rust
+add_step atuin           step_atuin
+add_step hunk            step_hunk
+add_step claude          step_claude
+add_step herdr           step_herdr
+add_step herdr-plugins   step_herdr_plugins
+add_step blesh           step_blesh
+add_step tpm             step_tpm
+add_step ranger-devicons step_ranger_devicons
+add_step bat-cache       step_bat_cache
+add_step gh-dash         step_gh_dash
+if [ "$OS" = macos ]; then
+  add_step operator-mono step_operator_mono
+else
+  add_step docker        step_docker_linux
+  add_step azure-cli     step_azure_cli_linux
+  add_step aws-cli       step_aws_cli_linux
+fi
+
+# ----------------------------------------------------------------- runner ---
+
+RESULTS=(); FAILED_NAMES=""
+
+summary() {
+  printf '\n=================== bootstrap summary ===================\n'
+  [ ${#RESULTS[@]} -gt 0 ] && printf '  %s\n' "${RESULTS[@]}"
+  if [ -s "$MANUAL_FILE" ]; then
+    printf '\nManual follow-ups:\n'
+    sort -u "$MANUAL_FILE" | sed 's/^/  - /'
+  fi
+  if [ -n "$FAILED_NAMES" ]; then
+    printf '\nRetry failed steps with: ~/.config/yadm/bootstrap --only %s\n' "$(echo $FAILED_NAMES | tr ' ' ',')"
+  fi
+  printf '\nFull log: %s\n' "$LOG"
+}
+
+run_step() {
+  local name=$1 fn=$2 required=$3 rc
+  printf '\n==> %s\n' "$name"
+  # Not inside if/||/&&: that would silently switch off set -e within the step.
+  ( set -e; "$fn" )
+  rc=$?
+  case $rc in
+    0)  RESULTS+=("ok      $name") ;;
+    99) RESULTS+=("skip    $name") ;;
+    98) RESULTS+=("manual  $name") ;;
+    *)  RESULTS+=("FAIL    $name (exit $rc)"); FAILED_NAMES="$FAILED_NAMES $name"
+        if [ -n "$required" ]; then
+          printf '\n!! %s is a prerequisite and failed, so stopping here.\n' "$name"
+          summary
+          exit 1
+        fi ;;
+  esac
+  refresh_path
+}
+
+usage() { sed -n '3,9p' "$0" | sed 's/^# \{0,1\}//'; }
+
+ONLY="${BOOTSTRAP_ONLY:-}"
+while [ $# -gt 0 ]; do
+  case $1 in
+    --list) printf '%s\n' "${STEP_NAMES[@]}"; exit 0 ;;
+    --only) shift; ONLY="$ONLY ${1:-}" ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
+  esac
+  shift
+done
+ONLY=$(echo "$ONLY" | tr ',' ' ')
+for want in $ONLY; do
+  case " ${STEP_NAMES[*]} " in
+    *" $want "*) ;;
+    *) echo "No step called '$want' on $OS. Steps: ${STEP_NAMES[*]}" >&2; exit 2 ;;
+  esac
+done
+
+exec > >(tee -a "$LOG") 2>&1
+echo "bootstrap on $OS ($(uname -m)), log: $LOG"
+refresh_path
+
+i=0
+while [ $i -lt ${#STEP_NAMES[@]} ]; do
+  name=${STEP_NAMES[$i]}
+  if [ -z "$ONLY" ] || case " $ONLY " in *" $name "*) true ;; *) false ;; esac; then
+    run_step "$name" "${STEP_FNS[$i]}" "${STEP_REQUIRED[$i]}"
+  fi
+  i=$((i + 1))
+done
+
+summary
+[ -z "$FAILED_NAMES" ]

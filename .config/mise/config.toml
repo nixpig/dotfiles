@@ -1,0 +1,34 @@
+# Global dev tools and language runtimes, the same on macOS and Linux.
+# Installed by ~/.config/yadm/bootstrap (`mise install`); activated in ~/.bashrc.
+# `mise upgrade` updates everything pinned to "latest".
+
+[tools]
+# Languages (rust is managed by rustup; see the bootstrap's rust step)
+go = "latest"
+node = "26"
+
+# Editor
+neovim = "latest"
+tree-sitter = "latest"
+
+# Git
+gh = "latest"
+lazygit = "latest"
+
+# Prompt
+starship = "latest"
+
+# Kubernetes and infrastructure
+kubectl = "latest"
+helm = "latest"
+minikube = "latest"
+terraform = "latest"
+
+# APIs, data and release tooling
+yq = "latest"                 # mikefarah/yq (Debian's `yq` package is a different tool)
+protoc = "latest"             # also all Rust needs: prost/tonic are Cargo build deps
+protoc-gen-go = "latest"
+protoc-gen-go-grpc = "latest"
+grpcurl = "latest"
+goreleaser = "latest"
+"go:golang.org/x/perf/cmd/benchstat" = "latest"

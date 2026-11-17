@@ -1,0 +1,19 @@
+# Debian / Ubuntu / Raspberry Pi OS packages: installed by ~/.config/yadm/bootstrap.
+# One install, all or nothing: an unknown name fails the whole step, so check names
+# exist on both Debian and Ubuntu before adding them here.
+# Dev tools and language runtimes are in ~/.config/mise/config.toml instead.
+# Docker, Azure CLI and AWS CLI have their own bootstrap steps (sources differ by distro).
+
+# Base and build
+build-essential ca-certificates curl wget git unzip python3
+clang cmake gawk
+lua5.1 luajit luarocks
+
+# Shell and CLI
+bat btop eza fzf jq ranger ripgrep tmux yadm
+
+# Network and benchmarking
+lsof nmap arp-scan hyperfine
+
+# Media and certificates
+ffmpeg mkcert libnss3-tools

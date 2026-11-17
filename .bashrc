@@ -25,6 +25,8 @@ path_prepend "$HOME/.atuin/bin"
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$HOME/.opencode/bin"
+# mise shims, for non-interactive shells; interactive ones use `mise activate` below
+path_prepend "$HOME/.local/share/mise/shims"
 export PATH
 unset -f path_prepend
 
@@ -78,17 +80,8 @@ alias egrep='egrep --color=auto'
 
 [ -f "$HOME/.bash_aliases" ] && . "$HOME/.bash_aliases"
 
-# nvm: Homebrew on macOS, ~/.nvm on Linux
-export NVM_DIR="$HOME/.nvm"
-for d in /opt/homebrew/opt/nvm "$NVM_DIR"; do
-    if [ -s "$d/nvm.sh" ]; then
-        . "$d/nvm.sh"
-        [ -s "$d/bash_completion" ] && . "$d/bash_completion"
-        [ -s "$d/etc/bash_completion.d/nvm" ] && . "$d/etc/bash_completion.d/nvm"
-        break
-    fi
-done
-unset d
+# mise: dev tools and runtimes from ~/.config/mise/config.toml (replaces nvm)
+command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
 
 # pip cooldown: pass --uploaded-prior-to (pip >= 26) to install/download/wheel.
 pip3() {
