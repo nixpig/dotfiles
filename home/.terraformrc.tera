@@ -1,0 +1,6 @@
+provider_installation {
+  dev_overrides {
+    "terraform.releases.teleport.dev/gravitational/teleport" = "{{ env.HOME }}/projects/teleport/integrations/terraform/build"
+  }
+  direct {}
+}

@@ -174,10 +174,11 @@ Most differences live inside shared files, using existence checks. For example,
 `~/.bashrc` only adds `/opt/homebrew/bin` to PATH if it exists, and looks for
 bash-completion in both Homebrew's and Debian's locations.
 
-Files that only matter on one platform are linked everywhere anyway, when
-that's harmless. For example, `.terraformrc` and the Teleport links in
-`.local/bin` point at build paths on the Mac; on Linux the links dangle and
-nothing uses them.
+Files that only matter on some machines are linked everywhere anyway, when
+that's harmless. The Teleport links in `.local/bin` are relative links to
+`~/projects/.../build`. They resolve through `~/.dotfiles/home/.local/bin`, so
+they rely on the repo being at `~/.dotfiles`, and dangle where nothing is built.
+`.terraformrc` is a template so it can use `{{ env.HOME }}`.
 
 When only some lines differ, the file becomes a Tera template: name it
 `<file>.tera`, add an entry like the git config's in `[dotfile_groups.home.entries]`,
@@ -186,7 +187,8 @@ and use `{% if os() == "macos" %}`.
 ## Conventions
 
 - **Use `$HOME`, never `/home/nixpig` or `/Users/...`.** The username differs between
-  machines.
+  machines. In a file that can't expand `$HOME`, make it a template and use
+  `{{ env.HOME }}`; in a link, use a relative path.
 - **Don't commit generated state.** For example atuin's install receipt, herdr's
   plugin registry, or `gh/hosts.yml`, which can hold a token on machines without
   a keychain. Only committed files are linked, so untracked files in
