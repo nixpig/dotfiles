@@ -47,8 +47,3 @@ mas = "latest"                # for the mas: package below
 [bootstrap.brew]
 adopt = true                  # keep apps already in /Applications instead of replacing them
 
-# ------------------------------------------------------------- dotfiles ---
-
-[dotfile_groups.macos]
-root = "macos"
-manifest = "git"

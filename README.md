@@ -101,7 +101,6 @@ the link becomes a plain file and `mise bootstrap status` shows it. Run
 ```text
 ~/.dotfiles/
 ├── home/                     linked into ~ on every machine
-├── macos/                    linked into ~ on macOS only
 └── mise/                     ~/.config/mise (a link to here)
     ├── config.toml           tools, dotfiles, git repos (every machine)
     ├── config.linux.toml     apt packages and apt repos
@@ -126,7 +125,7 @@ in the right state, so it's safe to run any time:
    mise installs itself into `/opt/homebrew` (the `brew` command isn't needed),
    and App Store apps via `mas`.
 1. **Git repos**: tpm, ranger_devicons and ble.sh's source.
-1. **Dotfiles**: links `home/` (and `macos/` on a Mac) into `~`, and renders
+1. **Dotfiles**: links `home/` into `~`, and renders
    `~/.config/git/config` from `home/.config/git/config.tera`. That's the git
    identity, which differs between macOS and everything else.
 1. **Tools**: everything in `[tools]`: languages, Neovim, gh, atuin, herdr, Claude
@@ -177,11 +176,10 @@ Most differences live inside shared files, using existence checks. For example,
 `~/.bashrc` only adds `/opt/homebrew/bin` to PATH if it exists, and looks for
 bash-completion in both Homebrew's and Debian's locations.
 
-When a whole file only applies to one platform, it goes in `macos/` rather than
-`home/`:
-- `.terraformrc`, the Terraform dev overrides for local builds;
-- `.local/bin/{tsh,tctl,teleport,tbot,fdpass-teleport}`, the links to local
-  Teleport builds.
+Files that only matter on one platform are linked everywhere anyway, when
+that's harmless. For example, `.terraformrc` and the Teleport links in
+`.local/bin` point at build paths on the Mac; on Linux the links dangle and
+nothing uses them.
 
 When only some lines differ, the file becomes a Tera template: name it
 `<file>.tera`, add an entry like the git config's in `[dotfile_groups.home.entries]`,
