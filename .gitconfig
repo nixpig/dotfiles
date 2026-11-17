@@ -1,0 +1,4 @@
+[core]
+	pager = hunk pager
+[merge]
+    conflictStyle = zdiff3

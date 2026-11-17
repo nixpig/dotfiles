@@ -1,0 +1,6 @@
+# macOS only (yadm alternate). Git reads this as well as ~/.gitconfig.
+[user]
+	name = Jake Ward
+	email = jacob.ward@goteleport.com
+[credential]
+	helper = osxkeychain

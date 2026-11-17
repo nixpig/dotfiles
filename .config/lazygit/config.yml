@@ -1,0 +1,9 @@
+customCommands:
+  - key: "g"
+    context: "files"
+    description: "AI commit message"
+    command: >
+      git diff --cached | ollama run qwen2.5-coder:7b "Write a 
+      commit message for this diff. Subject under 65 chars. No body
+      unless the why is non-obvious." | git commit -F -
+    loadingText: "thinking..."

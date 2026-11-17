@@ -1,0 +1,41 @@
+# The default setup profile, applied to every new beam before an agent runs.
+# Beams add inference credentials to requests themselves, so nothing here is
+# secret.
+agent: opencode
+version: 2.1.2 # the adapter needs OpenCode 2.1 or a later 2.x
+
+# OpenCode 2 is published on npm (the same packages opencode.ai/v2/install
+# downloads; the GitHub tags carry only source). pipe downloads the package
+# once into a local cache (to know its checksum); each beam then downloads
+# it itself and checks it against that copy. If a beam can't, pipe uploads
+# the cached copy (slower: about 100 MB).
+binary:
+  url: https://registry.npmjs.org/@opencode/cli-{{.OS}}-{{.Arch}}/-/cli-{{.OS}}-{{.Arch}}-{{.Version}}.tgz
+  path: package/bin/opencode
+  dest: ~/.local/bin/opencode
+  os: linux
+  # x64 needs AVX2. For beams without it (`grep -c avx2 /proc/cpuinfo`
+  # prints 0) use x64-baseline; arm64 also exists.
+  arch: x64
+
+# Copied to the beam: OpenCode's global config, skills, plugins, AGENTS.md.
+files:
+  - src: opencode/
+    dest: ~/.config/opencode/
+
+# System packages, installed with whatever package manager the beam has.
+packages: [tmux, git, gcc, make]
+
+# Extra commands (run on the beam, in its own shell).
+# Install Go toolchain.
+run:
+  - curl -fsSL https://go.dev/dl/go1.27.3.linux-$(dpkg --print-architecture).tar.gz -o /tmp/go.tgz
+  - sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go.tgz
+  - sudo ln -sf /usr/local/go/bin/go /usr/local/bin/go
+
+verify:
+  - opencode --version
+  - tmux -V
+  - go version
+
+timeout: 10m

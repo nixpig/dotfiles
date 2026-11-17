@@ -1,142 +1,130 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# ~/.bashrc — shared by macOS and Debian/Ubuntu/Raspberry Pi OS (managed by yadm).
+# Platform differences are handled with existence checks rather than yadm
+# alternates, so this one file works everywhere.
+#
+# Login shells (macOS terminals, ssh) read ~/.bash_profile, which sources this.
 
-set -o vi
+# --- Environment (also wanted by non-interactive shells, e.g. `ssh host cmd`) ---
 
-# If not running interactively, don't do anything
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Prepend a directory to PATH if it exists and isn't already there.
+path_prepend() {
+    [ -d "$1" ] || return 0
+    case ":$PATH:" in
+        *":$1:"*) ;;
+        *) PATH="$1:$PATH" ;;
+    esac
+}
+# Listed lowest-priority first; the last one ends up at the front of PATH.
+path_prepend /opt/homebrew/opt/llvm/bin
+path_prepend /usr/local/go/bin
+path_prepend "$HOME/go/bin"
+path_prepend "$HOME/.hunk/bin"
+path_prepend "$HOME/.atuin/bin"
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.cargo/bin"
+path_prepend "$HOME/.opencode/bin"
+export PATH
+unset -f path_prepend
+
+export VISUAL="nvim"
+export EDITOR="nvim"
+export GIT_EDITOR="nvim"
+export BAT_THEME="Catppuccin Mocha"
+# lazygit's default config dir on macOS is ~/Library/Application Support; point it here on every platform.
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml"
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
+[ -d "$HOME/projects/cloud/tc/cmd/tc" ] && export TC_PATH="$HOME/projects/cloud/tc/cmd/tc"
+
+# Package cooldowns: don't install packages published in the last 3 days.
+export YARN_NPM_MINIMAL_AGE_GATE="4320"
+
+# --- Interactive only below here ---
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
+set -o vi
+
 HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+shopt -s histappend
+# check the window size after each command and, if necessary, update LINES and COLUMNS.
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-#alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-export VISUAL="nvim"
-export EDITOR="nvim"
-export GIT_EDITOR="nvim"
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
-export BAT_THEME="Catppuccin Mocha"
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Load bash-completion before ble.sh, which clears PS1 during early init
+# (bash_completion only loads when PS1 is set).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    for f in /opt/homebrew/etc/profile.d/bash_completion.sh \
+             /usr/share/bash-completion/bash_completion \
+             /etc/bash_completion; do
+        [ -r "$f" ] && { . "$f"; break; }
+    done
+    unset f
 fi
-export PATH="$HOME/.local/bin:$PATH"
 
+[ -r "$HOME/.local/share/blesh/ble.sh" ] && source "$HOME/.local/share/blesh/ble.sh" --noattach
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+[ -f "$HOME/.bash_aliases" ] && . "$HOME/.bash_aliases"
+
+# nvm: Homebrew on macOS, ~/.nvm on Linux
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-. "$HOME/.cargo/env"
+for d in /opt/homebrew/opt/nvm "$NVM_DIR"; do
+    if [ -s "$d/nvm.sh" ]; then
+        . "$d/nvm.sh"
+        [ -s "$d/bash_completion" ] && . "$d/bash_completion"
+        [ -s "$d/etc/bash_completion.d/nvm" ] && . "$d/etc/bash_completion.d/nvm"
+        break
+    fi
+done
+unset d
 
-# Added by the Hunk installer (https://hunk.dev)
-export PATH='/home/nixpig/.hunk/bin':"$PATH"
+# pip cooldown: pass --uploaded-prior-to (pip >= 26) to install/download/wheel.
+pip3() {
+    local pip_major cutoff
+    pip_major=$(command pip3 --version 2>/dev/null | awk '{ split($2, a, "."); print a[1]; exit }')
+    case "$1" in
+        install|download|wheel)
+            if [[ "${pip_major:-0}" -ge 26 ]]; then
+                # GNU date first, then BSD (macOS) date
+                cutoff=$(date -u -d '3 days ago' '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || date -u -v-3d '+%Y-%m-%dT%H:%M:%SZ')
+                command pip3 "$1" --uploaded-prior-to "$cutoff" "${@:2}"
+            else
+                echo "warning: pip3 ${pip_major:-unknown} does not support --uploaded-prior-to (need >= 26), skipping cooldown" >&2
+                command pip3 "$@"
+            fi
+            ;;
+        *)
+            command pip3 "$@"
+            ;;
+    esac
+}
 
-eval "$(starship init bash)"
+bind -x '"\C-f": "bash -c \"herdr-sessionizer\""'
+bind -x '"\C-n": "bash -c \"rangerizer\""'
 
-. "$HOME/.atuin/bin/env"
-eval "$(atuin init bash --disable-up-arrow)"
+command -v kubectl >/dev/null 2>&1 && source <(kubectl completion bash)
+command -v aws_completer >/dev/null 2>&1 && complete -C aws_completer aws
+command -v terraform >/dev/null 2>&1 && complete -C "$(command -v terraform)" terraform
 
-# Attach blesh
+command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
+
+if command -v atuin >/dev/null 2>&1; then
+    # atuin uses ble.sh's hooks when present; otherwise it needs bash-preexec.
+    [[ ! ${BLE_VERSION-} && -f "$HOME/.bash-preexec.sh" ]] && source "$HOME/.bash-preexec.sh"
+    eval "$(atuin init bash --disable-up-arrow)"
+fi
+
+# Attach blesh (keep last)
 [[ ${BLE_VERSION-} ]] && ble-attach
-

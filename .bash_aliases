@@ -12,10 +12,9 @@ alias mkdir='mkdir -pv'
 alias less='less -FSRXc'
 alias wget='wget -c'
 alias c='clear' 
-alias path='echo -e ${PATH//:/\\n' 
+alias path='echo -e ${PATH//:/\\n}'
 alias src='source ~/.bashrc && stty sane'
 alias apt='sudo apt'
-alias pacman='sudo pacman'
 alias update-alternatives='sudo update-alternatives'
 alias mount='mount | column -t'
 alias reboot='sudo reboot'
@@ -55,8 +54,14 @@ alias grc='cd ~ && vim .gitconfig'
 # alias czsp="cd $(chezmoi source-path)"
 
 # Remap utilities
-## cat aliases
-alias cat='batcat'
+## cat aliases (Debian/Ubuntu ship bat as `batcat`)
+if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+    alias bat='batcat'
+    _bat=batcat
+else
+    _bat=bat
+fi
+alias cat='bat'
 alias make='colormake'
 
 ## eza and ls aliases
@@ -76,19 +81,18 @@ alias lsa='eza --long --header --icons --all --sort=acc --reverse'
 alias d='cd $(find . -type d -print | fzf --preview "eza --long --header --icons --all {}" --preview-window=down)'
 
 ## Fuzzy-find a file and preview out contents
-alias f='bat $(find . -type f -print | fzf --preview "bat --color=always --line-range=:500 {}" --preview-window=down)'
+alias f='bat $(find . -type f -print | fzf --preview "$_bat --color=always --line-range=:500 {}" --preview-window=down)'
 
 ## Fuzzy-find a directory and open in vim
 alias vd='nvim $(find . -type d -print | fzf --preview "eza --long --header --icons --all {}" --preview-window=down)'
 
 ## Fuzzy-find a file and open in vim
-alias vf='nvim $(find . -type f -print | fzf --preview "bat --color=always --line-range=:500 {}" --preview-window=down)'
+alias vf='nvim $(find . -type f -print | fzf --preview "$_bat --color=always --line-range=:500 {}" --preview-window=down)'
 
 ## Fuzzy find a directory and create a new tmux session
 alias td='tmux-sessionizer'
 
 # Git aliases
-alias g='git'
 alias gb='git branch'
 alias gbl='git branch --list'
 alias gba='git branch -a'
@@ -108,7 +112,6 @@ alias gpu='git push -u origin $(git branch | fzf | sed "s/^[ *]*//g")'
 alias gra='git remote add'
 alias grr='git remote rm'
 alias gcl='git clone'
-alias gcm='git commit -m'
 alias gca='git commit --amend'
 alias gcz='git-cz'
 alias gss='git stash'

@@ -1,0 +1,11 @@
+{
+  "theme": {
+    "name": "catppuccin"
+  },
+  "session": {
+    "sidebar": "hide"
+  },
+  "tabs": {
+    "mode": "off"
+  }
+}

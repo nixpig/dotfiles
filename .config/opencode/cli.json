@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "./herdr-opencode"
+  ],
+  "session": {
+    "sidebar": "hide"
+  },
+  "theme": {
+    "name": "catppuccin"
+  }
+}

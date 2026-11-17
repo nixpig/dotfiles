@@ -1584,6 +1584,7 @@ require('lazy').setup({
         'query',
         'templ',
         'vhs',
+        'tmux',
       }
 
       -- Install missing parsers after startup
