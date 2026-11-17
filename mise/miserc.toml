@@ -1,0 +1,3 @@
+# Read before the config files. auto_env loads config.linux.toml or config.macos.toml
+# on the matching OS (the default from mise 2027.6.0; set here so it works sooner).
+auto_env = true

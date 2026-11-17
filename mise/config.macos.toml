@@ -1,0 +1,54 @@
+# macOS only. Loaded on macOS because miserc.toml turns on auto_env.
+# mise installs formulae and casks itself, into /opt/homebrew; the `brew` command
+# isn't needed (but sees them if it's installed).
+# Not needed because macOS already has them: curl, lsof, clang/make (Xcode Command Line Tools).
+
+[tools]
+mas = "latest"                # for the mas: package below
+
+[bootstrap.packages]
+# Shell and CLI (the rest are mise tools in config.toml)
+"brew:btop" = "latest"
+"brew:eza" = "latest"
+"brew:gawk" = "latest"
+"brew:ranger" = "latest"
+"brew:tmux" = "latest"
+"brew:wget" = "latest"
+
+# Build
+"brew:cmake" = "latest"
+"brew:gcc" = "latest"         # real GCC, installed as gcc-NN; plain `gcc` on macOS is clang
+"brew:luajit" = "latest"
+"brew:luarocks" = "latest"
+
+# Network
+"brew:arp-scan" = "latest"
+"brew:nmap" = "latest"
+
+# Media, certificates, cloud
+"brew:ffmpeg" = "latest"
+"brew:nss" = "latest"         # lets `mkcert -install` add its CA to Firefox
+"brew-cask:azure-cli" = "latest"
+
+# Apps
+"brew-cask:docker-desktop" = "latest"
+"brew-cask:ghostty" = "latest"
+"brew-cask:jurplel/tap/instant-space-switcher" = "latest"
+"brew-cask:logitune" = "latest"
+"brew-cask:ollama-app" = "latest"
+"brew-cask:unnaturalscrollwheels" = "latest"
+# Amphetamine. Needs an App Store sign-in, and mas from [tools], so on a new Mac
+# it's installed by the second `mise bootstrap`.
+"mas:937984704" = "latest"
+
+# Fonts (Operator Mono comes from a private repo; see tasks/bootstrap)
+"brew-cask:font-symbols-only-nerd-font" = "latest"
+
+[bootstrap.brew]
+adopt = true                  # keep apps already in /Applications instead of replacing them
+
+# ------------------------------------------------------------- dotfiles ---
+
+[dotfile_groups.macos]
+root = "macos"
+manifest = "git"

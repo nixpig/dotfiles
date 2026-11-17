@@ -1,12 +1,10 @@
-# ~/.bashrc — shared by macOS and Debian/Ubuntu/Raspberry Pi OS (managed by yadm).
-# Platform differences are handled with existence checks rather than yadm
-# alternates, so this one file works everywhere.
+# ~/.bashrc — shared by macOS and Debian/Ubuntu/Raspberry Pi OS (linked from
+# ~/.dotfiles/home by mise). Platform differences are handled with existence
+# checks, so this one file works everywhere.
 #
 # Login shells (macOS terminals, ssh) read ~/.bash_profile, which sources this.
 
 # --- Environment (also wanted by non-interactive shells, e.g. `ssh host cmd`) ---
-
-[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Prepend a directory to PATH if it exists and isn't already there.
 path_prepend() {
@@ -17,11 +15,11 @@ path_prepend() {
     esac
 }
 # Listed lowest-priority first; the last one ends up at the front of PATH.
+# Homebrew packages (installed by mise bootstrap, with or without the brew command)
+path_prepend /opt/homebrew/sbin
+path_prepend /opt/homebrew/bin
 path_prepend /opt/homebrew/opt/llvm/bin
-path_prepend /usr/local/go/bin
 path_prepend "$HOME/go/bin"
-path_prepend "$HOME/.hunk/bin"
-path_prepend "$HOME/.atuin/bin"
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$HOME/.opencode/bin"

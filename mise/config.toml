@@ -1,0 +1,77 @@
+# Global mise config: this directory is ~/.config/mise, linked into the dotfiles
+# checkout (~/.dotfiles/mise) by `mise bootstrap --config-dir mise`.
+#
+# `mise bootstrap` applies, in order: packages (config.linux.toml / config.macos.toml),
+# repos, dotfiles, tools, then the `bootstrap` task (tasks/bootstrap).
+# Platform files load because miserc.toml turns on auto_env.
+
+# ---------------------------------------------------------------- tools ---
+# `mise upgrade` updates everything pinned to "latest".
+
+[tools]
+# Languages
+go = "latest"
+node = "26"
+rust = "stable"               # through rustup, in ~/.rustup and ~/.cargo
+
+# Editor
+neovim = "latest"
+tree-sitter = "latest"
+
+# Git
+gh = "latest"
+lazygit = "latest"
+hunk = "latest"
+
+# Shell
+starship = "latest"
+atuin = "latest"
+herdr = "latest"
+bat = "latest"
+fzf = "latest"
+ripgrep = "latest"
+jq = "latest"
+yq = "latest"                 # mikefarah/yq (Debian's `yq` package is a different tool)
+
+# Kubernetes and infrastructure
+kubectl = "latest"
+helm = "latest"
+minikube = "latest"
+terraform = "latest"
+aws-cli = "latest"
+
+# APIs, data and release tooling
+protoc = "latest"             # also all Rust needs: prost/tonic are Cargo build deps
+protoc-gen-go = "latest"
+protoc-gen-go-grpc = "latest"
+grpcurl = "latest"
+goreleaser = "latest"
+"go:golang.org/x/perf/cmd/benchstat" = "latest"
+
+# Benchmarking and certificates
+hyperfine = "latest"
+mkcert = "latest"
+
+# AI
+claude = "latest"
+
+# ------------------------------------------------------------- dotfiles ---
+# Every file committed under ~/.dotfiles/home is linked to the same path under ~,
+# one symlink per file, so directories like ~/.config stay real directories.
+# macOS-only files are in the `macos` group (config.macos.toml).
+
+[dotfile_groups.home]
+root = "home"
+manifest = "git"              # only files committed to the repo
+
+[dotfile_groups.home.entries]
+# Different identity per OS, so it's rendered rather than linked.
+"~/.config/git/config" = { mode = "template" }
+
+# ---------------------------------------------------------------- repos ---
+# Cloned if missing; left alone if they exist (`mise bootstrap --update` pulls).
+
+[bootstrap.repos]
+"~/.tmux/plugins/tpm" = { url = "https://github.com/tmux-plugins/tpm", depth = 1 }
+"~/.config/ranger/plugins/ranger_devicons" = { url = "https://github.com/alexanderjeurissen/ranger_devicons", depth = 1 }
+"~/.local/src/ble.sh" = { url = "https://github.com/akinomyoga/ble.sh", depth = 1, submodules = true }  # built by tasks/bootstrap

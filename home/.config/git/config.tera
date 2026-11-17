@@ -1,0 +1,13 @@
+# Rendered by `mise dot apply` to ~/.config/git/config. Git reads this as well as
+# ~/.gitconfig, which holds everything that's the same on every machine.
+{% if os() == "macos" -%}
+[user]
+	name = Jake Ward
+	email = jacob.ward@goteleport.com
+[credential]
+	helper = osxkeychain
+{%- else -%}
+[user]
+	email = 143995476+nixpig@users.noreply.github.com
+	name = nixpig
+{%- endif %}

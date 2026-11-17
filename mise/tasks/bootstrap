@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+#MISE description="Setup that mise can't declare: run last by `mise bootstrap`"
+#
+# Each step checks whether it's already done, so this is safe to run again
+# (`mise run bootstrap`, or `mise run bootstrap -- <step>...` for particular steps).
+# A failed step doesn't stop the others; the summary lists what failed and what's
+# left to do by hand, and the task exits non-zero if anything failed.
+
+set -uo pipefail
+
+HERDR_PLUGINS="aimdevlee/herdr-nvim-nav makyinmars/herdr-context.nvim jeffarese/herdr-bar"
+HERDR_PLUGINS_MACOS="assawalhy/herdr-stay-awake"
+OPERATOR_MONO_REPO="nixpig/operator-mono-powerline-ligatures"
+
+case "$(uname -s)" in Darwin) OS=macos ;; *) OS=linux ;; esac
+
+skip() { echo "already done: $*"; exit 99; }
+manual() { echo "$*"; exit 98; }
+gh_ready() { gh auth status >/dev/null 2>&1; }
+
+# ---------------------------------------------------------------- steps ---
+
+step_blesh() {
+  [ -f "$HOME/.local/share/blesh/ble.sh" ] && skip "ble.sh"
+  # Cloned by [bootstrap.repos]; builds into its own (git-ignored) out/ directory.
+  make -C "$HOME/.local/src/ble.sh" install PREFIX="$HOME/.local"
+}
+
+step_herdr_plugins() {
+  local list="$HERDR_PLUGINS" installed todo="" p
+  [ "$OS" = macos ] && list="$list $HERDR_PLUGINS_MACOS"
+  installed=$(herdr plugin list 2>/dev/null || true)
+  for p in $list; do
+    case "$installed" in *"github:$p@"*) ;; *) todo="$todo $p" ;; esac
+  done
+  [ -n "$todo" ] || skip "herdr plugins"
+  # --yes: herdr refuses remote installs without it when stdin isn't a terminal.
+  for p in $todo; do herdr plugin install --yes "$p"; done
+}
+
+step_bat_cache() {
+  # Compiles the Catppuccin theme in ~/.config/bat/themes into bat's cache.
+  bat cache --build
+}
+
+step_docker_group() {
+  case " $(id -nG) " in *" docker "*) skip "docker group" ;; esac
+  sudo usermod -aG docker "$USER"
+  manual "Log out and back in so the docker group applies (then check: docker run --rm hello-world)."
+}
+
+step_gh_dash() {
+  gh extension list 2>/dev/null | grep -q dlvhdr/gh-dash && skip "gh-dash"
+  gh_ready || manual "Run 'gh auth login', then 'mise run bootstrap -- gh-dash'."
+  gh extension install dlvhdr/gh-dash
+}
+
+step_operator_mono() {
+  compgen -G "$HOME/Library/Fonts/*[Oo]perator*" >/dev/null && skip "Operator Mono"
+  gh_ready || manual "Run 'gh auth login', then 'mise run bootstrap -- operator-mono'."
+  local tmp
+  tmp=$(mktemp -d)
+  gh repo clone "$OPERATOR_MONO_REPO" "$tmp/fonts" -- --depth 1
+  find "$tmp/fonts" -type f \( -iname '*.otf' -o -iname '*.ttf' \) -exec cp {} "$HOME/Library/Fonts/" \;
+  rm -rf "$tmp"
+}
+
+step_mac_apps() {
+  local marker="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/mac-apps-opened"
+  [ -f "$marker" ] && skip "app permissions noted"
+  mkdir -p "$(dirname "$marker")" && touch "$marker"
+  manual "Open Docker Desktop, InstantSpaceSwitcher, UnnaturalScrollWheels and Logi Tune once and grant any permissions they ask for."
+}
+
+STEPS="blesh herdr-plugins bat-cache gh-dash"
+if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono mac-apps"; else STEPS="$STEPS docker-group"; fi
+
+# --------------------------------------------------------------- runner ---
+
+[ $# -gt 0 ] && STEPS="$*"
+
+for name in $STEPS; do
+  declare -F "step_${name//-/_}" >/dev/null || { echo "unknown step: $name (steps: $STEPS)" >&2; exit 2; }
+done
+
+results=() follow_ups=() failed=()
+out=$(mktemp); trap 'rm -f "$out"' EXIT
+for name in $STEPS; do
+  echo "--- $name"
+  # Run outside if/|| so set -e works inside the step.
+  ( set -e; "step_${name//-/_}" ) 2>&1 | tee "$out"; rc=${PIPESTATUS[0]}
+  case $rc in
+    0)  results+=("ok      $name") ;;
+    99) results+=("skip    $name") ;;
+    98) results+=("manual  $name"); follow_ups+=("$(tail -n1 "$out")") ;;
+    *)  results+=("FAIL    $name"); failed+=("$name") ;;
+  esac
+done
+
+printf '\n--- bootstrap task summary\n'
+printf '  %s\n' "${results[@]}"
+if [ ${#follow_ups[@]} -gt 0 ]; then
+  printf '\nTo do by hand:\n'
+  printf '  - %s\n' "${follow_ups[@]}"
+fi
+if [ ${#failed[@]} -gt 0 ]; then
+  printf '\nRetry with: mise run bootstrap -- %s\n' "${failed[*]}"
+  exit 1
+fi

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#MISE description="Check this machine matches the config (used by CI after mise bootstrap)"
+#
+# Run it from a login shell, so it also checks the shell setup puts everything on
+# PATH: `bash -lc 'mise run check'`.
+
+set -u
+fail=0
+
+# Everything the config declares: packages, apt sources, repos, dotfiles, tools.
+# The lists themselves are the source of truth, so nothing is repeated here.
+echo "--- mise bootstrap status"
+mise bootstrap status --missing || fail=1
+
+# PATH: one command from each place things are installed, found the way an
+# interactive shell would find it (mise shims, ~/.cargo/bin, /opt/homebrew/bin, apt).
+echo "--- commands on PATH"
+cmds=(nvim node go cargo atuin claude herdr hunk bat rg aws tmux eza btop gawk nmap docker az)
+case "$(uname -s)" in
+  Linux)  cmds+=(gcc clang lua5.1 luajit luarocks) ;;
+  Darwin) cmds+=(luajit luarocks mas) ;;
+esac
+for c in "${cmds[@]}"; do
+  if command -v "$c" >/dev/null 2>&1; then printf 'ok       %s\n' "$c"
+  else printf 'MISSING  %s\n' "$c"; fail=1; fi
+done
+
+# Built by tasks/bootstrap, which nothing above checks.
+echo "--- bootstrap task"
+for f in "$HOME/.local/share/blesh/ble.sh"; do
+  if [ -e "$f" ]; then printf 'ok       %s\n' "$f"; else printf 'MISSING  %s\n' "$f"; fail=1; fi
+done
+
+[ "$fail" -eq 0 ] && echo "--- all good" || echo "--- problems found"
+exit "$fail"

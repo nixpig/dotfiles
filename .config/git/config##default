@@ -1,4 +1,0 @@
-# Everywhere except macOS (yadm alternate). Git reads this as well as ~/.gitconfig.
-[user]
-	email = 143995476+nixpig@users.noreply.github.com
-	name = nixpig
