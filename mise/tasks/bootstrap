@@ -49,12 +49,6 @@ step_docker_group() {
   manual "Log out and back in so the docker group applies (then check: docker run --rm hello-world)."
 }
 
-step_gh_dash() {
-  gh extension list 2>/dev/null | grep -q dlvhdr/gh-dash && skip "gh-dash"
-  gh_ready || manual "Run 'gh auth login', then 'mise run bootstrap -- gh-dash'."
-  gh extension install dlvhdr/gh-dash
-}
-
 step_operator_mono() {
   compgen -G "$HOME/Library/Fonts/*[Oo]perator*" >/dev/null && skip "Operator Mono"
   gh_ready || manual "Run 'gh auth login', then 'mise run bootstrap -- operator-mono'."
@@ -72,7 +66,7 @@ step_mac_apps() {
   manual "Open Docker Desktop, InstantSpaceSwitcher, UnnaturalScrollWheels and Logi Tune once and grant any permissions they ask for."
 }
 
-STEPS="blesh herdr-plugins bat-cache gh-dash"
+STEPS="blesh herdr-plugins bat-cache"
 if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono mac-apps"; else STEPS="$STEPS docker-group"; fi
 
 # --------------------------------------------------------------- runner ---

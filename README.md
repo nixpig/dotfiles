@@ -134,13 +134,12 @@ in the right state, so it's safe to run any time:
    - builds ble.sh;
    - installs the herdr plugins;
    - rebuilds bat's theme cache;
-   - installs gh-dash;
    - on Linux, adds you to the `docker` group;
    - on macOS, installs Operator Mono.
 
    A failed step doesn't stop the others, and a summary at the end lists anything
    that failed or needs doing by hand. Re-run single steps with
-   `mise run bootstrap -- gh-dash`.
+   `mise run bootstrap -- bat-cache`.
 
 A failure in any of the steps before the task stops the run. Fix it and run
 `mise bootstrap` again.
@@ -149,9 +148,8 @@ A failure in any of the steps before the task stops the run. Fix it and run
 
 The bootstrap lists these when they apply:
 
-- `gh auth login`, then `mise run bootstrap -- gh-dash`. On macOS, also
-  `mise run bootstrap -- operator-mono`, which needs gh because the font repo is
-  private.
+- `gh auth login`. On macOS, then `mise run bootstrap -- operator-mono`, which
+  needs gh because the font repo is private.
 - Linux: log out and back in for the `docker` group.
 - macOS: sign in to the App Store and run `mise bootstrap` again. Then open Docker
   Desktop, InstantSpaceSwitcher, UnnaturalScrollWheels and Logi Tune once to grant

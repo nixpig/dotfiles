@@ -54,6 +54,7 @@ mkcert = "latest"
 
 # AI
 claude = "latest"
+"github:dlvhdr/gh-dash" = "latest"   # `gh dash` is an alias for it in gh/config.yml
 
 # ------------------------------------------------------------- dotfiles ---
 # Every file committed under ~/.dotfiles/home is linked to the same path under ~,
