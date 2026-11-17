@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Used by .github/workflows/bootstrap.yml after `yadm bootstrap`: checks that the
+# tools it should have installed are on PATH in a login shell. Run it by hand
+# with `bash -l ~/.config/yadm/ci-check-tools` to check a machine.
+
+# A login shell runs ~/.bash_profile -> ~/.profile + ~/.bashrc, whose environment
+# section puts mise's shims and the other tool directories on PATH.
+
+tools=(
+  # mise
+  go node npm nvim tree-sitter gh lazygit starship kubectl helm minikube terraform
+  yq protoc protoc-gen-go protoc-gen-go-grpc grpcurl goreleaser benchstat
+  # own installers
+  rustup cargo atuin hunk claude herdr
+  # packages
+  curl wget git cmake gawk jq fzf rg eza btop ranger tmux yadm nmap hyperfine
+  arp-scan ffmpeg mkcert luajit luarocks aws az docker
+)
+case "$(uname -s)" in
+  Linux)  tools+=(clang gcc lsof batcat lua5.1) ;;
+  Darwin) tools+=(clang lsof bat mas) ;;
+esac
+
+# Root-only tools (arp-scan) live in sbin, which Debian leaves off a normal user's PATH.
+found() { command -v "$1" >/dev/null 2>&1 || [ -x "/usr/sbin/$1" ] || [ -x "/sbin/$1" ]; }
+
+missing=()
+for t in "${tools[@]}"; do
+  if found "$t"; then
+    printf 'ok       %s\n' "$t"
+  else
+    printf 'MISSING  %s\n' "$t"
+    missing+=("$t")
+  fi
+done
+
+[ -f "$HOME/.local/share/blesh/ble.sh" ] && echo "ok       ble.sh" || { echo "MISSING  ble.sh"; missing+=(ble.sh); }
+[ -d "$HOME/.tmux/plugins/tpm" ] && echo "ok       tpm" || { echo "MISSING  tpm"; missing+=(tpm); }
+
+if [ ${#missing[@]} -gt 0 ]; then
+  printf '\n%d missing: %s\n' "${#missing[@]}" "${missing[*]}"
+  exit 1
+fi
+printf '\nall %d tools found\n' "${#tools[@]}"

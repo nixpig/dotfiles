@@ -146,7 +146,8 @@ step_herdr_plugins() {
     case "$installed" in *"github:$p@"*) ;; *) todo="$todo $p" ;; esac
   done
   [ -n "$todo" ] || skip "herdr plugins"
-  for p in $todo; do herdr plugin install "$p"; done
+  # --yes: herdr refuses remote installs without it when stdin isn't a terminal (e.g. CI).
+  for p in $todo; do herdr plugin install --yes "$p"; done
 }
 
 step_blesh() {

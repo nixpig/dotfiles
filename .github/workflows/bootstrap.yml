@@ -1,0 +1,72 @@
+# Runs ~/.config/yadm/bootstrap on fresh machines, the way a new laptop or Pi would:
+# clone the dotfiles with yadm as a normal user, run `yadm bootstrap`, then check the
+# tools are on PATH in a login shell.
+name: bootstrap
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: bootstrap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: ${{ matrix.image }} (${{ matrix.runner == 'ubuntu-24.04-arm' && 'arm64' || 'x64' }})
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.image }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["debian:trixie", "ubuntu:24.04"]
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    steps:
+      - name: Prepare a fresh machine
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq sudo git yadm curl ca-certificates
+          git config --system --add safe.directory '*'
+          useradd -m -u 1001 -s /bin/bash tester
+          echo 'tester ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/tester
+          # Let yadm check out its own versions instead of leaving them aside.
+          rm -f /home/tester/.bashrc /home/tester/.profile /home/tester/.bash_logout
+
+      - uses: actions/checkout@v4
+        with:
+          path: dotfiles
+
+      - name: Clone with yadm and bootstrap
+        run: |
+          git -C dotfiles checkout -q -B ci-under-test
+          su - tester -c "yadm clone --no-bootstrap -b ci-under-test '$GITHUB_WORKSPACE/dotfiles' && yadm bootstrap"
+
+      - name: Check tools in a login shell
+        run: su - tester -c 'bash -l ~/.config/yadm/ci-check-tools'
+
+  macos:
+    name: macOS (arm64)
+    runs-on: macos-latest
+    timeout-minutes: 60
+    env:
+      # The App Store needs an interactive sign-in, which CI can't do.
+      HOMEBREW_BUNDLE_MAS_SKIP: "Amphetamine 937984704"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: dotfiles
+
+      - name: Clone with yadm and bootstrap
+        run: |
+          brew install yadm
+          git -C dotfiles checkout -q -B ci-under-test
+          yadm clone --no-bootstrap -b ci-under-test "$GITHUB_WORKSPACE/dotfiles"
+          # The runner image ships its own dotfiles; make sure ours win.
+          yadm reset -q --hard HEAD
+          yadm alt
+          yadm bootstrap
+
+      - name: Check tools in a login shell
+        run: bash -l ~/.config/yadm/ci-check-tools
