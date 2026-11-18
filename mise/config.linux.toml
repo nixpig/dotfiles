@@ -1,6 +1,12 @@
 # Linux (Debian / Ubuntu / Raspberry Pi OS) only. Loaded on Linux because
 # miserc.toml turns on auto_env.
 
+[tools]
+# btop from its own release builds, not apt: Debian/Ubuntu's 1.3.x rewrites
+# btop.conf in its own format and drops save_config_on_exit (a 1.4 setting), so
+# it churns against the Mac's Homebrew 1.4.x. Go back to apt once it has 1.4+.
+btop = "latest"
+
 [bootstrap.packages]
 # Base and build
 "apt:build-essential" = "latest"
@@ -20,7 +26,6 @@
 "apt:luarocks" = "latest"
 
 # Shell and CLI (the rest are mise tools in config.toml)
-"apt:btop" = "latest"
 "apt:eza" = "latest"
 "apt:ranger" = "latest"
 "apt:tmux" = "latest"
