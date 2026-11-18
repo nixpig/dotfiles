@@ -83,9 +83,11 @@ mv ~/.config/mise ~/.config/mise.old
   - Claude Code's installer: `rm -rf ~/.local/bin/claude ~/.local/share/claude`.
     Keep `~/.claude` and `~/.claude.json`, which hold its settings and login.
   - The gh-dash extension (now a mise tool): `gh extension remove dash`.
-  - On macOS, Homebrew formulae that are now mise tools, or no longer needed:
-    `brew uninstall mise yadm mas neovim bat fzf jq ripgrep hyperfine mkcert
-    awscli gh lazygit starship` (only the ones you have).
+  - On macOS, Homebrew formulae that are now mise tools, casks, or no longer
+    needed: `brew uninstall --formula mise yadm mas neovim bat fzf jq ripgrep
+    hyperfine mkcert awscli azure-cli gh lazygit starship` (only the ones you
+    have). An old `azure-cli` formula stops the bootstrap: its completion links
+    are in the way of the cask.
 - Keep `~/.cargo` and `~/.rustup`: mise's Rust uses them too. Keep
   `~/.local/share/blesh` and `/opt/homebrew` as well, which the new setup reuses.
 

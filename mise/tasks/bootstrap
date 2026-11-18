@@ -16,7 +16,6 @@ case "$(uname -s)" in Darwin) OS=macos ;; *) OS=linux ;; esac
 
 skip() { echo "already done: $*"; exit 99; }
 manual() { echo "$*"; exit 98; }
-gh_ready() { gh auth status >/dev/null 2>&1; }
 
 # ---------------------------------------------------------------- steps ---
 
@@ -51,7 +50,9 @@ step_docker_group() {
 
 step_operator_mono() {
   compgen -G "$HOME/Library/Fonts/*[Oo]perator*" >/dev/null && skip "Operator Mono"
-  gh_ready || manual "Run 'gh auth login', then 'mise run bootstrap -- operator-mono'."
+  # Checks access, not just sign-in: CI's token is signed in but can't see the private repo.
+  gh repo view "$OPERATOR_MONO_REPO" >/dev/null 2>&1 ||
+    manual "Run 'gh auth login' (as an account that can see $OPERATOR_MONO_REPO), then 'mise run bootstrap -- operator-mono'."
   local tmp
   tmp=$(mktemp -d)
   gh repo clone "$OPERATOR_MONO_REPO" "$tmp/fonts" -- --depth 1
@@ -63,9 +64,11 @@ step_instant_space_switcher() {
   # What its Homebrew cask (jurplel/tap) does: copy the app from the release's .dmg.
   local app=/Applications/InstantSpaceSwitcher.app tmp url
   [ -d "$app" ] && skip "InstantSpaceSwitcher"
-  url=$(curl -fsSL https://api.github.com/repos/jurplel/InstantSpaceSwitcher/releases/latest |
-    grep -o '"browser_download_url": *"[^"]*\.dmg"' | head -1 | sed 's/.*"\(https[^"]*\)"$/\1/')
-  [ -n "$url" ] || { echo "no .dmg in the latest InstantSpaceSwitcher release"; return 1; }
+  # The latest release's version, from where /releases/latest redirects (.../tag/v3.1).
+  # Not the GitHub API, whose rate limit CI runners often hit.
+  url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/jurplel/InstantSpaceSwitcher/releases/latest)
+  local v=${url##*/v}
+  url="https://github.com/jurplel/InstantSpaceSwitcher/releases/download/v$v/InstantSpaceSwitcher-$v.dmg"
   tmp=$(mktemp -d)
   curl -fsSL -o "$tmp/app.dmg" "$url"
   hdiutil attach -nobrowse -readonly -mountpoint "$tmp/mnt" "$tmp/app.dmg" >/dev/null
