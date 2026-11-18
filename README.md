@@ -61,39 +61,6 @@ That file is git-ignored, so it stays on the machine.
 The `work` environment loads `mise/config.work.toml`, which links `work/` into `~`.
 Without the file, later runs would switch it back.
 
-### Switching a machine from yadm
-
-Run these before the commands above. They move yadm and the old
-`~/.config/mise` out of the way, because mise needs that path for its link:
-
-```sh
-mv ~/.local/share/yadm ~/.local/share/yadm.old
-mv ~/.config/mise ~/.config/mise.old
-```
-
-`--force-dotfiles` then replaces yadm's checked-out files with links. Afterwards:
-
-- Remove yadm's leftovers: `rm -rf ~/.config/yadm ~/.github ~/.local/share/yadm.old ~/.config/mise.old ~/.local/state/bootstrap`,
-  and anything `find ~ -name '*##*' -not -path '*/.dotfiles/*'` lists.
-- Remove tools that mise now installs, so they don't shadow its versions. Check
-  each one with `type -a <tool>`: the mise one is under `~/.local/share/mise`.
-  - Old installers: `~/.atuin`, `~/.hunk`, `~/.nvm`, `/usr/local/go` (and on
-    macOS `/etc/paths.d/go`, which Go's installer adds),
-    `/opt/nvim-*`, and on Linux the `bat`, `fzf`, `jq`, `ripgrep`, `hyperfine`,
-    `mkcert`, `lazygit`, `starship` and `gh` apt packages.
-  - herdr's installer: `rm ~/.local/bin/herdr`, then `herdr server stop` and
-    start herdr again so the server runs mise's copy.
-  - Claude Code's installer: `rm -rf ~/.local/bin/claude ~/.local/share/claude`.
-    Keep `~/.claude` and `~/.claude.json`, which hold its settings and login.
-  - The gh-dash extension (now a mise tool): `gh extension remove dash`.
-  - On macOS, Homebrew formulae that are now mise tools, casks, or no longer
-    needed: `brew uninstall --formula mise yadm mas neovim bat fzf jq ripgrep
-    hyperfine mkcert awscli azure-cli gh lazygit starship go hunk atuin` (only the ones you
-    have). An old `azure-cli` formula stops the bootstrap: its completion links
-    are in the way of the cask.
-- Keep `~/.cargo` and `~/.rustup`: mise's Rust uses them too. Keep
-  `~/.local/share/blesh` and `/opt/homebrew` as well, which the new setup reuses.
-
 ## Day to day
 
 Every file under `~/.dotfiles/home` is **linked** into `~` at the same path.
