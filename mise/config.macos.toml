@@ -35,7 +35,8 @@ mas = "latest"                # for the mas: package below
 "brew-cask:ghostty" = "latest"
 # InstantSpaceSwitcher is installed by tasks/bootstrap: its cask is in a third-party
 # tap, which mise can only read with Ruby 3, and macOS ships Ruby 2.6.
-"brew-cask:logitune" = "latest"
+# Logi Tune is downloaded by tasks/bootstrap: its cask only opens Logitech's
+# installer for you to click through, which mise doesn't support.
 "brew-cask:ollama-app" = "latest"
 "brew-cask:unnaturalscrollwheels" = "latest"
 # Amphetamine. Needs an App Store sign-in, and mas from [tools], so on a new Mac

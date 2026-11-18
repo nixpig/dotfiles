@@ -74,6 +74,14 @@ step_instant_space_switcher() {
   rm -rf "$tmp"
 }
 
+step_logitune() {
+  # Logitech only ships an interactive installer (the cask is `installer manual:` too).
+  local dmg="$HOME/Downloads/LogiTuneInstaller.dmg"
+  [ -d /Applications/LogiTune.app ] && skip "Logi Tune"
+  [ -f "$dmg" ] || curl -fsSL -o "$dmg" https://software.vc.logitech.com/downloads/tune/LogiTuneInstaller.dmg
+  manual "Install Logi Tune: open ~/Downloads/LogiTuneInstaller.dmg and run the installer."
+}
+
 step_mac_apps() {
   local marker="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/mac-apps-opened"
   [ -f "$marker" ] && skip "app permissions noted"
@@ -82,7 +90,7 @@ step_mac_apps() {
 }
 
 STEPS="blesh herdr-plugins bat-cache"
-if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono instant-space-switcher mac-apps"; else STEPS="$STEPS docker-group"; fi
+if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono instant-space-switcher logitune mac-apps"; else STEPS="$STEPS docker-group"; fi
 
 # --------------------------------------------------------------- runner ---
 
