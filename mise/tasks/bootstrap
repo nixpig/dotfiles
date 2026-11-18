@@ -46,7 +46,7 @@ step_bat_cache() {
 step_docker_group() {
   case " $(id -nG) " in *" docker "*) skip "docker group" ;; esac
   sudo usermod -aG docker "$USER"
-  manual "Log out and back in so the docker group applies (then check: docker run --rm hello-world)."
+  manual "Run 'newgrp docker' to use docker in this terminal now; log out and back in for every other terminal and tmux (check: docker run --rm hello-world)."
 }
 
 step_operator_mono() {
