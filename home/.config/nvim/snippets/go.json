@@ -1007,6 +1007,22 @@
     "body": "require.Empty(t, ${1:val})",
     "description": "Snippet for require.Empty test assertion"
   },
+  "require.Nil": {
+    "prefix": [
+      "tanil",
+      "reqnil"
+    ],
+    "body": "require.Nil(t, ${1:val})",
+    "description": "Snippet for require.Nil test assertion"
+  },
+  "require.NotNil": {
+    "prefix": [
+      "tannil",
+      "reqnnil"
+    ],
+    "body": "require.NotNil(t, ${1:val})",
+    "description": "Snippet for require.NotNil test assertion"
+  },
   "cmp.Diff check": {
     "prefix": [
       "tacmp",
@@ -1026,4 +1042,3 @@
     "description": "Snippet for CheckAndSetDefaults method declaration"
   }
 }
-
