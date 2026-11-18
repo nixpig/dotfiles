@@ -33,7 +33,8 @@ mas = "latest"                # for the mas: package below
 # Apps
 "brew-cask:docker-desktop" = "latest"
 "brew-cask:ghostty" = "latest"
-"brew-cask:jurplel/tap/instant-space-switcher" = "latest"
+# InstantSpaceSwitcher is installed by tasks/bootstrap: its cask is in a third-party
+# tap, which mise can only read with Ruby 3, and macOS ships Ruby 2.6.
 "brew-cask:logitune" = "latest"
 "brew-cask:ollama-app" = "latest"
 "brew-cask:unnaturalscrollwheels" = "latest"

@@ -59,6 +59,21 @@ step_operator_mono() {
   rm -rf "$tmp"
 }
 
+step_instant_space_switcher() {
+  # What its Homebrew cask (jurplel/tap) does: copy the app from the release's .dmg.
+  local app=/Applications/InstantSpaceSwitcher.app tmp url
+  [ -d "$app" ] && skip "InstantSpaceSwitcher"
+  url=$(curl -fsSL https://api.github.com/repos/jurplel/InstantSpaceSwitcher/releases/latest |
+    grep -o '"browser_download_url": *"[^"]*\.dmg"' | head -1 | sed 's/.*"\(https[^"]*\)"$/\1/')
+  [ -n "$url" ] || { echo "no .dmg in the latest InstantSpaceSwitcher release"; return 1; }
+  tmp=$(mktemp -d)
+  curl -fsSL -o "$tmp/app.dmg" "$url"
+  hdiutil attach -nobrowse -readonly -mountpoint "$tmp/mnt" "$tmp/app.dmg" >/dev/null
+  cp -R "$tmp/mnt/InstantSpaceSwitcher.app" /Applications/ || { hdiutil detach "$tmp/mnt" >/dev/null; return 1; }
+  hdiutil detach "$tmp/mnt" >/dev/null
+  rm -rf "$tmp"
+}
+
 step_mac_apps() {
   local marker="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/mac-apps-opened"
   [ -f "$marker" ] && skip "app permissions noted"
@@ -67,7 +82,7 @@ step_mac_apps() {
 }
 
 STEPS="blesh herdr-plugins bat-cache"
-if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono mac-apps"; else STEPS="$STEPS docker-group"; fi
+if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono instant-space-switcher mac-apps"; else STEPS="$STEPS docker-group"; fi
 
 # --------------------------------------------------------------- runner ---
 
