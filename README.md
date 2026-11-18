@@ -71,16 +71,23 @@ mv ~/.config/mise ~/.config/mise.old
 
 `--force-dotfiles` then replaces yadm's checked-out files with links. Afterwards:
 
-- Remove yadm's leftovers: `rm -rf ~/.config/yadm ~/.github ~/.local/share/yadm.old ~/.config/mise.old`,
+- Remove yadm's leftovers: `rm -rf ~/.config/yadm ~/.github ~/.local/share/yadm.old ~/.config/mise.old ~/.local/state/bootstrap`,
   and anything `find ~ -name '*##*' -not -path '*/.dotfiles/*'` lists.
 - Remove tools that mise now installs, so they don't shadow its versions. Check
   each one with `type -a <tool>`: the mise one is under `~/.local/share/mise`.
   - Old installers: `~/.atuin`, `~/.hunk`, `~/.nvm`, `/usr/local/go`,
     `/opt/nvim-*`, and on Linux the `bat`, `fzf`, `jq`, `ripgrep`, `hyperfine`,
     `mkcert`, `lazygit`, `starship` and `gh` apt packages.
-  - On macOS, Homebrew formulae that are now mise tools: `brew uninstall mise
-    neovim bat fzf jq ripgrep hyperfine mkcert awscli gh lazygit starship`
-    (only the ones you have).
+  - herdr's installer: `rm ~/.local/bin/herdr`, then `herdr server stop` and
+    start herdr again so the server runs mise's copy.
+  - Claude Code's installer: `rm -rf ~/.local/bin/claude ~/.local/share/claude`.
+    Keep `~/.claude` and `~/.claude.json`, which hold its settings and login.
+  - The gh-dash extension (now a mise tool): `gh extension remove dash`.
+  - On macOS, Homebrew formulae that are now mise tools, or no longer needed:
+    `brew uninstall mise yadm mas neovim bat fzf jq ripgrep hyperfine mkcert
+    awscli gh lazygit starship` (only the ones you have).
+- Keep `~/.cargo` and `~/.rustup`: mise's Rust uses them too. Keep
+  `~/.local/share/blesh` and `/opt/homebrew` as well, which the new setup reuses.
 
 ## Day to day
 
