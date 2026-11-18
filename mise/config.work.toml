@@ -1,0 +1,6 @@
+# Work machines only. Loaded when the `work` environment is selected, which a
+# work machine does in its untracked miserc.local.toml (see README).
+
+[dotfile_groups.work]
+root = "work"
+manifest = "git"

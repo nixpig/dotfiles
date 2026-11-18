@@ -63,7 +63,9 @@ echo 'env = ["work"]' > ~/.config/mise/miserc.local.toml
 ```
 
 That file is git-ignored, so it stays on the machine. The `work` environment
-switches the git identity to the work one (`home/.config/git/config.tera`).
+loads `mise/config.work.toml`, which links `work/` into `~` (the Teleport
+links in `.local/bin`), and the templates use it to switch the git identity
+and add the Teleport provider override to `.terraformrc`.
 Without the file, later runs would switch it back.
 
 ### Switching a machine from yadm
@@ -114,10 +116,12 @@ the link becomes a plain file and `mise bootstrap status` shows it. Run
 ```text
 ~/.dotfiles/
 ├── home/                     linked into ~ on every machine
+├── work/                     linked into ~ on work machines
 └── mise/                     ~/.config/mise (a link to here)
     ├── config.toml           tools, dotfiles, git repos (every machine)
     ├── config.linux.toml     apt packages and apt repos
     ├── config.macos.toml     Homebrew formulae, casks, App Store apps
+    ├── config.work.toml      links work/ (work machines)
     ├── miserc.toml           turns on auto_env, so the platform files load
     ├── miserc.local.toml     (untracked) env = ["work"] on work machines
     ├── files/                apt signing keys
@@ -139,9 +143,10 @@ in the right state, so it's safe to run any time:
    mise installs itself into `/opt/homebrew` (the `brew` command isn't needed),
    and App Store apps via `mas`.
 1. **Git repos**: tpm, ranger_devicons and ble.sh's source.
-1. **Dotfiles**: links `home/` into `~`, and renders
-   `~/.config/git/config` from `home/.config/git/config.tera`. That holds the git
-   identity (work or personal) and, on macOS, the keychain credential helper.
+1. **Dotfiles**: links `home/` (and `work/` on work machines) into `~`, and
+   renders the templates: `~/.config/git/config`, which holds the git identity
+   (work or personal) and, on macOS, the keychain credential helper; and
+   `~/.terraformrc`.
 1. **Tools**: everything in `[tools]`: languages, Neovim, gh, atuin, herdr, Claude
    Code, and so on.
 1. **The `bootstrap` task** (`mise/tasks/bootstrap`):
@@ -188,11 +193,10 @@ Most differences live inside shared files, using existence checks. For example,
 `~/.bashrc` only adds `/opt/homebrew/bin` to PATH if it exists, and looks for
 bash-completion in both Homebrew's and Debian's locations.
 
-Files that only matter on some machines are linked everywhere anyway, when
-that's harmless. The Teleport links in `.local/bin` are relative links to
-`~/projects/.../build`. They resolve through `~/.dotfiles/home/.local/bin`, so
-they rely on the repo being at `~/.dotfiles`, and dangle where nothing is built.
-`.terraformrc` is a template so it can use `{{ env.HOME }}`.
+Whole files that only belong on work machines go in `work/`. For example, the
+Teleport links in `work/.local/bin` are relative links to `~/projects/.../build`.
+They resolve through `~/.dotfiles/work/.local/bin`, so they rely on the repo
+being at `~/.dotfiles`, and dangle until something is built.
 
 When only some lines differ, the file becomes a Tera template: name it
 `<file>.tera`, add an entry like the git config's in `[dotfile_groups.home.entries]`,
