@@ -12,7 +12,8 @@
 # Languages
 go = "latest"
 node = "26"
-rust = "stable"               # through rustup, in ~/.rustup and ~/.cargo
+# Rust isn't here: mise would set RUSTUP_TOOLCHAIN in every shell, which overrides
+# projects' rust-toolchain.toml. rustup is installed by tasks/bootstrap instead.
 
 # Editor
 neovim = "latest"
