@@ -2,10 +2,6 @@ customCommands:
   - key: "g"
     context: "files"
     description: "AI commit message"
-    # Opens the editor with the generated message, to review before committing
-    # (quit without saving, or empty the message, to abort).
     command: >
-      git commit -e -m "$(git diff --cached | ollama run qwen2.5-coder:7b 'Write a
-      commit message for this diff. Subject under 65 chars. No body
-      unless the why is non-obvious.')"
+      git commit -e -F <(git diff --cached | ollama run qwen2.5-coder:7b "Craft a concise, single sentence, commit message that encapsulates all changes made, with an emphasis on the primary updates. If the modifications share a common theme or scope, mention it succinctly; otherwise, leave the scope out to maintain focus. The goal is to provide a clear and unified overview of the changes in one single message. Don't add any descriptions to the commit, only commit message. Imperitive and concise: present tense, imperative verb first, no trailing period.")
     output: terminal
