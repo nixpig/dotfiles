@@ -37,7 +37,7 @@ jobs:
           echo 'tester ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/tester
           rm -f /home/tester/.bashrc /home/tester/.profile /home/tester/.bash_logout
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: dotfiles
 
@@ -62,7 +62,7 @@ jobs:
       # Leaves out mas: the App Store needs an interactive sign-in, which CI can't do.
       MISE_SYSTEM_PACKAGES_MANAGERS: brew,brew-cask
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: dotfiles
 
