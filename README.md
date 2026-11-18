@@ -22,7 +22,9 @@ curl -fsSL https://mise.run | sh
 `--from` clones this repo to `~/.dotfiles` (installing git if needed), links
 `~/.config/mise` to `~/.dotfiles/mise`, and runs the bootstrap from there.
 `--force-dotfiles` replaces files that are already in the way, such as the
-distro's default `~/.bashrc`.
+distro's default `~/.bashrc`. It deletes them without a backup, so on a machine
+that already has config you care about, leave it off: mise then stops and lists
+the conflicts, and `mise dot add <file>` keeps your version instead.
 
 ### Additional
 
