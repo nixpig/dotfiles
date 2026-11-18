@@ -32,6 +32,8 @@ After running the bootstrap script, run
 
 #### macOS
 
+Run `sudo -v` before bootstrap.
+
 Install [Xcode Command Line Tools](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools#Install-the-Command-Line-Tools-package-in-Terminal)
 (git, clang, make, etc.) before running the bootstrap script.
 After running the bootstrap script, sign in to the App Store,
@@ -75,7 +77,8 @@ mv ~/.config/mise ~/.config/mise.old
   and anything `find ~ -name '*##*' -not -path '*/.dotfiles/*'` lists.
 - Remove tools that mise now installs, so they don't shadow its versions. Check
   each one with `type -a <tool>`: the mise one is under `~/.local/share/mise`.
-  - Old installers: `~/.atuin`, `~/.hunk`, `~/.nvm`, `/usr/local/go`,
+  - Old installers: `~/.atuin`, `~/.hunk`, `~/.nvm`, `/usr/local/go` (and on
+    macOS `/etc/paths.d/go`, which Go's installer adds),
     `/opt/nvim-*`, and on Linux the `bat`, `fzf`, `jq`, `ripgrep`, `hyperfine`,
     `mkcert`, `lazygit`, `starship` and `gh` apt packages.
   - herdr's installer: `rm ~/.local/bin/herdr`, then `herdr server stop` and
@@ -85,7 +88,7 @@ mv ~/.config/mise ~/.config/mise.old
   - The gh-dash extension (now a mise tool): `gh extension remove dash`.
   - On macOS, Homebrew formulae that are now mise tools, casks, or no longer
     needed: `brew uninstall --formula mise yadm mas neovim bat fzf jq ripgrep
-    hyperfine mkcert awscli azure-cli gh lazygit starship` (only the ones you
+    hyperfine mkcert awscli azure-cli gh lazygit starship go hunk atuin` (only the ones you
     have). An old `azure-cli` formula stops the bootstrap: its completion links
     are in the way of the cask.
 - Keep `~/.cargo` and `~/.rustup`: mise's Rust uses them too. Keep
