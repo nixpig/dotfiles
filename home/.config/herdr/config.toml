@@ -102,28 +102,31 @@ key = "ctrl+l"
 type = "plugin_action"
 command = "herdr-nvim-nav.right"
 
+# Pane commands run via `sh -c` with the herdr server's environment, whose PATH
+# may not include mise's tools (it depends on how the server was started), so
+# they go through a login shell, which adds them via ~/.profile.
 [[keys.command]]
 key = "ctrl+n"
 type = "pane"
-command = "ranger"
+command = "exec bash -lc ranger"
 description = "Open ranger in current directory"
 
 [[keys.command]]
 key = "ctrl+g"
 type = "pane"
-command = "lazygit"
+command = "exec bash -lc lazygit"
 description = "Open lazygit in current directory"
 
 [[keys.command]]
 key = "ctrl+t"
 type = "pane"
-command = "gh dash"
+command = "exec bash -lc 'gh dash'"
 description = "Open gh-dash in current directory"
 
 [[keys.command]]
 key = "ctrl+b"
 type = "pane"
-command = "btop"
+command = "exec bash -lc btop"
 description = "Open btop in pane"
 
 [[keys.command]]
