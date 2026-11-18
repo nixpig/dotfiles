@@ -53,6 +53,19 @@ distro's default `~/.bashrc`. Leave it off to have mise stop and list them inste
 
 Once this branch is merged into the default branch, drop `?ref=mise`.
 
+### Work machines
+
+Add `-E work` to the `mise bootstrap --from` command, then make it permanent for
+that machine:
+
+```sh
+echo 'env = ["work"]' > ~/.config/mise/miserc.local.toml
+```
+
+That file is git-ignored, so it stays on the machine. The `work` environment
+switches the git identity to the work one (`home/.config/git/config.tera`).
+Without the file, later runs would switch it back.
+
 ### Switching a machine from yadm
 
 Run these before the commands above. They move yadm and the old
@@ -106,6 +119,7 @@ the link becomes a plain file and `mise bootstrap status` shows it. Run
     ├── config.linux.toml     apt packages and apt repos
     ├── config.macos.toml     Homebrew formulae, casks, App Store apps
     ├── miserc.toml           turns on auto_env, so the platform files load
+    ├── miserc.local.toml     (untracked) env = ["work"] on work machines
     ├── files/                apt signing keys
     └── tasks/
         ├── bootstrap         steps mise can't declare (run last by mise bootstrap)
@@ -126,8 +140,8 @@ in the right state, so it's safe to run any time:
    and App Store apps via `mas`.
 1. **Git repos**: tpm, ranger_devicons and ble.sh's source.
 1. **Dotfiles**: links `home/` into `~`, and renders
-   `~/.config/git/config` from `home/.config/git/config.tera`. That's the git
-   identity, which differs between macOS and everything else.
+   `~/.config/git/config` from `home/.config/git/config.tera`. That holds the git
+   identity (work or personal) and, on macOS, the keychain credential helper.
 1. **Tools**: everything in `[tools]`: languages, Neovim, gh, atuin, herdr, Claude
    Code, and so on.
 1. **The `bootstrap` task** (`mise/tasks/bootstrap`):
@@ -182,7 +196,8 @@ they rely on the repo being at `~/.dotfiles`, and dangle where nothing is built.
 
 When only some lines differ, the file becomes a Tera template: name it
 `<file>.tera`, add an entry like the git config's in `[dotfile_groups.home.entries]`,
-and use `{% if os() == "macos" %}`.
+and use `{% if os() == "macos" %}`, or
+`{% if mise_env is defined and "work" in mise_env %}` for work machines.
 
 ## Conventions
 

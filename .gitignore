@@ -1,0 +1,2 @@
+# Machine-local mise settings, e.g. miserc.local.toml selecting the work environment.
+mise/*.local.toml
