@@ -50,9 +50,11 @@ goreleaser = "latest"
 # x/perf has no releases, so every commit is a new version. mise skips versions
 # under 24h old by default, which leaves none for a day after each commit.
 "go:golang.org/x/perf/cmd/benchstat" = { version = "latest", minimum_release_age = "0" }
+"go:github.com/githubnemo/CompileDaemon" = "latest"
 
 # Benchmarking and certificates
 hyperfine = "latest"
+bats = "latest"               # bats-core
 mkcert = "latest"
 
 # AI

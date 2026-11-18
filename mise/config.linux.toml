@@ -13,6 +13,8 @@
 "apt:clang" = "latest"
 "apt:cmake" = "latest"
 "apt:gawk" = "latest"
+"apt:pkg-config" = "latest"
+"apt:libfido2-dev" = "latest"  # FIDO2 library and headers, for building Teleport
 "apt:lua5.1" = "latest"
 "apt:luajit" = "latest"
 "apt:luarocks" = "latest"

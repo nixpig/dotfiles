@@ -20,6 +20,8 @@ mas = "latest"                # for the mas: package below
 "brew:gcc" = "latest"         # real GCC, installed as gcc-NN; plain `gcc` on macOS is clang
 "brew:luajit" = "latest"
 "brew:luarocks" = "latest"
+"brew:pkgconf" = "latest"     # provides pkg-config (the formula was renamed)
+"brew:libfido2" = "latest"    # for building Teleport
 
 # Network
 "brew:arp-scan" = "latest"
