@@ -75,6 +75,7 @@ commit and push from `~/.dotfiles` as normal.
 | Pull changes and apply them | `mise bootstrap --update` |
 | See what's out of sync | `mise bootstrap status`, or `mise run check` |
 | Upgrade tools pinned to `latest` | `mise upgrade` |
+| Upgrade Rust | `rustup update` |
 | Upgrade system packages | `mise bootstrap packages upgrade` |
 | Preview a run | `mise bootstrap --dry-run` |
 | Run some parts only | `mise bootstrap --only packages,dotfiles` (parts are listed in `mise bootstrap --help`) |
@@ -114,6 +115,11 @@ Run `mise dot add <file>` to copy the app's version into the repo and link it ag
 
 Use `mise use -g` rather than apt or Homebrew when mise has the tool.
 That way it's one entry for both platforms, and the same version on each.
+
+The exception is Rust, which comes from rustup (installed by the bootstrap task).
+mise's `rust` sets `RUSTUP_TOOLCHAIN` in every shell, which overrides a project's
+`rust-toolchain.toml`, and Homebrew's or apt's `rust` shadow rustup's `cargo`.
+`mise run check` fails if `cargo` or `rustc` isn't rustup's.
 
 ### Platform-specific files
 

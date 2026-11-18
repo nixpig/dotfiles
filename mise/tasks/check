@@ -31,5 +31,18 @@ for f in "$HOME/.local/share/blesh/ble.sh"; do
   if [ -e "$f" ]; then printf 'ok       %s\n' "$f"; else printf 'MISSING  %s\n' "$f"; fail=1; fi
 done
 
+# Rust must come from rustup's proxies, or builds ignore a project's rust-toolchain.toml.
+# Catches anything earlier on PATH, e.g. Homebrew's rust or a leftover mise shim.
+echo "--- rust from rustup"
+for c in cargo rustc; do
+  found=$(command -v "$c" 2>/dev/null)
+  if [ "$found" = "$HOME/.cargo/bin/$c" ]; then printf 'ok       %s\n' "$found"
+  else printf 'WRONG    %s is %s, not rustup'\''s ~/.cargo/bin/%s\n' "$c" "${found:-missing}" "$c"; fail=1; fi
+  # mise drops its shims from PATH inside `mise run`, so look for a leftover one directly:
+  # interactive shells put the shims first.
+  shim="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims/$c"
+  if [ -e "$shim" ]; then printf 'WRONG    %s has a mise shim, which comes before rustup in shells: %s\n' "$c" "$shim"; fail=1; fi
+done
+
 [ "$fail" -eq 0 ] && echo "--- all good" || echo "--- problems found"
 exit "$fail"
