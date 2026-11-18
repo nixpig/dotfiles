@@ -80,7 +80,7 @@ mv ~/.config/mise ~/.config/mise.old
 
 `--force-dotfiles` then replaces yadm's checked-out files with links. Afterwards:
 
-- Remove yadm's leftovers: `rm -rf ~/.config/yadm ~/.local/share/yadm.old ~/.config/mise.old`,
+- Remove yadm's leftovers: `rm -rf ~/.config/yadm ~/.github ~/.local/share/yadm.old ~/.config/mise.old`,
   and anything `find ~ -name '*##*' -not -path '*/.dotfiles/*'` lists.
 - Remove tools that mise now installs, so they don't shadow its versions. Check
   each one with `type -a <tool>`: the mise one is under `~/.local/share/mise`.
