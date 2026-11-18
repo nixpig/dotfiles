@@ -2,8 +2,10 @@ customCommands:
   - key: "g"
     context: "files"
     description: "AI commit message"
+    # Opens the editor with the generated message, to review before committing
+    # (quit without saving, or empty the message, to abort).
     command: >
-      git diff --cached | ollama run qwen2.5-coder:7b "Write a 
+      git commit -e -m "$(git diff --cached | ollama run qwen2.5-coder:7b 'Write a
       commit message for this diff. Subject under 65 chars. No body
-      unless the why is non-obvious." | git commit -F -
-    loadingText: "thinking..."
+      unless the why is non-obvious.')"
+    output: terminal
