@@ -984,7 +984,7 @@ require('lazy').setup({
             local util = require 'lspconfig.util'
             local tsdk = util.get_typescript_server_path(config.root_dir)
             if tsdk == '' then
-              tsdk = vim.fn.expand '~/.local/share/nvim/mason/packages/typescript-language-server/node_modules/typescript/lib'
+              tsdk = vim.fn.stdpath 'data' .. '/mason/packages/typescript-language-server/node_modules/typescript/lib'
             end
             config.init_options.typescript.tsdk = tsdk
           end,

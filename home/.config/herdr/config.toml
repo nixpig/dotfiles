@@ -63,25 +63,7 @@ navigate_pane_up = "ctrl+k"
 split_horizontal = "prefix+minus"
 split_vertical = "prefix+\\"
 
-# herdr-beams plugin actions (see the plugin README)
-[[keys.command]]
-key = "prefix+shift+b"
-type = "plugin_action"
-command = "herdr-beams.bind-new-beam"
-description = "Bind a new beam to a workspace"
-
-[[keys.command]]
-key = "prefix+shift+l"
-type = "plugin_action"
-command = "herdr-beams.refresh-beam-labels"
-description = "Refresh beam labels"
-
-[[keys.command]]
-key = "prefix+shift+a"
-type = "plugin_action"
-command = "herdr-beams.show-beams"
-description = "Show beams table"
-
+# Pane navigation
 [[keys.command]]
 key = "ctrl+h"
 type = "plugin_action"
@@ -106,10 +88,10 @@ command = "herdr-nvim-nav.right"
 # may not include mise's tools (it depends on how the server was started), so
 # they go through a login shell, which adds them via ~/.profile.
 [[keys.command]]
-key = "ctrl+n"
+key = "ctrl+b"
 type = "pane"
-command = "exec bash -lc ranger"
-description = "Open ranger in current directory"
+command = "exec bash -lc btop"
+description = "Open btop in pane"
 
 [[keys.command]]
 key = "ctrl+g"
@@ -124,10 +106,10 @@ command = "exec bash -lc 'gh dash'"
 description = "Open gh-dash in current directory"
 
 [[keys.command]]
-key = "ctrl+b"
+key = "ctrl+n"
 type = "pane"
-command = "exec bash -lc btop"
-description = "Open btop in pane"
+command = "exec bash -lc ranger"
+description = "Open ranger in current directory"
 
 [[keys.command]]
 key = "prefix+k"
