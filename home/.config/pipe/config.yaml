@@ -14,6 +14,11 @@ concurrency: 16
 # Model providers specs may use (Beams inject credentials for these).
 # providers: [openai, anthropic]
 
+# Model used by `pipe new` when --model is omitted.
+default_model: anthropic/claude-sonnet-5
+default_agent: claude
+default_setup: claude
+
 # How often interactive agent sessions are checkpointed locally.
 # checkpoint_interval: 2m
 
@@ -26,11 +31,13 @@ concurrency: 16
 
 # beams:
 #   destroy_delay: 30m   # keep a finished step's beam this long
-#   ttl: 24h             # Beams' fixed lifetime
-#   ttl_notice: 20m      # warn this long before an interactive beam expires
-#   ttl_auto_rotate: 5m  # move an interactive step to a new beam at this point
+#   ttl: 11h             # Beams' fixed lifetime
+#   ttl_notice: 30m      # warn, and start preparing the next beam, this
+#                        # long before an interactive beam expires
+#   ttl_auto_rotate: 15m # move an interactive step to a new beam at this point
 #   refresh: 15s         # how often `tsh beams ls` is polled
 #   poll_interval: 5s    # how often a running step is checked
+#   ready_timeout: 1m30s # how long a new beam may take to accept connections
 #   home: /home/beams    # home directory on a beam
 #   # How Mutagen reaches a beam: "tsh" passes its ssh and scp through
 #   # `tsh beams exec` (plain ssh can't reach beams); "system" uses your ssh.
@@ -40,6 +47,7 @@ concurrency: 16
 #   shell: ["{{.Tsh}}", "beams", "ssh", "{{.Name}}"]
 #   # attach: unset uses `pipe beam attach` (via tsh beams ssh); set an argv
 #   # here to attach some other way.
+#   phase_root: /opt/pipe # where setup profile files live on the phase image
 
 # budget:
 #   warn_at: 0.8         # warn at 80% of a run's budget
@@ -51,14 +59,31 @@ concurrency: 16
 # retries:
 #   infra: 3             # retries after infrastructure failures (lost beam, setup)
 
-tools:
-  herdr: herdr
+# tools:                 # programs pipe runs (names on PATH or absolute paths)
+#   git: git
+#   tsh: tsh
+#   ssh: ssh
+#   mutagen: mutagen
+#   herdr: herdr
 
 # herdr:
 #   enabled: true        # a Herdr workspace and console per run
 #   session: ""          # a named Herdr session (empty: the default)
 
-# Remap board keys by action name; alternatives are comma-separated.
+# theme:                 # terminal colors (full-spectrum hex); defaults to Catppuccin Mocha
+#   accent: "#cba6f7"    # needs you
+#   warn: "#f9e2af"      # paused / warning
+#   bad: "#f38ba8"       # failed
+#   good: "#a6e3a1"      # done
+#   running: "#89b4fa"   # running
+#   chrome: "#b4befe"    # headers / tab chrome
+#   dim: "#6c7086"       # dim text
+#   title: "#cdd6f4"     # titles
+#   selection: "#313244" # selected row background
+#   match: "#fab387"     # search match
+# Remap board keys by action name; alternatives are comma-separated. Each
+# alternative is a single keystroke (a letter, digit, symbol or named key
+# like "ctrl+d").
 # keymap:
-#   cancel: "dd"
-#   next_you: "]n,tab"
+#   cancel: "x,ctrl+x"
+#   down: "j,ctrl+n"

@@ -70,9 +70,6 @@ Only report what this change introduced, made worse, or now depends on. A proble
 
 Write `verify.json` in the repository root with an overall `"pass"` of `true` or `false` and one entry in `"reasons"` for each of the findings:
 
-Only findings of **critical** and **high** severity should result in `"pass": false`.
-Findings of only **medium**, **low**, and **nit** severity are informational only and should result in `"pass": true`.
-
 ```json
 {
     "pass": true or false,
@@ -87,6 +84,9 @@ Findings of only **medium**, **low**, and **nit** severity are informational onl
     ]
 }
 ```
+
+Only findings of **critical** and **high** severity should result in `"pass": false`.
+Findings of only **medium**, **low**, and **nit** severity are informational only and should result in `"pass": true`.
 
 Do not change any files except `verify.json`.
 

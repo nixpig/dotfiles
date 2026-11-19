@@ -41,18 +41,6 @@ alias tmw='tmux new-window'
 alias tms='tmux switch-client -t "$(tmux ls | fzf | cut -d: -f1)"'
 alias tmrc='cd ~ && vim .tmux.conf'
 
-# git
-alias g='git'
-alias gd='git diff'
-alias gs='git status'
-alias ga='git add'
-alias gaa='git add .'
-alias gc='git commit'
-alias gcm='git commit -m'
-alias grc='cd ~ && vim .gitconfig'
-
-# alias czsp="cd $(chezmoi source-path)"
-
 # Remap utilities
 ## cat aliases (Debian/Ubuntu ship bat as `batcat`)
 if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
@@ -93,6 +81,9 @@ alias vf='nvim $(find . -type f -print | fzf --preview "$_bat --color=always --l
 alias td='tmux-sessionizer'
 
 # Git aliases
+alias g='git'
+alias gd='git diff'
+alias grc='cd ~ && vim .gitconfig'
 alias gb='git branch'
 alias gbl='git branch --list'
 alias gba='git branch -a'
@@ -108,16 +99,21 @@ alias gpf='git push --force-with-lease'
 alias gpr='git pull --rebase'
 alias gpom='git pull origin master'
 alias gpob='git pull origin $(git rev-parse --abbrev-ref HEAD)'
-alias gpu='git push -u origin $(git branch | fzf | sed "s/^[ *]*//g")'
+alias gpu='git push -u origin $(git branch --show-current)'
 alias gra='git remote add'
 alias grr='git remote rm'
 alias gcl='git clone'
+
+alias ga='git add'
+alias gaa='git add .'
+
+alias gc='git commit'
+alias gcm='git commit -m'
 alias gca='git commit --amend'
-alias gcz='git-cz'
+
 alias gss='git stash'
-alias gsp='git stash pop'
-alias gsa='git stash apply'
-alias gpai='git diff HEAD~1 | ollama run qwen2.5-coder:7b "Write a one paragraph PR description for this change. Write in third person, in imperative active voice. Do not start with \"This\" or \"The\"."'
+alias gssp='git stash pop'
+alias gssa='git stash apply'
 
 alias tf='terraform'
 alias kc='kubectl'

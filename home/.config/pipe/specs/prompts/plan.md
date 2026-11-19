@@ -26,7 +26,7 @@ Remember that they will write the code. The plan should say what to do, not cont
 
 What makes a plan fail is usually not in any one step but between them, or outside the repository:
 
-- Anything the design rests on that the research or the RFD marks as assumed about a tool, service or runtime outside the repository goes under `## Preconditions to confirm`, and no step depends on it until it is confirmed. Ask the engineer to confirm what they can now: they can run what you can't.
+- Anything the design rests on that the research or the RFD marks as assumed about a tool, service or runtime outside the repository goes under `## Preconditions to confirm`, and no step depends on it until it is confirmed. Ideally, this should be empty, and all preconditions should be confirmed before writing the plan. Ask the engineer to confirm what they can now: they can run what you can't.
 - Each step states what it assumes already exists when its code runs (a directory, a file, an environment variable, a binary on `PATH`, state an earlier step wrote) and what the code does when it doesn't.
 - Where a scenario's setup constrains how the code has to be written (a stub found through `PATH`, an injected clock, a fake file layout, a variable the test sets), state the constraint in the step that writes that code.
 - Don't cite `research.md`. Carry the fact itself, with its `path:line` in the repository or its outside source: `rfd.md` and `plan.md` are what a reviewer of the change has, and the research stays in the workspace.
@@ -51,6 +51,9 @@ An ordered list. Each step names the files and the function or type to change, s
 Where a step adds something new, it says which existing code it uses or extends, or why none fits.
 Each step says what it assumes exists when its code runs, and what the code does when it doesn't, and any constraint a scenario's setup puts on how it is written.
 Each step should contain sufficient detail to make the required change without prior knowledge of the area of the codebase it affects.
+Use the present tense, imperative verb form, and active voice. 
+
+This run lets the agent write directly in these directories: {{if .AgentWrite}}{{list .AgentWrite}}{{else}}none{{end}}. Mark each step whose files fall entirely inside them "(agent-writable)"; leave every other step unmarked, meaning the engineer writes it, with agent assistance, as usual.
 
 ## Tests
 
@@ -61,3 +64,4 @@ and the kind of test for each (unit, end-to-end, a fake or the real dependency).
 
 Use those headings, in that order.
 Then tell the engineer in one line that it's written and that they can end the session, and stop. Don't read the file back to them.
+
