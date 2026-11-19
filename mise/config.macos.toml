@@ -1,7 +1,8 @@
 # macOS only. Loaded on macOS because miserc.toml turns on auto_env.
 # mise installs formulae and casks itself, into /opt/homebrew; the `brew` command
 # isn't needed (but sees them if it's installed).
-# Not needed because macOS already has them: curl, lsof, clang/make (Xcode Command Line Tools).
+# Not needed because macOS already has them: curl, lsof, make (Xcode Command Line Tools).
+# Xcode's clang is also there, but it can't build wasm32; brew:llvm below can.
 
 [tools]
 mas = "latest"                # for the mas: package below
@@ -18,6 +19,7 @@ mas = "latest"                # for the mas: package below
 # Build
 "brew:cmake" = "latest"
 "brew:gcc" = "latest"         # real GCC, installed as gcc-NN; plain `gcc` on macOS is clang
+"brew:llvm" = "latest"        # LLVM clang, which can build wasm32 (Apple's can't); keg-only, on PATH via .bashrc
 "brew:luajit" = "latest"
 "brew:luarocks" = "latest"
 "brew:pkgconf" = "latest"     # provides pkg-config (the formula was renamed)
