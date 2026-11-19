@@ -10,7 +10,7 @@
 
 [tools]
 # Languages
-go = "latest"
+go = "1.27.3"   # 1.27.4 rejects Rust static libs (golang/go#83126), which breaks Teleport's cgo build; back to "latest" once fixed
 node = "26"
 # Rust isn't here: mise would set RUSTUP_TOOLCHAIN in every shell, which overrides
 # projects' rust-toolchain.toml. rustup is installed by tasks/bootstrap instead.
