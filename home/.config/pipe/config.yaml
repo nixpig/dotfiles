@@ -15,7 +15,7 @@ concurrency: 16
 # providers: [openai, anthropic]
 
 # Model used by `pipe new` when --model is omitted.
-default_model: anthropic/claude-sonnet-5
+# default_model: anthropic/claude-sonnet-5
 default_agent: claude
 default_setup: claude
 
@@ -59,12 +59,12 @@ default_setup: claude
 # retries:
 #   infra: 3             # retries after infrastructure failures (lost beam, setup)
 
-# tools:                 # programs pipe runs (names on PATH or absolute paths)
-#   git: git
-#   tsh: tsh
-#   ssh: ssh
-#   mutagen: mutagen
-#   herdr: herdr
+tools: # programs pipe runs (names on PATH or absolute paths)
+  #   git: git
+  #   tsh: tsh
+  #   ssh: ssh
+  #   mutagen: mutagen
+  herdr: /Users/jacobward/.local/share/mise/installs/herdr/latest/herdr
 
 # herdr:
 #   enabled: true        # a Herdr workspace and console per run

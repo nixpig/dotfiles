@@ -87,11 +87,11 @@ command = "herdr-nvim-nav.right"
 # Pane commands run via `sh -c` with the herdr server's environment, whose PATH
 # may not include mise's tools (it depends on how the server was started), so
 # they go through a login shell, which adds them via ~/.profile.
-[[keys.command]]
-key = "ctrl+b"
-type = "pane"
-command = "exec bash -lc btop"
-description = "Open btop in pane"
+# [[keys.command]]
+# key = "ctrl+b"
+# type = "pane"
+# command = "exec bash -lc btop"
+# description = "Open btop in pane"
 
 [[keys.command]]
 key = "ctrl+g"
