@@ -2,3 +2,5 @@
 	pager = hunk pager
 [merge]
     conflictStyle = zdiff3
+[user]
+	email = 143995476+nixpig@users.noreply.github.com

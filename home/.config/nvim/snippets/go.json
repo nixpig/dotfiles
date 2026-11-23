@@ -936,6 +936,16 @@
     "body": "require.Same(t, ${1}, ${2})",
     "description": "Snippet for require.Same(t, a, b) test assertion"
   },
+  "require.NotSame": {
+    "prefix": [
+      "tansame",
+      "tanotsame",
+      "reqnsame",
+      "reqnotsame"
+    ],
+    "body": "require.NotSame(t, ${1}, ${2})",
+    "description": "Snippet for require.NotSame(t, a, b) test assertion"
+  },
   "require.ErrorAs": {
     "prefix": [
       "taerras",
