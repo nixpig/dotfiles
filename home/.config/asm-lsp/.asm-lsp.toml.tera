@@ -1,12 +1,17 @@
-# Global asm-lsp defaults (Neovim's assembly LSP). A project's own .asm-lsp.toml
-# overrides this. Valid values: https://github.com/bergercookie/asm-lsp#configure-via-asm-lsptoml
+# Rendered by `mise dot apply` to ~/.config/asm-lsp/.asm-lsp.toml: global asm-lsp
+# defaults (Neovim's assembly LSP). A project's own .asm-lsp.toml overrides this.
+# Valid values: https://github.com/bergercookie/asm-lsp#configure-via-asm-lsptoml
 #
 # This file exists for `compiler`: without it, asm-lsp assembles with both gcc and
 # clang and reports every error twice from each. assembler and instruction_set are
-# required alongside it, so the instruction set is fixed here rather than detected.
+# required alongside it, so the instruction set follows this machine's architecture.
 [default_config]
 assembler = "gas"           # GNU as
+{%- if arch() == "arm64" %}
 instruction_set = "arm64"
+{%- else %}
+instruction_set = "x86/x86-64"
+{%- endif %}
 
 # Must be [default_config.opts]: a top-level [opts] (as in asm-lsp's README) is ignored.
 [default_config.opts]

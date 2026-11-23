@@ -73,10 +73,11 @@ root = "home"
 manifest = "git"              # only files committed to the repo
 
 [dotfile_groups.home.entries]
-# Rendered rather than linked: the git identity differs per OS, and .terraformrc
-# needs $HOME's absolute path.
+# Rendered rather than linked: the git identity differs per OS, .terraformrc
+# needs $HOME's absolute path, and asm-lsp's instruction set follows the CPU.
 "~/.config/git/config" = { mode = "template" }
 "~/.terraformrc" = { mode = "template" }
+"~/.config/asm-lsp/.asm-lsp.toml" = { mode = "template" }
 
 # ---------------------------------------------------------------- repos ---
 # Cloned if missing; left alone if they exist (`mise bootstrap --update` pulls).
