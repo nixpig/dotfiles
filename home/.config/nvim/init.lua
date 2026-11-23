@@ -1580,6 +1580,25 @@ require('lazy').setup({
 
       require('nvim-treesitter').setup {}
 
+      -- Liftoscript (Liftosaur programs) from a local checkout of tree-sitter-liftoscript:
+      -- `liftoscript` for program files and `liftoscript_script` for their {~ ~} scripts.
+      -- Skipped on machines without the checkout.
+      local liftoscript_repo = vim.fn.expand '~/projects/tree-sitter-liftoscript'
+      local has_liftoscript = vim.uv.fs_stat(liftoscript_repo) ~= nil
+      if has_liftoscript then
+        local function register_liftoscript()
+          local parsers = require 'nvim-treesitter.parsers'
+          parsers.liftoscript = {
+            install_info = { path = liftoscript_repo, location = 'liftoscript', queries = 'queries/liftoscript' },
+          }
+          parsers.liftoscript_script = {
+            install_info = { path = liftoscript_repo, location = 'script', queries = 'queries/liftoscript_script' },
+          }
+        end
+        register_liftoscript()
+        vim.api.nvim_create_autocmd('User', { pattern = 'TSUpdate', callback = register_liftoscript })
+      end
+
       -- Install parsers
       local ensure_installed = {
         'markdown',
@@ -1623,6 +1642,9 @@ require('lazy').setup({
         'templ',
         'vhs',
       }
+      if has_liftoscript then
+        vim.list_extend(ensure_installed, { 'liftoscript', 'liftoscript_script' })
+      end
 
       -- Install missing parsers after startup
       -- TODO: Is this really necessary? Doesn't it just duplicate ensure_installed?
@@ -2191,6 +2213,7 @@ vim.filetype.add {
     tfvars = 'terraform',
     tpl = 'helm',
     mdx = 'mdx',
+    liftoscript = 'liftoscript',
   },
   filename = {
     Podfile = 'ruby',
