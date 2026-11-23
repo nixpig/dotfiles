@@ -1073,36 +1073,69 @@ require('lazy').setup({
       })
       vim.lsp.enable 'tsc'
 
-      -- Organize imports on save, before conform formats: sort them and remove unused
-      -- ones (gopls also adds missing ones). Formatting alone only sorts Go imports,
-      -- and leaves TS/JS imports as they are.
+      -- oxlint: the project's own (node_modules/.bin), started only in projects with an
+      -- oxlint config or dependency. Not from Mason, so also kept out of `servers`.
+      -- Its fixes are applied on save (below).
+      local oxlint_root_dir = vim.lsp.config.oxlint.root_dir
+      vim.lsp.config('oxlint', {
+        capabilities = capabilities,
+        -- lspconfig's root_dir passes nil when there's no oxlint project, and a nil root
+        -- still starts the server (with a global oxlint), so only pass on a real root.
+        root_dir = function(bufnr, on_dir)
+          oxlint_root_dir(bufnr, function(root)
+            if root then
+              on_dir(root)
+            end
+          end)
+        end,
+      })
+      vim.lsp.enable 'oxlint'
+
+      -- Runs the code actions of `kind` that the buffer's `client_names` server offers
+      -- for the whole buffer, waiting for them to finish.
+      local function apply_code_actions(bufnr, client_names, kind)
+        local client = vim.iter(vim.lsp.get_clients { bufnr = bufnr }):find(function(c)
+          return client_names[c.name]
+        end)
+        if not client then
+          return
+        end
+        local params = {
+          textDocument = vim.lsp.util.make_text_document_params(bufnr),
+          range = { start = { line = 0, character = 0 }, ['end'] = { line = vim.api.nvim_buf_line_count(bufnr), character = 0 } },
+          context = { only = { kind }, diagnostics = {} },
+        }
+        local res = client:request_sync('textDocument/codeAction', params, 1000, bufnr)
+        -- Servers may ignore `only`: ts_ls also returns quickfixes, like adding `: any`.
+        local actions = vim.tbl_filter(function(action)
+          return action.kind == kind or vim.startswith(action.kind or '', kind .. '.')
+        end, res and res.result or {})
+        for _, action in ipairs(actions) do
+          if not action.edit and not action.command and client:supports_method 'codeAction/resolve' then
+            local resolved = client:request_sync('codeAction/resolve', action, 1000, bufnr)
+            action = resolved and resolved.result or action
+          end
+          if action.edit then
+            vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+          end
+          if action.command then
+            local command = type(action.command) == 'table' and action.command or action
+            client:request_sync('workspace/executeCommand', command, 1000, bufnr)
+          end
+        end
+      end
+
+      -- On save, before conform formats:
+      -- 1. Apply oxlint's fixes (JS/TS projects that use oxlint).
+      -- 2. Organize imports: sort them and remove unused ones (gopls also adds missing
+      --    ones). Formatting alone only sorts Go imports, and leaves TS/JS imports as they are.
       local organize_imports_clients = { gopls = true, ts_ls = true, tsc = true }
       vim.api.nvim_create_autocmd('BufWritePre', {
         group = vim.api.nvim_create_augroup('OrganizeImports', { clear = true }),
         pattern = { '*.go', '*.ts', '*.tsx', '*.mts', '*.cts', '*.js', '*.jsx', '*.mjs', '*.cjs' },
         callback = function(args)
-          local client = vim.iter(vim.lsp.get_clients { bufnr = args.buf }):find(function(c)
-            return organize_imports_clients[c.name]
-          end)
-          if not client then
-            return
-          end
-          local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
-          params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
-          local res = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
-          for _, action in ipairs(res and res.result or {}) do
-            if not action.edit and not action.command and client:supports_method 'codeAction/resolve' then
-              local resolved = client:request_sync('codeAction/resolve', action, 1000, args.buf)
-              action = resolved and resolved.result or action
-            end
-            if action.edit then
-              vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
-            end
-            if action.command then
-              local command = type(action.command) == 'table' and action.command or action
-              client:request_sync('workspace/executeCommand', command, 1000, args.buf)
-            end
-          end
+          apply_code_actions(args.buf, { oxlint = true }, 'source.fixAll.oxc')
+          apply_code_actions(args.buf, organize_imports_clients, 'source.organizeImports')
         end,
       })
     end,
@@ -1136,27 +1169,15 @@ require('lazy').setup({
         -- Uses the project's .clang-format, or clang-format's default (LLVM) style.
         c = { 'clang-format' },
         cpp = { 'clang-format' },
-        javascript = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
-        javascriptreact = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
-        typescript = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
-        typescriptreact = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
+        -- oxlint's fixes come from its language server, before these run (see OrganizeImports).
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         json = { 'prettierd', 'prettier', stop_after_first = true },
         jsonc = { 'prettierd', 'prettier', stop_after_first = true },
         css = { 'prettierd', 'prettier', stop_after_first = true },
         scss = { 'prettierd', 'prettier', stop_after_first = true },
-      },
-      formatters = {
-        oxlint = {
-          -- The project's own oxlint (node_modules/.bin), like conform's prettier;
-          -- skipped in projects that don't install it.
-          command = function(self, ctx)
-            return require('conform.util').from_node_modules 'oxlint'(self, ctx)
-          end,
-          args = function(_, ctx)
-            return { '--fix', ctx.filename }
-          end,
-          stdin = false,
-        },
       },
     },
   },
