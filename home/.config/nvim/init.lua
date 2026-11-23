@@ -827,6 +827,20 @@ require('lazy').setup({
         },
       }
 
+      -- Major version of the project's own TypeScript (nearest node_modules/typescript), or nil.
+      local function project_typescript_major(bufnr)
+        local pkg = vim.fs.find('node_modules/typescript/package.json', {
+          path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
+          upward = true,
+        })[1]
+        if not pkg then
+          return nil
+        end
+        local ok, json = pcall(vim.json.decode, table.concat(vim.fn.readfile(pkg), '\n'))
+        local version = ok and vim.version.parse(json.version or '')
+        return version and version.major or nil
+      end
+
       local servers = {
         -- Assembly. Instruction set and assembler come from the project's .asm-lsp.toml,
         -- else ~/.config/asm-lsp/.asm-lsp.toml (ARM64, GNU as).
@@ -834,8 +848,12 @@ require('lazy').setup({
         -- Starts only in projects with an ESLint config (eslint.config.*, .eslintrc*,
         -- or eslintConfig in package.json), using the project's ESLint.
         eslint = {},
+        -- TypeScript 6 and older. TypeScript 7+ projects use `tsc` instead (below).
         ts_ls = {
           root_dir = function(bufnr, on_dir)
+            if (project_typescript_major(bufnr) or 0) >= 7 then
+              return
+            end
             local root = vim.fs.root(bufnr, { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' })
             on_dir(root or vim.uv.cwd())
           end,
@@ -1031,10 +1049,34 @@ require('lazy').setup({
       vim.lsp.config('clangd', { capabilities = capabilities })
       vim.lsp.enable 'clangd'
 
+      -- TypeScript 7+ (the native compiler) has no tsserver.js for ts_ls; it has its own
+      -- language server, `tsc --lsp`, run from the project's node_modules. Not from Mason,
+      -- so also kept out of `servers`. Only started for TypeScript 7+ projects, else
+      -- lspconfig's tsc warns in every older project that no `--lsp` binary was found.
+      local tsc_root_dir = vim.lsp.config.tsc.root_dir
+      vim.lsp.config('tsc', {
+        capabilities = capabilities,
+        -- lspconfig's cmd looks up the binary its root_dir found in a cache, but that's a
+        -- different copy of lsp/tsc.lua from the one read here, so the lookup misses.
+        cmd = function(dispatchers, config)
+          local bin = vim.fs.joinpath(config.root_dir, 'node_modules/.bin/tsc')
+          if vim.fn.executable(bin) ~= 1 then
+            bin = 'tsc'
+          end
+          return vim.lsp.rpc.start({ bin, '--lsp', '--stdio' }, dispatchers)
+        end,
+        root_dir = function(bufnr, on_dir)
+          if (project_typescript_major(bufnr) or 0) >= 7 then
+            tsc_root_dir(bufnr, on_dir)
+          end
+        end,
+      })
+      vim.lsp.enable 'tsc'
+
       -- Organize imports on save, before conform formats: sort them and remove unused
       -- ones (gopls also adds missing ones). Formatting alone only sorts Go imports,
       -- and leaves TS/JS imports as they are.
-      local organize_imports_clients = { gopls = true, ts_ls = true }
+      local organize_imports_clients = { gopls = true, ts_ls = true, tsc = true }
       vim.api.nvim_create_autocmd('BufWritePre', {
         group = vim.api.nvim_create_augroup('OrganizeImports', { clear = true }),
         pattern = { '*.go', '*.ts', '*.tsx', '*.mts', '*.cts', '*.js', '*.jsx', '*.mjs', '*.cjs' },
