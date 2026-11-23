@@ -19,7 +19,9 @@ mas = "latest"                # for the mas: package below
 # Build
 "brew:cmake" = "latest"
 "brew:gcc" = "latest"         # real GCC, installed as gcc-NN; plain `gcc` on macOS is clang
-"brew:llvm" = "latest"        # LLVM clang, which can build wasm32 (Apple's can't); keg-only, on PATH via .bashrc
+"brew:llvm" = "latest"        # LLVM clang, which can build wasm32 (Apple's can't), plus clangd, clang-format, clang-tidy; keg-only, on PATH via .bashrc
+"brew:bear" = "latest"        # compile_commands.json for Make projects: `bear -- make`
+# No gdb or valgrind: neither supports Apple Silicon. Neovim debugs C/Rust with codelldb.
 "brew:luajit" = "latest"
 "brew:luarocks" = "latest"
 "brew:pkgconf" = "latest"     # provides pkg-config (the formula was renamed)

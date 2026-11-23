@@ -15,9 +15,10 @@ mise bootstrap status --missing || fail=1
 # PATH: one command from each place things are installed, found the way an
 # interactive shell would find it (mise shims, ~/.cargo/bin, /opt/homebrew/bin, apt).
 echo "--- commands on PATH"
-cmds=(nvim node go cargo atuin claude herdr hunk gh-dash CompileDaemon bats pkg-config bat rg aws tmux eza btop gawk nmap docker az)
+cmds=(nvim node go cargo atuin claude herdr hunk gh-dash CompileDaemon bats pkg-config bat rg fd aws tmux eza btop gawk nmap docker az
+  golangci-lint clangd clang-format clang-tidy bear)
 case "$(uname -s)" in
-  Linux)  cmds+=(gcc clang lua5.1 luajit luarocks) ;;
+  Linux)  cmds+=(gcc clang lua5.1 luajit luarocks gdb valgrind) ;;
   Darwin) cmds+=(luajit luarocks mas) ;;
 esac
 for c in "${cmds[@]}"; do
@@ -43,6 +44,10 @@ for c in cargo rustc; do
   shim="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims/$c"
   if [ -e "$shim" ]; then printf 'WRONG    %s has a mise shim, which comes before rustup in shells: %s\n' "$c" "$shim"; fail=1; fi
 done
+# rustup's rust-analyzer proxy is always on PATH, so run it: it fails unless the
+# component (step_rustup_components in tasks/bootstrap) is installed.
+if rust-analyzer --version >/dev/null 2>&1; then printf 'ok       rust-analyzer\n'
+else printf 'MISSING  rust-analyzer (rustup component add rust-analyzer)\n'; fail=1; fi
 
 [ "$fail" -eq 0 ] && echo "--- all good" || echo "--- problems found"
 exit "$fail"

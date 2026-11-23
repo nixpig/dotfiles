@@ -25,6 +25,15 @@ btop = "latest"
 "apt:luajit" = "latest"
 "apt:luarocks" = "latest"
 
+# C tooling (Neovim's C LSP and formatter, compile_commands.json, debugging, leak checks).
+# clangd from apt, not Mason: Mason's clangd has no Linux arm64 build.
+"apt:clangd" = "latest"
+"apt:clang-format" = "latest"
+"apt:clang-tidy" = "latest"
+"apt:bear" = "latest"         # compile_commands.json for Make projects: `bear -- make`
+"apt:gdb" = "latest"
+"apt:valgrind" = "latest"
+
 # Shell and CLI (the rest are mise tools in config.toml)
 "apt:eza" = "latest"
 "apt:ranger" = "latest"

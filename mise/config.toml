@@ -12,6 +12,7 @@
 # Languages
 go = "1.27.3"   # 1.27.4 rejects Rust static libs (golang/go#83126), which breaks Teleport's cgo build; back to "latest" once fixed
 node = "26"
+golangci-lint = "latest"      # CLI/CI linting; in Neovim, gopls already runs vet and staticcheck checks
 # Rust isn't here: mise would set RUSTUP_TOOLCHAIN in every shell, which overrides
 # projects' rust-toolchain.toml. rustup is installed by tasks/bootstrap instead.
 
@@ -31,6 +32,7 @@ herdr = "latest"
 bat = "latest"
 fzf = "latest"
 ripgrep = "latest"
+fd = "latest"
 jq = "latest"
 yq = "latest"                 # mikefarah/yq (Debian's `yq` package is a different tool)
 

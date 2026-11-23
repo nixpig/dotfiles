@@ -26,6 +26,19 @@ step_rustup() {
   curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path
 }
 
+step_rustup_components() {
+  # rust-analyzer: Neovim's Rust LSP (rustaceanvim). rust-src: its std completion.
+  # ~/.cargo/bin/rust-analyzer is always there as a rustup proxy, so check the components.
+  local rustup="$HOME/.cargo/bin/rustup" have missing="" c
+  have=$("$rustup" component list --installed)
+  for c in rust-analyzer rust-src; do
+    grep -q "^$c" <<<"$have" || missing="$missing $c"
+  done
+  [ -n "$missing" ] || skip "rustup components"
+  # shellcheck disable=SC2086
+  "$rustup" component add $missing
+}
+
 step_blesh() {
   [ -f "$HOME/.local/share/blesh/ble.sh" ] && skip "ble.sh"
   # Cloned by [bootstrap.repos]; builds into its own (git-ignored) out/ directory.
@@ -99,7 +112,7 @@ step_mac_apps() {
   manual "Open Docker Desktop, InstantSpaceSwitcher, UnnaturalScrollWheels and Logi Tune once and grant any permissions they ask for."
 }
 
-STEPS="rustup blesh herdr-plugins bat-cache"
+STEPS="rustup rustup-components blesh herdr-plugins bat-cache"
 if [ "$OS" = macos ]; then STEPS="$STEPS operator-mono instant-space-switcher logitune mac-apps"; else STEPS="$STEPS docker-group"; fi
 
 # --------------------------------------------------------------- runner ---

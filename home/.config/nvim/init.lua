@@ -143,19 +143,15 @@ require('lazy').setup({
   'tpope/vim-unimpaired',
   'tpope/vim-surround',
   'tpope/vim-sleuth',
-  -- 'NMAC427/guess-indent.nvim', -- Disabled and let vim-sleuth do it. TODO: Remove if no issues.
   'unblevable/quick-scope',
   'christoomey/vim-tmux-navigator',
 
   -- Telescope extensions
   'nvim-telescope/telescope-fzf-native.nvim',
-  -- 'nvim-telescope/telescope-symbols.nvim', -- Disabled. I think this was only used for an emoji picker (which isn't installed any more). TODO: Disable, or re-enable if any issues.
   'nvim-telescope/telescope-ui-select.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
   'debugloop/telescope-undo.nvim',
   'benfowler/telescope-luasnip.nvim',
-
-  -- 'duane9/nvim-rg', -- Disable. TODO: See if Telescope live_grep suffices.
 
   -- Treesitter extensions
   'nvim-treesitter/nvim-treesitter-context',
@@ -568,7 +564,10 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      {
+        'nvim-tree/nvim-web-devicons',
+        enabled = vim.g.have_nerd_font,
+      },
     },
     config = function()
       local telescope = require 'telescope'
@@ -719,15 +718,7 @@ require('lazy').setup({
           },
         },
         server = {
-          on_attach = function(_, _)
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              pattern = { '*.rs' },
-              callback = function()
-                vim.lsp.buf.format { timeout_ms = 100 }
-              end,
-              group = vim.api.nvim_create_augroup('MyAutocmdsRustFormatting', {}),
-            })
-          end,
+          -- Format on save is done by conform.nvim (its LSP fallback), not here.
           default_settings = {
             ['rust-analyzer'] = {
               check = {
@@ -995,7 +986,10 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         -- 'stylua',
         'gofumpt',
-        'golines',
+        -- Debug adapters. Here rather than in mason-nvim-dap's ensure_installed,
+        -- which only runs once nvim-dap loads (on its first keymap).
+        'codelldb', -- C, C++ and Rust (rustaceanvim finds Mason's codelldb itself)
+        'delve', -- Go
       })
 
       require('mason-tool-installer').setup {
@@ -1008,6 +1002,32 @@ require('lazy').setup({
         vim.lsp.config(server_name, server_config)
         vim.lsp.enable(server_name)
       end
+
+      -- clangd comes from the system (apt / brew:llvm), not Mason: Mason's clangd
+      -- has no Linux arm64 build. So it's kept out of `servers`, which Mason installs.
+      vim.lsp.config('clangd', { capabilities = capabilities })
+      vim.lsp.enable 'clangd'
+
+      -- Go: organize imports (add missing, remove unused) on save. gopls' formatting
+      -- (run by conform's LSP fallback) only sorts them.
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('GoOrganizeImports', { clear = true }),
+        pattern = '*.go',
+        callback = function(args)
+          local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'gopls' })[1]
+          if not client then
+            return
+          end
+          local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
+          params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
+          local res = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
+          for _, action in ipairs(res and res.result or {}) do
+            if action.edit then
+              vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+            end
+          end
+        end,
+      })
     end,
   },
 
@@ -1030,22 +1050,15 @@ require('lazy').setup({
     -- },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      format_on_save = {
+        timeout_ms = 500,
+        lsp_format = 'fallback',
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
+        -- Uses the project's .clang-format, or clang-format's default (LLVM) style.
+        c = { 'clang-format' },
+        cpp = { 'clang-format' },
         javascript = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
         javascriptreact = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
         typescript = { 'oxlint', 'prettierd', 'prettier', stop_after_first = false },
@@ -1727,7 +1740,17 @@ require('lazy').setup({
         automatic_installation = true,
 
         ensure_installed = {
+          'codelldb',
           'delve',
+        },
+
+        -- Default adapter and launch configurations for each installed adapter
+        -- (codelldb: C, C++, Rust), except delve: Go is set up by nvim-dap-go below.
+        handlers = {
+          function(config)
+            require('mason-nvim-dap').default_setup(config)
+          end,
+          delve = function() end,
         },
       }
 
@@ -2173,7 +2196,3 @@ vim.api.nvim_create_user_command('LspRestart', function()
   vim.lsp.stop_client(vim.lsp.get_clients { bufnr = 0 })
   vim.cmd 'edit'
 end, {})
-
--- TODO: Review if merge to servers.gopls has introduced any issues.
--- vim.lsp.config('gopls', { cmd = { vim.fn.expand '$HOME/go/bin/gopls' } })
---

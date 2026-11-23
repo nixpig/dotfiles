@@ -41,6 +41,9 @@ export FZF_DEFAULT_OPTS=" \
 
 [ -d "$HOME/projects/cloud/tc/cmd/tc" ] && export TC_PATH="$HOME/projects/cloud/tc/cmd/tc"
 
+# CMake writes compile_commands.json (for clangd) on every configure.
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON
+
 # Package cooldowns: don't install packages published in the last 3 days.
 export YARN_NPM_MINIMAL_AGE_GATE="4320"
 
