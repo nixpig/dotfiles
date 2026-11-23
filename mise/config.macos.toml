@@ -15,6 +15,7 @@ mas = "latest"                # for the mas: package below
 "brew:ranger" = "latest"
 "brew:tmux" = "latest"
 "brew:wget" = "latest"
+"brew:tree" = "latest"
 
 # Build
 "brew:cmake" = "latest"

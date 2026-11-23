@@ -38,6 +38,7 @@ btop = "latest"
 "apt:eza" = "latest"
 "apt:ranger" = "latest"
 "apt:tmux" = "latest"
+"apt:tree" = "latest"
 
 # Network
 "apt:lsof" = "latest"
