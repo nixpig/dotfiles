@@ -987,7 +987,6 @@ require('lazy').setup({
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        -- 'stylua',
         -- Debug adapters. Here rather than in mason-nvim-dap's ensure_installed,
         -- which only runs once nvim-dap loads (on its first keymap).
         'codelldb', -- C, C++ and Rust (rustaceanvim finds Mason's codelldb itself)

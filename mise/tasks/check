@@ -16,7 +16,7 @@ mise bootstrap status --missing || fail=1
 # interactive shell would find it (mise shims, ~/.cargo/bin, /opt/homebrew/bin, apt).
 echo "--- commands on PATH"
 cmds=(nvim node go cargo atuin claude herdr hunk gh-dash CompileDaemon bats pkg-config bat rg fd aws tmux eza btop gawk nmap docker az
-  golangci-lint clangd clang-format clang-tidy bear)
+  golangci-lint stylua clangd clang-format clang-tidy bear)
 case "$(uname -s)" in
   Linux)  cmds+=(gcc clang lua5.1 luajit luarocks gdb valgrind) ;;
   Darwin) cmds+=(luajit luarocks mas) ;;
