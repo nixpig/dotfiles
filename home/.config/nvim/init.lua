@@ -264,7 +264,7 @@ require('lazy').setup({
             {
               'filename',
               file_status = true, -- displays file status (readonly status, modified status)
-              path = 1,           -- 0 = just filename, 1 = relative path, 2 = absolute path
+              path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
             },
           },
           lualine_x = {
@@ -298,7 +298,7 @@ require('lazy').setup({
             {
               'filename',
               file_status = true, -- displays file status (readonly status, modified status)
-              path = 1,           -- 0 = just filename, 1 = relative path, 2 = absolute path
+              path = 1, -- 0 = just filename, 1 = relative path, 2 = absolute path
             },
           },
           lualine_x = { 'location' },
@@ -401,7 +401,7 @@ require('lazy').setup({
       require('mdkite').setup {
         -- all optional; sane defaults shown
         instance_mode = 'takeover', -- "takeover" (one tab) or "multi" (tab per instance)
-        port = 0,                   -- 0 = auto (8421 for takeover, OS-assigned for multi)
+        port = 0, -- 0 = auto (8421 for takeover, OS-assigned for multi)
         open_browser = true,
         debounce_ms = 300,
       }
@@ -613,10 +613,10 @@ require('lazy').setup({
             require('telescope.themes').get_dropdown {},
           },
           fzf = {
-            fuzzy = true,                   -- false will only do exact matching
+            fuzzy = true, -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true,    -- override the file sorter
-            case_mode = 'smart_case',       -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
+            override_file_sorter = true, -- override the file sorter
+            case_mode = 'smart_case', -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
           },
           file_browser = {
             hijack_netrw = true,
@@ -1347,7 +1347,7 @@ require('lazy').setup({
             padding = 2,
             columns = {
               { 'kind_icon' },
-              { 'label',    'label_description', gap = 1 },
+              { 'label', 'label_description', gap = 1 },
               { 'kind' },
             },
             components = {},
@@ -1446,7 +1446,7 @@ require('lazy').setup({
   {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
-      { 'tpope/vim-dadbod',                     lazy = true },
+      { 'tpope/vim-dadbod', lazy = true },
       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
     },
     cmd = {
@@ -1783,13 +1783,13 @@ require('lazy').setup({
             LogPoint = icons.dap.LogPoint,
             Stopped = icons.dap.Stopped,
           }
-          or {
-            Breakpoint = icons.dap.Breakpoint,
-            BreakpointCondition = icons.dap.BreakpointCondition,
-            BreakpointRejected = icons.dap.BreakpointRejected,
-            LogPoint = icons.dap.LogPoint,
-            Stopped = icons.dap.Stopped,
-          }
+        or {
+          Breakpoint = icons.dap.Breakpoint,
+          BreakpointCondition = icons.dap.BreakpointCondition,
+          BreakpointRejected = icons.dap.BreakpointRejected,
+          LogPoint = icons.dap.LogPoint,
+          Stopped = icons.dap.Stopped,
+        }
 
       for type, icon in pairs(breakpoint_icons) do
         local tp = 'Dap' .. type
