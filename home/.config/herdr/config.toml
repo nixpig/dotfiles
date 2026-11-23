@@ -24,9 +24,6 @@ agent_panel_sort = "priority"
 delivery = "herdr"
 
 [ui.sidebar.agents]
-# rows = [
-#   ["state_icon", "workspace", "state_text"],
-# ]
 rows = [["state_icon", "workspace", "state_text"], ["$ready"]]
 
 [ui.sidebar.spaces]
