@@ -848,7 +848,10 @@ require('lazy').setup({
         gopls = {
           settings = {
             gopls = {
-              gofumpt = true,
+              -- Plain gofmt, so saving gofmt'd files in existing projects changes
+              -- nothing. (gopls v0.23 bundles gofumpt v0.10.0, whose controversial
+              -- trailing-comma/closing-paren call rule became opt-in in v0.11.0.)
+              gofumpt = false,
               ['ui.completion.usePlaceholders'] = true,
               ['ui.completion.completeFunctionCalls'] = true,
             },
@@ -985,7 +988,6 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- 'stylua',
-        'gofumpt',
         -- Debug adapters. Here rather than in mason-nvim-dap's ensure_installed,
         -- which only runs once nvim-dap loads (on its first keymap).
         'codelldb', -- C, C++ and Rust (rustaceanvim finds Mason's codelldb itself)
