@@ -1,4 +1,8 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -34,11 +38,8 @@
       }
     ]
   },
+  "awaySummaryEnabled": false,
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "awaySummaryEnabled": false
+  "model": "opus"
 }
