@@ -813,6 +813,9 @@ require('lazy').setup({
       }
 
       local servers = {
+        -- Starts only in projects with an ESLint config (eslint.config.*, .eslintrc*,
+        -- or eslintConfig in package.json), using the project's ESLint.
+        eslint = {},
         ts_ls = {
           root_dir = function(bufnr, on_dir)
             local root = vim.fs.root(bufnr, { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' })
@@ -1010,13 +1013,17 @@ require('lazy').setup({
       vim.lsp.config('clangd', { capabilities = capabilities })
       vim.lsp.enable 'clangd'
 
-      -- Go: organize imports (add missing, remove unused) on save. gopls' formatting
-      -- (run by conform's LSP fallback) only sorts them.
+      -- Organize imports on save, before conform formats: sort them and remove unused
+      -- ones (gopls also adds missing ones). Formatting alone only sorts Go imports,
+      -- and leaves TS/JS imports as they are.
+      local organize_imports_clients = { gopls = true, ts_ls = true }
       vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('GoOrganizeImports', { clear = true }),
-        pattern = '*.go',
+        group = vim.api.nvim_create_augroup('OrganizeImports', { clear = true }),
+        pattern = { '*.go', '*.ts', '*.tsx', '*.mts', '*.cts', '*.js', '*.jsx', '*.mjs', '*.cjs' },
         callback = function(args)
-          local client = vim.lsp.get_clients({ bufnr = args.buf, name = 'gopls' })[1]
+          local client = vim.iter(vim.lsp.get_clients { bufnr = args.buf }):find(function(c)
+            return organize_imports_clients[c.name]
+          end)
           if not client then
             return
           end
@@ -1024,8 +1031,16 @@ require('lazy').setup({
           params.context = { only = { 'source.organizeImports' }, diagnostics = {} }
           local res = client:request_sync('textDocument/codeAction', params, 1000, args.buf)
           for _, action in ipairs(res and res.result or {}) do
+            if not action.edit and not action.command and client:supports_method 'codeAction/resolve' then
+              local resolved = client:request_sync('codeAction/resolve', action, 1000, args.buf)
+              action = resolved and resolved.result or action
+            end
             if action.edit then
               vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+            end
+            if action.command then
+              local command = type(action.command) == 'table' and action.command or action
+              client:request_sync('workspace/executeCommand', command, 1000, args.buf)
             end
           end
         end,
@@ -1072,7 +1087,11 @@ require('lazy').setup({
       },
       formatters = {
         oxlint = {
-          command = 'oxlint',
+          -- The project's own oxlint (node_modules/.bin), like conform's prettier;
+          -- skipped in projects that don't install it.
+          command = function(self, ctx)
+            return require('conform.util').from_node_modules 'oxlint'(self, ctx)
+          end,
           args = function(_, ctx)
             return { '--fix', ctx.filename }
           end,
