@@ -31,6 +31,21 @@ vim.opt.undofile = true
 vim.opt.backup = false
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
 vim.opt.clipboard = 'unnamedplus'
+
+-- Over SSH there's no local clipboard tool, so send yanks to the host terminal with OSC 52.
+-- Paste comes from Neovim's own register: an OSC 52 read would make Ghostty ask permission
+-- (or wait for a timeout) on every `p`. Paste from the Mac with Cmd+V.
+if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
+  local osc52 = require 'vim.ui.clipboard.osc52'
+  local function paste()
+    return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
+  end
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = { ['+'] = osc52.copy '+', ['*'] = osc52.copy '*' },
+    paste = { ['+'] = paste, ['*'] = paste },
+  }
+end
 vim.opt.shell = 'bash'
 
 -- Display
