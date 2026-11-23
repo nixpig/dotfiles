@@ -1,0 +1,11 @@
+# Global asm-lsp defaults (Neovim's assembly LSP). A project's own .asm-lsp.toml
+# overrides this. Valid values: https://github.com/bergercookie/asm-lsp#configure-via-asm-lsptoml
+[default_config]
+assembler = "gas"           # GNU as
+instruction_set = "arm64"
+
+[opts]
+# Diagnostics come from assembling with gcc (then clang), or the project's
+# compile_commands.json / compile_flags.txt.
+diagnostics = true
+default_diagnostics = true

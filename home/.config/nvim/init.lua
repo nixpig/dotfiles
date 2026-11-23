@@ -813,6 +813,9 @@ require('lazy').setup({
       }
 
       local servers = {
+        -- Assembly. Instruction set and assembler come from the project's .asm-lsp.toml,
+        -- else ~/.config/asm-lsp/.asm-lsp.toml (ARM64, GNU as).
+        asm_lsp = {},
         -- Starts only in projects with an ESLint config (eslint.config.*, .eslintrc*,
         -- or eslintConfig in package.json), using the project's ESLint.
         eslint = {},
@@ -1614,11 +1617,11 @@ require('lazy').setup({
         'c',
         'cpp',
         'cmake',
+        'asm', -- GNU as / ARM / x86 / RISC-V assembly (.s, .S, .asm)
         'vimdoc',
         'query',
         'templ',
         'vhs',
-        'tmux',
       }
 
       -- Install missing parsers after startup
