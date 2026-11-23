@@ -19,7 +19,6 @@ golangci-lint = "latest"      # CLI/CI linting; in Neovim, gopls already runs ve
 # Editor
 neovim = "latest"
 tree-sitter = "latest"
-stylua = "latest"             # Lua formatter (conform.nvim; uses nvim/.stylua.toml)
 
 # Git
 gh = "latest"
