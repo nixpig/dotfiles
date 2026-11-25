@@ -120,3 +120,7 @@ type = "plugin_action"
 command = "pipe.board"
 description = "pipe: board"
 
+[[keys.command]]
+key = "prefix+I"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"

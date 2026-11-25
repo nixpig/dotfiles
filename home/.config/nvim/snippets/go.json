@@ -1017,6 +1017,16 @@
     "body": "require.Empty(t, ${1:val})",
     "description": "Snippet for require.Empty test assertion"
   },
+  "require.NotEmpty": {
+    "prefix": [
+      "tanotemp",
+      "tanotempty",
+      "reqnotemp",
+      "reqnotempty"
+    ],
+    "body": "require.NotEmpty(t, ${1:val})",
+    "description": "Snippet for require.NotEmpty test assertion"
+  },
   "require.Nil": {
     "prefix": [
       "tanil",

@@ -8,7 +8,7 @@
 
 set -uo pipefail
 
-HERDR_PLUGINS="aimdevlee/herdr-nvim-nav makyinmars/herdr-context.nvim jeffarese/herdr-bar"
+HERDR_PLUGINS="aimdevlee/herdr-nvim-nav makyinmars/herdr-context.nvim jeffarese/herdr-bar persiyanov/herdr-reviewr"
 HERDR_PLUGINS_MACOS="assawalhy/herdr-stay-awake"
 OPERATOR_MONO_REPO="nixpig/operator-mono-powerline-ligatures"
 
