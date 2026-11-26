@@ -20,6 +20,7 @@
   "single constant": {
     "prefix": [
       "co",
+      "con",
       "const"
     ],
     "body": "const ${1:name} = ${2:value}",
@@ -79,6 +80,7 @@
   "channel declaration": {
     "prefix": [
       "ch",
+      "chan",
       "channel"
     ],
     "body": "chan ${1:type}",
@@ -132,7 +134,7 @@
   },
   "for range statement": {
     "prefix": "forr",
-    "body": "for ${1:_, }${2:v} := range ${3:v} {\n\t$0\n}",
+    "body": "for ${1:_}, ${2:v} := range ${3:v} {\n\t$0\n}",
     "description": "Snippet for a for range loop"
   },
   "for i statement": {
@@ -232,12 +234,12 @@
   },
   "fmt.Fprintln": {
     "prefix": "ffpl",
-    "body": "fmt.Fprintln(\"${1:w}\", \"$2\", ${3:var})",
+    "body": "fmt.Fprintln(${1:w}, \"$2\", ${3:var})",
     "description": "Snippet for fmt.Fprintln()"
   },
   "fmt.Fprintf": {
     "prefix": "ffpf",
-    "body": "fmt.Fprintf(\"${1:w}\", \"$2\", ${3:var})",
+    "body": "fmt.Fprintf(${1:w}, \"$2\", ${3:var})",
     "description": "Snippet for fmt.Fprintf()"
   },
   "log.Println": {
@@ -257,7 +259,7 @@
       "slogwarn"
     ],
     "body": [
-      "${1:logger}.WarnContext(${2:ctx}, \"${3:msg}\", \"error\", err)"
+      "${1:logger}.WarnContext(${2:ctx}, \"${3:msg}\")"
     ],
     "description": "Snippet for slog.WarnContext()"
   },
@@ -268,7 +270,7 @@
       "sloginfo"
     ],
     "body": [
-      "${1:logger}.InfoContext(${2:ctx}, \"${3:msg}\", \"error\", err)"
+      "${1:logger}.InfoContext(${2:ctx}, \"${3:msg}\")"
     ],
     "description": "Snippet for slog.InfoContext()"
   },
@@ -280,7 +282,7 @@
       "slogerror"
     ],
     "body": [
-      "${1:logger}.ErrorContext(${2:ctx}, \"${3:msg}\", \"error\", err)"
+      "${1:logger}.ErrorContext(${2:ctx}, \"${3:msg}\")"
     ],
     "description": "Snippet for slog.ErrorContext()"
   },
@@ -292,16 +294,17 @@
       "slogdebug"
     ],
     "body": [
-      "${1:logger}.DebugContext(${2:ctx}, \"${3:msg}\", \"error\", err)"
+      "${1:logger}.DebugContext(${2:ctx}, \"${3:msg}\")"
     ],
     "description": "Snippet for slog.DebugContext()"
   },
-  "defer statement": {
+  "defer function statement": {
     "prefix": [
       "df",
+      "def",
       "defer"
     ],
-    "body": "defer ${1:func}($0)",
+    "body": "defer func() {\n\t${1}\n}",
     "description": "Snippet for defer statement"
   },
   "defer cancel": {
@@ -369,6 +372,7 @@
   "switch statement": {
     "prefix": [
       "sw",
+      "swi",
       "switch"
     ],
     "body": "switch ${1:expression} {\ncase ${2:condition}:\n\t$0\n}",
@@ -433,12 +437,12 @@
   },
   "if equals statement": {
     "prefix": "ifeq",
-    "body": "if ${1:condition} == ${2:condition} {\n\t$0\n}",
+    "body": "if ${1:a} == ${2:b} {\n\t$0\n}",
     "description": "Snippet for if equals statement"
   },
   "if not equals statement": {
     "prefix": "ifne",
-    "body": "if ${1:condition} != ${2:condition} {\n\t$0\n}",
+    "body": "if ${1:a} != ${2:b} {\n\t$0\n}",
     "description": "Snippet for if not equals statement"
   },
   "else branch": {
@@ -448,14 +452,6 @@
     ],
     "body": "else {\n\t$0\n}",
     "description": "Snippet for else branch"
-  },
-  "if else statement": {
-    "prefix": [
-      "ifel",
-      "ifelse"
-    ],
-    "body": "if ${1:condition} {\n\t$2\n} else {\n\t$0\n}",
-    "description": "Snippet for if else"
   },
   "if ok": {
     "prefix": "ifok",
@@ -473,6 +469,14 @@
       "ifkm"
     ],
     "body": "if ${1:_}, ok := ${2:map}[${3:key}]; ok {\n\t$4\n}",
+    "description": "Snippet for if key in map"
+  },
+  "if not key in a map": {
+    "prefix": [
+      "ifnk",
+      "ifnkm"
+    ],
+    "body": "if ${1:_}, ok := ${2:map}[${3:key}]; !ok {\n\t$4\n}",
     "description": "Snippet for if key in map"
   },
   "table-driven test struct": {
@@ -517,7 +521,10 @@
     "description": "Snippet for context.WithTimeout()"
   },
   "context.WithCancel": {
-    "prefix": "cxwc",
+    "prefix": [
+      "cxwc",
+      "cxc"
+    ],
     "body": "ctx, cancel := context.WithCancel(${1:ctx})\ndefer cancel()",
     "description": "Snippet for context.WithCancel()"
   },
@@ -534,7 +541,7 @@
       "eas",
       "erras"
     ],
-    "body": "errors.As(err, &${1:target})",
+    "body": "errors.As(err, ${1:&target})",
     "description": "Snippet for errors.As()"
   },
   "trace.Wrap(err)": {
@@ -786,7 +793,7 @@
       "tcl",
       "tclup"
     ],
-    "body": "t.Cleanup(func() {\n\t$0\n})",
+    "body": "t.Cleanup(func() {\n\t$1\n})",
     "description": "Snippet for t.Cleanup()"
   },
   "t.TempDir": {
@@ -799,8 +806,8 @@
       "tcx",
       "tctx"
     ],
-    "body": "ctx := t.Context()",
-    "description": "Snippet for ctx := t.Context()"
+    "body": "t.Context()",
+    "description": "Snippet for t.Context()"
   },
   "t.Run": {
     "prefix": "trun",
@@ -828,14 +835,14 @@
       "ifein",
       "iferrin"
     ],
-    "body": "if err := ${1:...}; err != nil {\n\t$0\n}",
+    "body": "if err := ${1}; err != nil {\n\t$0\n}",
     "description": "Snippet for if err := ...; err != nil"
   },
   "if value == nil": {
     "prefix": [
       "ifnil"
     ],
-    "body": "if ${1:...} == nil {\n\t$0\n}",
+    "body": "if ${1} == nil {\n\t$0\n}",
     "description": "Snippet for if value == nil"
   },
   "if value != nil": {
@@ -843,7 +850,7 @@
       "ifnnil",
       "ifnn"
     ],
-    "body": "if ${1:...} != nil {\n\t$0\n}",
+    "body": "if ${1} != nil {\n\t$0\n}",
     "description": "Snippet for if value != nil"
   },
   "benchmark function": {
@@ -877,7 +884,7 @@
   },
   "proto builder": {
     "prefix": "pbb",
-    "body": "${1:Type}_builder{${2:Field}: ${3:val}}.Build()",
+    "body": "${1:Type}_builder{${2}}.Build()",
     "description": "Snippet for protobuf builder"
   },
   "t.Log": {
@@ -1005,7 +1012,7 @@
       "reql",
       "reqlen"
     ],
-    "body": "require.Len(t, ${1:slice}, ${2:n})",
+    "body": "require.Len(t, ${1:slice}, ${2:len})",
     "description": "Snippet for require.Len test assertion"
   },
   "require.Empty": {
@@ -1014,7 +1021,7 @@
       "taempty",
       "reqempty"
     ],
-    "body": "require.Empty(t, ${1:val})",
+    "body": "require.Empty(t, ${1:target})",
     "description": "Snippet for require.Empty test assertion"
   },
   "require.NotEmpty": {
@@ -1024,7 +1031,7 @@
       "reqnotemp",
       "reqnotempty"
     ],
-    "body": "require.NotEmpty(t, ${1:val})",
+    "body": "require.NotEmpty(t, ${1:target})",
     "description": "Snippet for require.NotEmpty test assertion"
   },
   "require.Nil": {
@@ -1032,15 +1039,16 @@
       "tanil",
       "reqnil"
     ],
-    "body": "require.Nil(t, ${1:val})",
+    "body": "require.Nil(t, ${1:target})",
     "description": "Snippet for require.Nil test assertion"
   },
   "require.NotNil": {
     "prefix": [
       "tannil",
-      "reqnnil"
+      "reqnnil",
+      "reqnotnil"
     ],
-    "body": "require.NotNil(t, ${1:val})",
+    "body": "require.NotNil(t, ${1:target})",
     "description": "Snippet for require.NotNil test assertion"
   },
   "cmp.Diff check": {
@@ -1048,7 +1056,7 @@
       "tacmp",
       "reqcmp"
     ],
-    "body": "require.Empty(t, cmp.Diff(${1:want}, ${2:got}, protocmp.Transform()))",
+    "body": "require.Empty(t, cmp.Diff(${1:a}, ${2:b}, protocmp.Transform()))",
     "description": "Snippet for cmp.Diff empty test assertion"
   },
   "CheckAndSetDefaults": {
