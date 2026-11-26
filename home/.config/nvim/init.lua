@@ -1503,12 +1503,18 @@ require('lazy').setup({
           lsp = {
             score_offset = 10, -- Boost LSP above snippets
             transform_items = function(ctx, items)
+              -- Strip types from placeholders: ${1:t TestingT} -> ${1:t}
+              local function strip_types(s)
+                s = s:gsub('\\}', '\1') -- hide escaped braces, e.g. interface{\}
+                s = s:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
+                return (s:gsub('\1', '\\}'))
+              end
               for _, item in ipairs(items) do
                 if item.insertText then
-                  item.insertText = item.insertText:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
+                  item.insertText = strip_types(item.insertText)
                 end
                 if item.textEdit and item.textEdit.newText then
-                  item.textEdit.newText = item.textEdit.newText:gsub('%${(%d+):(%w+)%s+[^}]*}', '${%1:%2}')
+                  item.textEdit.newText = strip_types(item.textEdit.newText)
                 end
               end
               return items
