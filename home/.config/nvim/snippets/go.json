@@ -232,6 +232,11 @@
     "body": "fmt.Printf(\"$1\", ${2:var})",
     "description": "Snippet for fmt.Printf()"
   },
+  "fmt.Sprintf": {
+    "prefix": "fspf",
+    "body": "fmt.Sprintf(\"$1\", ${2:var})",
+    "description": "Snippet for fmt.Sprintf()"
+  },
   "fmt.Fprintln": {
     "prefix": "ffpl",
     "body": "fmt.Fprintln(${1:w}, \"$2\", ${3:var})",
